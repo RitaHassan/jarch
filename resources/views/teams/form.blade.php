@@ -1,5 +1,7 @@
 @extends('layout')
 @section('contents')
+
+
     <div class="row">
         <div class="col-xl-12">
             <div class="card card-flush shadow-sm">
@@ -27,13 +29,13 @@
                     <div class="card-body py-5">
 
 
-                    @if (isset($team->ID))
-                    <form class="row" method="POST" action="{{route('teams.update',$team->ID)}}" >
-                        @method('patch')
-                        @else
-                    <form class="row" method="POST" action="{{route('teams.store')}}" >
-                    @endif
-                    @csrf
+                            @if (isset($team->ID))
+                            <form class="row" method="POST" action="{{route('teams.update',$team->ID)}}" >
+                                @method('patch')
+                                @else
+                            <form class="row" method="POST" action="{{route('teams.store')}}" >
+                            @endif
+                            @csrf
                             <div class="col-xl-6 form-group mb-6">
                             <label class="required form-label fw-bolder">اسم الفريق</label>
                             <input type="text"  id="NAME" name="NAME" value="{{old('NAME',$team->NAME)}}"  class="form-control form-control-solid" 

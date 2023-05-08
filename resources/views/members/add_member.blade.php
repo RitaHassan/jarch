@@ -51,7 +51,7 @@ use App\Models\Member;
                             <select name="TEAM_ID" id="TEAM_ID" class="form-control form-control-solid" disabled >
                                 <option value="-1" >--اختر--</option>
                                 @foreach($member2 as $m)
-                                    <option value="{{ $m->ID }}" {{$team->ID==$m->ID ? 'selected' :''}}>{{$m->NAME}}</option>
+                                    <option value="{{$m->ID}}" {{$team->ID==$m->ID? 'selected' :''}}>{{$m->NAME}}</option>
                                 @endforeach
                             </select>  
                     </div>

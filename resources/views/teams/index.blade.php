@@ -1,7 +1,25 @@
-
 @extends('layout')
 @section('contents')
+
+@php
+use App\Models\Team;
+$team= new Team();
+@endphp
 <div class="card shadow-sm">
+    <div class="d-flex align-items-center py-1">
+
+        <!--begin::Button-->
+            <a href="#" class="btn btn-sm btn-primary add" id="kt_toolbar_primary_button">
+            <span class="svg-icon svg-icon-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black"></rect>
+                    <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black"></rect>
+                </svg>
+            </span> 
+            إضافة فريق</a>
+        <!--end::Button-->
+    </div>
+    
     <div class="card-body">
         <!--begin::Wrapper-->
         <div class="d-flex flex-stack mb-5">
@@ -83,6 +101,43 @@
 </div>
 
 
+<div id="addModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">اضافة فريق</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
+
+                </div>
+                <div class="modal-body">
+                    @if (isset($team->ID))
+                    <form class="row" method="POST" action="{{route('teams.update',$team->ID)}}" >
+                        @method('patch')
+                        @else
+                    <form class="row" method="POST" action="{{route('teams.store')}}" >
+                    @endif
+                    @csrf
+                                <div class="col-xl-6 form-group mb-6">
+                                <label class="required form-label fw-bolder">اسم الفريق</label>
+                                <input type="text"  id="NAME" name="NAME" value="{{old('NAME',$team->NAME)}}"  class="form-control form-control-solid" 
+                                placeholder="الفريق">
+                                </div>
+    
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-check me-2"></i> حفظ
+                                </button>
+                            </div>
+    
+                       </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary close" data-dismiss="modal">اغلاق</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
  <div id="viewModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
             <div class="modal-content">
@@ -106,7 +161,6 @@
                         </tr>
                       </thead>   
                       <tbody >
-                      
                       </tbody> 
                 </table>
                 </div>
@@ -175,7 +229,7 @@
                     render: function (data, type, row) {
                         var edit_link = '/teams/'+data.ID+'/edit';
                         var add_link = '/teams/create_by_id/'+data.ID;
-                        var add_system = '/systems/'+data.ID+'/create';
+                       // var add_system = '/systems/'+data.ID+'/create';
                        
                         return `\
                             <a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start" data-kt-menu-flip="top-end">
@@ -210,18 +264,7 @@
                                          عرض الأعضاء
                                     </a>
                                 </div>
-                                <!--end::Menu item-->
-
-                                <!--begin::Menu item-->
-                                <div class="menu-item px-3">
-                                    <a href="${add_system}" class="menu-link px-3" data-kt-docs-table-filter=""> <i class="fa fa-times me-2"></i>
-                                         إضافة نظام 
-                                    </a>
-                                </div>
-                                <!--end::Menu item-->
-                            </div>
-                            <!--end::Menu-->
-                           
+                
                         `;
                     },
                 },
@@ -349,52 +392,67 @@ var handleViewRows = () => {
                     jQuery.ajax({
                                 type: "get",
                                 url: 'teams/giveMembers/'+id,
-                                
                                 dataType: 'json',
                                 success :function (data) {
-                                //   $('#members-table').append('<th><tr><td>رقم الهوية</td><td>الصفة الوظيفية</td></tr></th>')+
-                                      
-                                //   $('table > tbody  > tr').each(function(index, tr) { 
-
-                                //   '<td>'+data[0][ID_NUM]+'</td><td></td>'
-                                  
-                                //     });
-
-
+                                //    var i=0;
                                 $("#members_table").empty();
-                    $("#members_table").append('<tr>'+
+                                $("#members_table").append('<tr>'+
                                             '<th>#</th>'+
                                             '<th>رقم الهوية</th>'+
                                             '<th>الاسم</th>'+
                                             '<th>الصفة</th>'+
+                                            '<th>الاجراءات</th>'+
                                             '</tr>');
-                    data.forEach(element => {
-                    var role = (element.ROLE == 1) ? 'مشرف' : 'عضو';
-                        $("#members_table").append(
-'<tr><td>' +  element.ID  + '</td>' +
-'<td>' +  element.ID_NUM   + '</td>'+
-'<td>' +  element.MEM_NAME   + '</td>'+
-'<td>'+ role+'</td></tr>'
+                                data.forEach(element => {
+                                var role = (element.ROLE == 1) ? 'مشرف' : 'عضو';
+                              // i++;
 
-);
-
-                        });
-                            
-
-
-                                }
-                          
+                              $("#members_table").append(
+                               // '<tr><td>'+i+'</td>' +
+                                '<tr><td>'+element.MEM_ID+'</td>' +
+                                '<td>'+element.ID_NUM +'</td>'+
+                                '<td>'+element.MEM_NAME+'</td>'+
+                                '<td>'+role+'</td>'+
+                                '<td>'+'<button type="button" id="delRoc" class="btn btn-primary cancel"><i class="fa fa-cancel"></i> حذف</button>'+'</td></tr>' );
+                                });
+                              }
                             });
-                               
 
 
+                            $("#members_table").on('click', '.cancel', function () {
+                                
+                            //  var id =$(this).closest('tr').remove();
+                        //    var id =$(this).closest('tr');
+                        var    this_ = $(this);
+                        var currentRow=$(this).closest("tr"); 
+                        var id=currentRow.find("td:eq(0)").text(); 
+                        //alert(id);
+                            jQuery.ajax({
+                                type: "DELETE",
+                                url: 'members/'+id,
+                                data:{
+                                    "_token": "{{ csrf_token() }}",
+                                },
+                                dataType: 'json',
+                                success :function (data) {
+                                    Swal.fire({
+                                    text: "تم الحذف",
+                                    icon: "success",
+                                    buttonsStyling: false,
+                                    confirmButtonText: "حسنًا ، موافق!",
+                                    customClass: {
+                                        confirmButton: "btn fw-bold btn-primary",
+                                    }
 
-
-
-
-                   
-                  
-                })
+                                    
+                                }).then(function (response) {
+                                    
+           
+                                });
+                                }
+                            });
+                              });
+                });
             });
         }
 
@@ -418,6 +476,15 @@ var handleViewRows = () => {
 
     $(document).on('click', '.view', function (data, callbak) {
                     $('#viewModal').modal('show');
+       
+                });
+$("button[data-dismiss=modal]").click(function()
+{
+  $(".modal").modal('hide');
+});
+
+$(document).on('click', '.add', function (data, callbak) {
+                    $('#addModal').modal('show');
        
                 });
 $("button[data-dismiss=modal]").click(function()

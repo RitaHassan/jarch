@@ -16,6 +16,11 @@ class Team extends MYModel
         'NAME',
         'CREATED_BY',
         'UPDATED_BY',
+        'ID_NUM',
+        'MEM_NAME',
+        'ROLE',
+        'ACTIVE',
+        'TEAM_ID'
     ];
 
     public function __construct() {
