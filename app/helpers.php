@@ -3,7 +3,7 @@
 if (! function_exists('get_asset')) {
     function get_asset($path) : string
     {
-        return '/'.$path;
+        return '/'.$path; 
     }
 }
 
