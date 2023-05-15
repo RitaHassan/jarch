@@ -4,6 +4,7 @@
 @php
 use App\Models\Team;
 $team= new Team();
+//dd($team);
 @endphp
 <div class="card shadow-sm">
     <div class="d-flex align-items-center py-1">
@@ -106,20 +107,14 @@ $team= new Team();
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 id="modalTitle">اضافة فريق</h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-
                 </div>
                 <div class="modal-body">
-                    @if (isset($team->ID))
-                    <form class="row" method="POST" action="{{route('teams.update',$team->ID)}}" >
-                        @method('patch')
-                        @else
-                    <form class="row" method="POST" action="{{route('teams.store')}}" >
-                    @endif
-                    @csrf
+
+                        <form class="row" method="POST" action="{{route('teams.store')}}" >
+                        @csrf
                                 <div class="col-xl-6 form-group mb-6">
                                 <label class="required form-label fw-bolder">اسم الفريق</label>
-                                <input type="text"  id="NAME" name="NAME" value="{{old('NAME',$team->NAME)}}"  class="form-control form-control-solid" 
+                                <input type="text"  id="NAME" name="NAME"  class="form-control form-control-solid" 
                                 placeholder="الفريق">
                                 </div>
     
@@ -138,13 +133,46 @@ $team= new Team();
         </div>
     </div>
 
+    <div id="updateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="modalTitle">تعديل فريق</h3>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" id="ID" value="{{old('ID',$team->ID)}}"/>
+    
+        
+                             <form class="row" method="POST" action="" >
+                            @method('patch')
+                            
+    
+                                    <div class="col-xl-6 form-group mb-6">
+                                    <label class="required form-label fw-bolder">اسم الفريق</label>
+                                    <input type="text"  id="NAME" name="NAME"  value="{{old('NAME',$team->NAME)}}"  class="form-control form-control-solid" 
+                                    placeholder="الفريق">
+                                    </div>
+        
+                                <div class="card-footer">
+                                    <button type="buttun" class="btn btn-primary save">
+                                        <i class="fa fa-check me-2"></i> حفظ
+                                    </button>
+                                </div>
+        
+                           </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary close" data-dismiss="modal">اغلاق</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
  <div id="viewModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 id="modalTitle">عرض أعضاء الفريق</h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
-
                 </div>
                 <div class="modal-body">
                     <input type='hidden'  id ="TEAM_ID" name="TEAM_ID" value=""/>
@@ -227,7 +255,7 @@ $team= new Team();
                     orderable: false,
                     className: 'text-end',
                     render: function (data, type, row) {
-                        var edit_link = '/teams/'+data.ID+'/edit';
+                      //  var edit_link = '/teams/'+data.ID+'/edit';
                         var add_link = '/teams/create_by_id/'+data.ID;
                        // var add_system = '/systems/'+data.ID+'/create';
                        
@@ -239,7 +267,7 @@ $team= new Team();
                             <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
                                 <!--begin::Menu item-->
                                 <div class="menu-item px-3">
-                                    <a href="${edit_link}" class="menu-link px-3" data-kt-docs-table-filter="edit_row"> <i class="fa fa-edit me-2"></i>
+                                    <a href="#" class="menu-link px-3 update" val_id="${data.ID}"> <i class="fa fa-edit me-2"></i>
                                         تعديل
                                     </a>
                                 </div>
@@ -446,7 +474,7 @@ var handleViewRows = () => {
 
                                     
                                 }).then(function (response) {
-                                    
+                                    this_.closest('tr').remove();
            
                                 });
                                 }
@@ -456,6 +484,44 @@ var handleViewRows = () => {
             });
         }
 
+
+$(document).on('click', '.update', function (data, callbak) {
+     const id = $(this).attr('val_id'); 
+     var str = $("#ID").val(id);
+
+
+     $('#updateModal').modal('show');
+
+
+     
+});
+
+ $("button[data-dismiss=modal]").click(function()
+{
+                   
+  $(".modal").modal('hide');
+});
+
+$(document).on('click', '.save', function (data, callbak) {
+    //const id = $(this).attr('val_id'); 
+                    var str = $("#ID").val();
+                  //  var strN = $("#NAME").val(); 
+                   alert(str);
+
+                    jQuery.ajax({
+                                type: "get",
+                                url: 'teams/update/'+str,
+                                data:{
+                                    NAME:NAME
+                                },
+                                dataType: 'json',
+                                success :function (data) {
+data.html("تم التعديل");
+return false;
+                                }
+                                }); 
+                            
+                            });
     
         // Public methods
         return {
@@ -475,8 +541,8 @@ var handleViewRows = () => {
     
 
     $(document).on('click', '.view', function (data, callbak) {
+   
                     $('#viewModal').modal('show');
-       
                 });
 $("button[data-dismiss=modal]").click(function()
 {
@@ -485,11 +551,11 @@ $("button[data-dismiss=modal]").click(function()
 
 $(document).on('click', '.add', function (data, callbak) {
                     $('#addModal').modal('show');
-       
-                });
-$("button[data-dismiss=modal]").click(function()
-{
+          
+ });
+$("button[data-dismiss=modal]").click(function(){
   $(".modal").modal('hide');
 });
+
     </script>
 @endpush

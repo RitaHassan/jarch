@@ -20,6 +20,7 @@ Route::get('/', function () {
 Route::get('teams/create_by_id/{ID}', 'TeamController@create_by_id')->name('teams.create_by_id');
 Route::post('teams/save_by_id/{ID}', 'TeamController@save_by_id')->name('teams.save_by_id');
 Route::get('teams/giveMembers/{TEAM_ID}', 'TeamController@giveMembers')->name('teams.giveMembers');
+Route::get('teams/update/{ID}', 'TeamController@update')->name('teams.update');
 Route::get('teams/datatable', 'TeamController@datatable')->name('teams.datatable');
 Route::resource('teams', 'TeamController');
 
