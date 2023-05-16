@@ -109,7 +109,8 @@ class TeamController extends Controller
         }
         $request->request->add(['UPDATED_BY' => 1,'ID'=>$id]);
         $result = Team::Update_(change_key($request->only((new Team())->getFillable())));
-        return back()->with('success', 'تمت عملية الحفظ بنجاح');
+        return [];
+        // return back()->with('success', 'تمت عملية الحفظ بنجاح');
     }
 
     /**

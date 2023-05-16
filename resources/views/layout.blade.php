@@ -388,14 +388,15 @@
 	 	 	 	 	 	 	 	 	 <!--end::Description--></h1>
 	 	 	 	 	 	 	 	 	 <span class="h-20px border-gray-200 border-start ms-3 mx-2"></span>
 	 	 	 	 	 	 	 	 	 <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
-	 	 	 	 	 	 	 	 	 	 <li class="breadcrumb-item text-muted">
-	 	 	 	 	 	 	 	 	 	 	 <a href="#" class="text-muted text-hover-primary"></a>
-	 	 	 	 	 	 	 	 	 	 </li>
-	 	 	 	 	 	 	 	 	 	 <li class="breadcrumb-item">
-	 	 	 	 	 	 	 	 	 	 	 <span class="bullet bg-gray-200 w-5px h-2px"></span>
-	 	 	 	 	 	 	 	 	 	 </li>
-	 	 	 	 	 	 	 	 	 	 <li class="breadcrumb-item text-dark"></li>
-
+                                        @if(isset($html_breadcrumbs))
+										<li class="breadcrumb-item text-muted">
+											<a href="{{$html_breadcrumbs['title_url']}}" class="text-muted text-hover-primary">{{$html_breadcrumbs['title']}}</a>
+										</li>
+										<li class="breadcrumb-item">
+											<span class="bullet bg-gray-200 w-5px h-2px"></span>
+										</li>
+										<li class="breadcrumb-item text-dark">{{$html_breadcrumbs['subtitle']}}</li>
+										@endif
 	 	 	 	 	 	 	 	 	 </ul>
 	 	 	 	 	 	 	 	 	 <!--end::Title-->
 	 	 	 	 	 	 	 	 </div>
@@ -403,14 +404,27 @@
 
 	 	 	 	 	 	 	 	 <div class="d-flex align-items-center py-1">
 
-	 	 	 	 	 	 	 	 	 <!--begin::Button-->	 	 	 	 	 	 	 	 	 
+	 	 	 	 	 	 	 	 	 <!--begin::Button-->	 
+                                             @if(isset($html_new_path))
+                                             <a href="{{$html_new_path}}" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button">
+                                                 <span class="svg-icon svg-icon-2">
+                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                         <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black"></rect>
+                                                         <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black"></rect>
+                                                     </svg>
+                                                 </span>
+                                                 جديد</a>
+                                             <!--end::Button-->
+                                             @else
+                                             <span class="kt-subheader__btn-daterange-title" id="kt_dashboard_daterangepicker_title">اليوم : </span>&nbsp;
+                                             <span class="kt-subheader__btn-daterange-date" id="kt_dashboard_daterangepicker_date">{{date('Y-m-d')}}</span>
+                                             {{-- <a href="javascript:;" class="btn kt-subheader__btn-daterange" id="kt_dashboard_daterangepicker" data-toggle="kt-tooltip" title="" data-placement="left">
+                                                 <span class="kt-subheader__btn-daterange-title" id="kt_dashboard_daterangepicker_title">{{__('views.Today')}}</span>&nbsp;
+                                                 <span class="kt-subheader__btn-daterange-date" id="kt_dashboard_daterangepicker_date">{{date('Y-m-d')}}</span>
+                                             </a> --}}
+                                             @endif	 	 	 	 	 	 	 	 
 	 	 	 	 	 	 	 	 	 <!--end::Button-->
-	 	 	 	 	 	 	 	 	 <span class="kt-subheader__btn-daterange-title" id="kt_dashboard_daterangepicker_title">اليوم : </span>&nbsp;
-	 	 	 	 	 	 	 	 	 <span class="kt-subheader__btn-daterange-date" id="kt_dashboard_daterangepicker_date">{{date('Y-m-d')}}</span>
-	 	 	 	 	 	 	 	 	 {{-- <a href="javascript:;" class="btn kt-subheader__btn-daterange" id="kt_dashboard_daterangepicker" data-toggle="kt-tooltip" title="" data-placement="left">
-	 	 	 	 	 	 	 	 	 	 <span class="kt-subheader__btn-daterange-title" id="kt_dashboard_daterangepicker_title">{{__('views.Today')}}</span>&nbsp;
-	 	 	 	 	 	 	 	 	 	 <span class="kt-subheader__btn-daterange-date" id="kt_dashboard_daterangepicker_date">{{date('Y-m-d')}}</span>
-	 	 	 	 	 	 	 	 	 </a> --}}
+	 	 	 	 	 	 	 	 	
 	 	 	 	 	 	 	 	 </div>
 
 	 	 	 	 	 	 	 </div>
@@ -492,8 +506,8 @@
 
     tinymce.init({
         selector: 'textarea.tinymce-editor',
-        content_style:
-            "@import url('" + window.location.origin + /assets/css/fonts.css');,
+        // content_style:
+        //     "@import url('" + window.location.origin + /assets/css/fonts.css');,
         font_formats:
             "رفيع جدا=MAINULTRALIGHT;رفيع=MAINLIGHT;وسط=MAINMEDIUM;سميك=MAINBOLD;سميك جدا=MAINHEAVY;",
         plugins: 'media mediaembed lists image link',
@@ -515,4 +529,4 @@
 
 </body>
 
-</html>
+</html>test

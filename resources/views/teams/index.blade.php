@@ -1,11 +1,7 @@
 @extends('layout')
 @section('contents')
 
-@php
-use App\Models\Team;
-$team= new Team();
-//dd($team);
-@endphp
+
 <div class="card shadow-sm">
     <div class="d-flex align-items-center py-1">
 
@@ -92,8 +88,7 @@ $team= new Team();
                     </div>
                 </th>
                 <th class="text-center fw-bolder">اسم الفريق</th>
-                <th class="text-center fw-bolder">اسم النظام</th>
-                <th class="text-center fw-bolder">الاجراءات</th>
+                <th class="text-end min-w-100px">الاجراءات</th>
             </thead>
 
         </table>
@@ -110,81 +105,62 @@ $team= new Team();
                 </div>
                 <div class="modal-body">
 
-                        <form class="row" method="POST" action="{{route('teams.store')}}" >
-                        @csrf
-                                <div class="col-xl-6 form-group mb-6">
-                                <label class="required form-label fw-bolder">اسم الفريق</label>
-                                <input type="text"  id="NAME" name="NAME"  class="form-control form-control-solid" 
-                                placeholder="الفريق">
+                                <div class="col-xl-12 form-group mb-12">
+                                    <label class="required form-label fw-bolder">اسم الفريق</label>
+                                    <input type="text"  id="NAME" name="NAME"  class="form-control form-control-solid" 
+                                    placeholder="الفريق">
                                 </div>
     
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary" id="save_btn">
                                     <i class="fa fa-check me-2"></i> حفظ
                                 </button>
                             </div>
-    
-                       </form>
+
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary close" data-dismiss="modal">اغلاق</button>
-                </div>
+
             </div>
         </div>
     </div>
 
     <div id="updateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 id="modalTitle">تعديل فريق</h3>
-                    </div>
-                    <div class="modal-body">
-                        <input type="text" id="ID" value="{{old('ID',$team->ID)}}"/>
-    
-        
-                             <form class="row" method="POST" action="" >
-                            @method('patch')
-                            
-    
-                                    <div class="col-xl-6 form-group mb-6">
-                                    <label class="required form-label fw-bolder">اسم الفريق</label>
-                                    <input type="text"  id="NAME" name="NAME"  value="{{old('NAME',$team->NAME)}}"  class="form-control form-control-solid" 
-                                    placeholder="الفريق">
-                                    </div>
-        
-                                <div class="card-footer">
-                                    <button type="buttun" class="btn btn-primary save">
-                                        <i class="fa fa-check me-2"></i> حفظ
-                                    </button>
-                                </div>
-        
-                           </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary close" data-dismiss="modal">اغلاق</button>
-                    </div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">تعديل فريق</h3>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="ID" value=""/>
+                        <div class="col-xl-12 form-group mb-12">
+                            <label class="required form-label fw-bolder">اسم الفريق</label>
+                            <input type="text"  id="NAME_UPDATE" name="NAME"  value=""  class="form-control form-control-solid" 
+                            placeholder="الفريق">
+                        </div>
+                        <div class="card-footer">
+                            <button type="buttun" class="btn btn-primary" id="btn_update">
+                                <i class="fa fa-check me-2"></i> حفظ
+                            </button>
+                        </div>
                 </div>
             </div>
         </div>
+    </div>
 
- <div id="viewModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
+    <div id="viewModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 id="modalTitle">عرض أعضاء الفريق</h3>
                 </div>
                 <div class="modal-body">
                     <input type='hidden'  id ="TEAM_ID" name="TEAM_ID" value=""/>
-               <!-- <div id="here_table"></div>-->
 
                 <table class="table table-bordered table-hover table-striped dataTable" id="members_table">
   
                     <thead>
                         <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th>#</th>
+                        <th>الاسم</th>
                         <th></th>
                         </tr>
                       </thead>   
@@ -234,30 +210,32 @@ $team= new Team();
                 ajax: {
                 url: '{{ route('teams.datatable') }}',
                 "data": function ( d ) {
-                    // d.ID_NO = $('#ID_NO').val();
-                    // d.CARD_ID = $('#CARD_ID').val(); 
-                    // d.LICENSE_NUMBER = $('#LICENSE_NUMBER').val();
-                    // d.LICENSE_EXPIRATION_DATE = $('#LICENSE_EXPIRATION_DATE').val(); 
-                    // d.NAME = $('#NAME').val();
+
                 }
                 },
                 columns: [
                     { data: 'ID',"searchable": false },
                     { data: 'NAME',"searchable": false },
-                    { data: 'SYSTEM_NAME',"searchable": false },
                     { data: null,"searchable": false }
                 ],
                 columnDefs: [
-                  
+                    {
+                        targets: 0,
+                        orderable: false,
+                        render: function (data) {
+                            return `
+                                <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                    <input class="form-check-input" type="checkbox" value="${data}" />
+                                </div>`;
+                        }
+                    },
                     {
                     targets: -1,
                     data: null,
                     orderable: false,
                     className: 'text-end',
                     render: function (data, type, row) {
-                      //  var edit_link = '/teams/'+data.ID+'/edit';
                         var add_link = '/teams/create_by_id/'+data.ID;
-                       // var add_system = '/systems/'+data.ID+'/create';
                        
                         return `\
                             <a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start" data-kt-menu-flip="top-end">
@@ -267,7 +245,7 @@ $team= new Team();
                             <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
                                 <!--begin::Menu item-->
                                 <div class="menu-item px-3">
-                                    <a href="#" class="menu-link px-3 update" val_id="${data.ID}"> <i class="fa fa-edit me-2"></i>
+                                    <a href="#" class="menu-link px-3 update" val_id="${data.ID}" val_name="${data.NAME}"> <i class="fa fa-edit me-2"></i>
                                         تعديل
                                     </a>
                                 </div>
@@ -288,9 +266,7 @@ $team= new Team();
                                 <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                 <div class="menu-item px-3">
-                                    <a href="#" val_id="${data.ID}" class="menu-link px-3 view" data-kt-docs-table-filter="view_row"> <i class="fa fa-times me-2"></i>
-                                         عرض الأعضاء
-                                    </a>
+                                    <a href="#" val_id="${data.ID}" class="menu-link px-3 view" data-kt-docs-table-filter="view_row"> <i class="fa fa-users me-1"></i>الأعضاء</a>
                                 </div>
                 
                         `;
@@ -308,7 +284,6 @@ $team= new Team();
             // Re-init functions on every table re-draw -- more info: https://datatables.net/reference/event/draw
             dt.on('draw', function () {
                 handleDeleteRows();
-                handleViewRows();
                 KTMenu.createInstances();
             });
         }
@@ -327,208 +302,215 @@ $team= new Team();
         // });
     }
     
-        // Delete user
-        var handleDeleteRows = () => {
-            // Select all delete buttons
-            const deleteButtons = document.querySelectorAll('[data-kt-docs-table-filter="delete_row"]');
-    
-            deleteButtons.forEach(d => {
-                // Delete button on click
-                d.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    // Select parent row
-                    const parent = e.target.closest('tr');
-    
-                    // Get customer name
-                    const customerName = parent.querySelectorAll('td')[1].innerText;
-                    const id = $(this).attr('val_id'); 
-                    var str = $("#TEAM_ID").val(id);
-                    // SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
-                    Swal.fire({
-                        text: "هل أنت متأكد من حذف  " + customerName + " ؟",
-                        icon: "warning",
-                        showCancelButton: true,
-                        buttonsStyling: false,
-                        confirmButtonText: "نعم , احذف!",
-                        cancelButtonText: "لا , الغاء",
-                        customClass: {
-                            confirmButton: "btn fw-bold btn-danger",
-                            cancelButton: "btn fw-bold btn-active-light-primary"
-                        }
-                    }).then(function (result) {
-                        if (result.value) {
-                            // Simulate delete request -- for demo purpose only
-                            jQuery.ajax({
-                                type: "DELETE",
-                                url: 'teams/'+id,
-                                data:{
-                                    "_token": "{{ csrf_token() }}",
-                                },
-                                dataType: 'json',
-                                success :function (data) {
-                                    Swal.fire({
-                                    text: "تم حذف  " + customerName + "!.",
-                                    icon: "success",
-                                    buttonsStyling: false,
-                                    confirmButtonText: "حسنًا ، موافق!",
-                                    customClass: {
-                                        confirmButton: "btn fw-bold btn-primary",
-                                    }
-                                }).then(function () {
-                                    // delete row data from server and re-draw datatable
-                                    dt.draw();
-                                });
-                                }
-                            });
-                               
-                     
-                        } else if (result.dismiss === 'cancel') {
-                            Swal.fire({
-                                text: customerName + " تم الغاء عملية الحذف.",
-                                icon: "error",
+    // Delete user
+    var handleDeleteRows = () => {
+        // Select all delete buttons
+        const deleteButtons = document.querySelectorAll('[data-kt-docs-table-filter="delete_row"]');
+
+        deleteButtons.forEach(d => {
+            // Delete button on click
+            d.addEventListener('click', function (e) {
+                e.preventDefault();
+                // Select parent row
+                const parent = e.target.closest('tr');
+
+                // Get customer name
+                const customerName = parent.querySelectorAll('td')[1].innerText;
+                const id = $(this).attr('val_id'); 
+                var str = $("#TEAM_ID").val(id);
+                // SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
+                Swal.fire({
+                    text: "هل أنت متأكد من حذف  " + customerName + " ؟",
+                    icon: "warning",
+                    showCancelButton: true,
+                    buttonsStyling: false,
+                    confirmButtonText: "نعم , احذف!",
+                    cancelButtonText: "لا , الغاء",
+                    customClass: {
+                        confirmButton: "btn fw-bold btn-danger",
+                        cancelButton: "btn fw-bold btn-active-light-primary"
+                    }
+                }).then(function (result) {
+                    if (result.value) {
+                        // Simulate delete request -- for demo purpose only
+                        jQuery.ajax({
+                            type: "DELETE",
+                            url: 'teams/'+id,
+                            data:{
+                                "_token": "{{ csrf_token() }}",
+                            },
+                            dataType: 'json',
+                            success :function (data) {
+                                Swal.fire({
+                                text: "تم حذف  " + customerName + "!.",
+                                icon: "success",
                                 buttonsStyling: false,
                                 confirmButtonText: "حسنًا ، موافق!",
                                 customClass: {
                                     confirmButton: "btn fw-bold btn-primary",
                                 }
+                            }).then(function () {
+                                // delete row data from server and re-draw datatable
+                                dt.draw();
                             });
-                        }
-                    });
-                })
-            });
-        }
-
-       
-
-// Delete user
-var handleViewRows = () => {
-            // Select all delete buttons
-            const deleteButtons = document.querySelectorAll('[data-kt-docs-table-filter="view_row"]');
-    
-            deleteButtons.forEach(d => {
-                // Delete button on click
-                d.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    // Select parent row
-                    const parent = e.target.closest('tr');
-    
-                    // Get customer name
-                    const customerName = parent.querySelectorAll('td')[3].innerText;
-                    const id = $(this).attr('val_id'); 
-                    var str = $("#TEAM_ID").val(id);
-                   // alert(id);
-                    jQuery.ajax({
-                                type: "get",
-                                url: 'teams/giveMembers/'+id,
-                                dataType: 'json',
-                                success :function (data) {
-                                //    var i=0;
-                                $("#members_table").empty();
-                                $("#members_table").append('<tr>'+
-                                            '<th>#</th>'+
-                                            '<th>رقم الهوية</th>'+
-                                            '<th>الاسم</th>'+
-                                            '<th>الصفة</th>'+
-                                            '<th>الاجراءات</th>'+
-                                            '</tr>');
-                                data.forEach(element => {
-                                var role = (element.ROLE == 1) ? 'مشرف' : 'عضو';
-                              // i++;
-
-                              $("#members_table").append(
-                               // '<tr><td>'+i+'</td>' +
-                                '<tr><td>'+element.MEM_ID+'</td>' +
-                                '<td>'+element.ID_NUM +'</td>'+
-                                '<td>'+element.MEM_NAME+'</td>'+
-                                '<td>'+role+'</td>'+
-                                '<td>'+'<button type="button" id="delRoc" class="btn btn-primary cancel"><i class="fa fa-cancel"></i> حذف</button>'+'</td></tr>' );
-                                });
-                              }
-                            });
-
-
-                            $("#members_table").on('click', '.cancel', function () {
-                                
-                            //  var id =$(this).closest('tr').remove();
-                        //    var id =$(this).closest('tr');
-                        var    this_ = $(this);
-                        var currentRow=$(this).closest("tr"); 
-                        var id=currentRow.find("td:eq(0)").text(); 
-                        //alert(id);
-                            jQuery.ajax({
-                                type: "DELETE",
-                                url: 'members/'+id,
-                                data:{
-                                    "_token": "{{ csrf_token() }}",
-                                },
-                                dataType: 'json',
-                                success :function (data) {
-                                    Swal.fire({
-                                    text: "تم الحذف",
-                                    icon: "success",
-                                    buttonsStyling: false,
-                                    confirmButtonText: "حسنًا ، موافق!",
-                                    customClass: {
-                                        confirmButton: "btn fw-bold btn-primary",
-                                    }
-
-                                    
-                                }).then(function (response) {
-                                    this_.closest('tr').remove();
-           
-                                });
-                                }
-                            });
-                              });
-                });
-            });
-        }
-
-
-$(document).on('click', '.update', function (data, callbak) {
-     const id = $(this).attr('val_id'); 
-     var str = $("#ID").val(id);
-
-
-     $('#updateModal').modal('show');
-
-
-     
-});
-
- $("button[data-dismiss=modal]").click(function()
-{
-                   
-  $(".modal").modal('hide');
-});
-
-$(document).on('click', '.save', function (data, callbak) {
-    //const id = $(this).attr('val_id'); 
-                    var str = $("#ID").val();
-                  //  var strN = $("#NAME").val(); 
-                   alert(str);
-
-                    jQuery.ajax({
-                                type: "get",
-                                url: 'teams/update/'+str,
-                                data:{
-                                    NAME:NAME
-                                },
-                                dataType: 'json',
-                                success :function (data) {
-data.html("تم التعديل");
-return false;
-                                }
-                                }); 
+                            }
+                        });
                             
-                            });
+                    
+                    } else if (result.dismiss === 'cancel') {
+                        Swal.fire({
+                            text: customerName + " تم الغاء عملية الحذف.",
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: "حسنًا ، موافق!",
+                            customClass: {
+                                confirmButton: "btn fw-bold btn-primary",
+                            }
+                        });
+                    }
+                });
+            })
+        });
+    }
+
+    // start add team
+    $(document).on('click', '.add', function (data, callbak) {
+        $('#addModal').modal('show');  
+    });
+
+    $("#save_btn").click(function(e){
+        e.preventDefault();
+        jQuery.ajax({
+                type: "post",
+                url: 'teams',
+                data:{
+                    "_token": "{{ csrf_token() }}",
+                    "NAME": $("#NAME").val(),
+                },
+                dataType: 'json',
+                success :function (data) {
+                    $('#addModal').modal('hide');
+                    $("#NAME").val("");
+                    dt.draw();
+                    toastr.success("تمت عملية الحفظ بنجاح");
+
+                }
+            }); 
+    });
+    // end add team
+
+    //start edit team
+    $(document).on('click', '.update', function (data, callbak) {
+        $("#ID").val($(this).attr('val_id'));
+        $("#NAME_UPDATE").val($(this).attr('val_name'));
+        $('#updateModal').modal('show');
+    });
     
+    $("#btn_update").click(function(e){
+        e.preventDefault();
+        jQuery.ajax({
+                type: "PATCH",
+                url: 'teams/'+ $("#ID").val(),
+                data:{
+                    "_token": "{{ csrf_token() }}",
+                    "NAME": $("#NAME_UPDATE").val(),
+                },
+                dataType: 'json',
+                success :function (data) {
+                    $('#updateModal').modal('hide');
+                    $("#NAME_UPDATE").val("");
+                    $("#ID").val("");
+                    dt.draw();
+                    toastr.success("تمت عملية الحفظ بنجاح");
+
+                }
+            }); 
+    });
+    //end edit team
+
+    //start show members
+    $(document).on('click', '.view', function (data, callbak) {
+        var team_id = $(this).attr('val_id');
+        draw_members(team_id);
+    });
+    function draw_members (team_id){
+        jQuery.ajax({
+                type: "get",
+                url: 'teams/giveMembers/'+ team_id,
+                dataType: 'json',
+                success :function (data) {
+                    $("#members_table").find('tbody').empty();
+                    data.forEach((d, index)  => {
+                        $("#members_table").find('tbody').append("<tr><td>"+(index+1)+"</td><td>"+d.MEM_NAME+"</td><td><a val-id='"+d.MEM_ID+"' val_name='"+d.MEM_NAME+"' val_team_id='"+team_id+"' class='btn btn-icon btn-xs btn-sm btn-danger btn-member-delete'><i class='fa fa-trash'></i></a></td><td></td></tr>");
+                   
+                    });
+                }
+            }); 
+
+        $('#viewModal').modal('show');
+    }
+ $(document).on('click', '.btn-member-delete', function (data, callbak) {
+    const id =  $(this).attr('val-id');
+    const customerName = $(this).attr('val_name'); 
+    const team_id = $(this).attr('val_team_id');
+    alert(id);
+    Swal.fire({
+        text: "هل أنت متأكد من عملية الحذف",
+        icon: "warning",
+        showCancelButton: true,
+        buttonsStyling: false,
+        confirmButtonText: "نعم , احذف!",
+        cancelButtonText: "لا , الغاء",
+        customClass: {
+            confirmButton: "btn fw-bold btn-danger",
+            cancelButton: "btn fw-bold btn-active-light-primary"
+        }
+    }).then(function (result) {
+        if (result.value) {
+            // Simulate delete request -- for demo purpose only
+            jQuery.ajax({
+                type: "DELETE",
+                url: 'members/'+id,
+                data:{
+                    "_token": "{{ csrf_token() }}",
+                },
+                dataType: 'json',
+                success :function (data) {
+                    Swal.fire({
+                    text: "تم حذف  " + customerName + "!.",
+                    icon: "success",
+                    buttonsStyling: false,
+                    confirmButtonText: "حسنًا ، موافق!",
+                    customClass: {
+                        confirmButton: "btn fw-bold btn-primary",
+                    }
+                }).then(function () {
+                    // delete row data from server and re-draw datatable
+                    draw_members(team_id);
+                });
+                }
+            });
+                
+        
+        } else if (result.dismiss === 'cancel') {
+            Swal.fire({
+                text: customerName + " تم الغاء عملية الحذف.",
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "حسنًا ، موافق!",
+                customClass: {
+                    confirmButton: "btn fw-bold btn-primary",
+                }
+            });
+        }
+    });
+ });
+    //end show members
         // Public methods
         return {
             init: function () {
                 initDatatable();
                 handleDeleteRows();
-                handleViewRows();
                 handleSearchDatatable();
             }
         }
@@ -540,22 +522,10 @@ return false;
     });
     
 
-    $(document).on('click', '.view', function (data, callbak) {
    
-                    $('#viewModal').modal('show');
-                });
-$("button[data-dismiss=modal]").click(function()
-{
-  $(".modal").modal('hide');
-});
 
-$(document).on('click', '.add', function (data, callbak) {
-                    $('#addModal').modal('show');
-          
- });
-$("button[data-dismiss=modal]").click(function(){
-  $(".modal").modal('hide');
-});
+
+
 
     </script>
 @endpush
