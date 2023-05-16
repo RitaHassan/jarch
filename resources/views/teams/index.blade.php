@@ -168,9 +168,7 @@
                       </tbody> 
                 </table>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary close" data-dismiss="modal">اغلاق</button>
-                </div>
+               
             </div>
         </div>
     </div>
