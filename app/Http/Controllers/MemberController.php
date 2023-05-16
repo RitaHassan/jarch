@@ -53,9 +53,9 @@ class MemberController extends Controller
       $request->validate([
             'ID_NUM' => 'required|numeric|digits:9',
             'MEM_NAME' => 'required',
-            'ACTIVE' => 'required',
-            'ROLE' => 'required',
-            'TEAM_ID' => 'required'
+            'ACTIVE' => 'sometimes',
+            'ROLE' => 'sometimes',
+            'TEAM_ID' => 'sometimes'
 
         ]);
      //  dd('request');

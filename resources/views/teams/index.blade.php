@@ -153,8 +153,34 @@
                     <h3 id="modalTitle">عرض أعضاء الفريق</h3>
                 </div>
                 <div class="modal-body">
-                    <input type='hidden'  id ="TEAM_ID" name="TEAM_ID" value=""/>
+                    <div class="row">
+                        <input type='hidden'  id ="TEAM_ID" name="TEAM_ID" value=""/>
 
+                    {{-- <div class="col-sm-4 form-group mb-4">
+                        <label class="required form-label fw-bolder">اسم الفريق</label>
+                        <select name="TEAM_ID" id="TEAM_ID" class="form-control form-control-solid" disabled >
+                             <option value="-1" >--اختر--</option>
+                            @foreach($member2 as $m)
+                                <option value="{{$m->ID}}" {{$team->ID==$m->ID? 'selected' :''}}>{{$m->NAME}}</option>
+                            @endforeach 
+                        </select>  
+                    </div> --}}
+                    <div class="col-sm-4 form-group mb-4">
+                        <label class="required form-label fw-bolder">رقم هوية الموظف</label>
+                        <input type="text"  id="ID_NUM" name="ID_NUM"  class="form-control form-control-solid" 
+                        placeholder="رقم الهوية">
+                    </div>
+                    <div class="col-sm-6 form-group mb-6">
+                        <label class="required form-label fw-bolder">اسم الموظف</label>
+                        <input type="text"  id="MEM_NAME" name="MEM_NAME"   class="form-control form-control-solid" 
+                        placeholder="اسم الموظف">
+                    </div>
+                    <div class="col-xl-2 form-group mb-2">
+
+                    <button type="button" id="add_member" class='btn btn-icon btn-xl btn-xl btn-primary btn-add-member'><i class='fa fa-plus'></i></button>
+                </div>
+
+                </div>
                 <table class="table table-bordered table-hover table-striped dataTable" id="members_table">
   
                     <thead>
@@ -255,16 +281,10 @@
                                     </a>
                                 </div>
                                 <!--end::Menu item-->
+
                                 <!--begin::Menu item-->
                                 <div class="menu-item px-3">
-                                    <a href="${add_link}"  val_id="${data.ID}" class="menu-link px-3" data-kt-docs-table-filter=""> <i class="fa fa-times me-2"></i>
-                                        إضافة أعضاء
-                                    </a>
-                                </div>
-                                <!--end::Menu item-->
-                                <!--begin::Menu item-->
-                                <div class="menu-item px-3">
-                                    <a href="#" val_id="${data.ID}" class="menu-link px-3 view" data-kt-docs-table-filter="view_row"> <i class="fa fa-users me-1"></i>الأعضاء</a>
+                                    <a href="#" val_id="${data.ID}" val_name="${data.NAME}" class=" x menu-link px-3 view" data-kt-docs-table-filter="view_row"> <i class="fa fa-users me-1"></i>الأعضاء</a>
                                 </div>
                 
                         `;
@@ -429,8 +449,55 @@
     //start show members
     $(document).on('click', '.view', function (data, callbak) {
         var team_id = $(this).attr('val_id');
+        $('#TEAM_ID').val(team_id);
         draw_members(team_id);
     });
+
+    $("#add_member").click(function(e){
+        e.preventDefault();
+        var name  = $('#TEAM_ID').val();
+       // alert(name);
+        jQuery.ajax({
+                type: "post",
+                url: 'members',
+                data:{
+                    "_token": "{{ csrf_token() }}",
+                    "TEAM_ID":name,
+                    "ID_NUM": $("#ID_NUM").val(), 
+                    "MEM_NAME": $("#MEM_NAME").val(),
+                    "ROLE":0,
+                    "ACTIVE":1
+                },
+                dataType: 'json',
+                success :function (data) {
+                   // $('#addModal').modal('hide');
+                    $("#ID_NUM").val(""); 
+                    $("#MEM_NAME").val("");
+                    toastr.success("تمت عملية الحفظ بنجاح");
+                    draw_members(team_id);
+
+
+                }
+            }); 
+    });
+
+        $("#ID_NUM").change(function(){
+            if($(this).val().length==9){
+            jQuery.ajax({
+            type: "get",
+            url: '/members/info/'+$(this).val(),
+            dataType: 'json',
+            success :function (data) {
+            if(data.StatusCode == 1){
+                  $("#MEM_NAME").val(data.Result.FullName);
+            }else{
+                $("#MEM_NAME").val("");
+            }
+            }
+    
+        });
+        }
+        });
     function draw_members (team_id){
         jQuery.ajax({
                 type: "get",
