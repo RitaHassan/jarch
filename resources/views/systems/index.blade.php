@@ -71,15 +71,86 @@
                     <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
                     </div>
                 </th>
-                <th class="text-center fw-bolder">رقم النظام</th>
+                <th class="text-center fw-bolder min-w-100px">رقم النظام</th>
                 <th class="text-center fw-bolder">اسم النظام</th>
-                <th class="text-center fw-bolder">الاجراءات</th>
+                <th>الحالة</th>
+                <th class="text-end fw-bolder">الاجراءات</th>
             </thead>
 
         </table>
         <!--end::Datatable-->
     </div>
 </div>
+{{-- start modal to add system  --}}
+<div id="addModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">اضافة نظام</h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="required form-label fw-bolder">رقم النظام</label>
+                        <input type="text"  id="SYSTEM_NUM" name="SYSTEM_NUM"  class="form-control form-control-solid" 
+                        placeholder="رقم النظام">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="required form-label fw-bolder">اسم النظام</label>
+                        <input type="text"  id="SYSTEM_NAME" name="SYSTEM_NAME"  class="form-control form-control-solid" 
+                        placeholder="اسم النظام">
+                    </div>
+                    <div class="col-md-3">
+                        <br>
+                        <button type="submit" class="btn btn-primary" id="save_btn">
+                            <i class="fa fa-check me-2"></i> حفظ
+                        </button>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{{-- end modal to add system  --}}
+
+{{-- start modal to update system  --}}
+<div id="updateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">تعديل نظام</h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <input type="hidden" id="ID_UPDATE">
+                    <div class="col-md-3">
+                        <label class="required form-label fw-bolder">رقم النظام</label>
+                        <input type="text"  id="SYSTEM_NUM_UPDATE" name="SYSTEM_NUM_UPDATE"  class="form-control form-control-solid" 
+                        placeholder="رقم النظام">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="required form-label fw-bolder">اسم النظام</label>
+                        <input type="text"  id="SYSTEM_NAME_UPDATE" name="SYSTEM_NAME_UPDATE"  class="form-control form-control-solid" 
+                        placeholder="اسم النظام">
+                    </div>
+                    <div class="col-md-3">
+                        <br>
+                        <button type="submit" class="btn btn-primary" id="update_btn">
+                            <i class="fa fa-check me-2"></i> حفظ
+                        </button>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+{{-- end modal to update system  --}}
 @endsection
 @push('javascript')
 
@@ -124,13 +195,29 @@
                 },
                 columns: [
                     { data: 'ID',"searchable": false },
-                    { data: 'SYSTEM_NUM',"searchable": false },
-                    { data: 'SYSTEM_NAME',"searchable": false },
-                    { data: null,"searchable": false }
+                    { data: 'SYSTEM_NUM',"searchable": false ,"width": "100px"},
+                    { data: 'SYSTEM_NAME',"searchable": false,"className": 'text-center', },
+                    { data:'ACTIVE','title':'الحالة','bSort':true,render :function (data) {
+                        if(data == 1){
+                            return '<span class="badge badge-success">فعال</span>';
+                        }
+                        if(data == 0){
+                            return '<span class="badge badge-danger">غير فعال</span>';
+                        }
+                        return '-';
+                    }},
+                    { data: null,"searchable": false ,"width": "100px"}
                 ],
                 columnDefs: [
                     {
-                      
+                        targets: 0,
+                        orderable: false,
+                        render: function (data) {
+                            return `
+                                <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                    <input class="form-check-input" type="checkbox" value="${data}" />
+                                </div>`;
+                        }
                     },
                     {
                     targets: -1,
@@ -138,8 +225,15 @@
                     orderable: false,
                     className: 'text-end',
                     render: function (data, type, row) {
-                        var edit_link = '/systems/'+data.ID+'/edit';
-                       
+                        var toggel_text="";
+                        var toggel_icon="check";
+                       if(data.ACTIVE == 1){
+                        toggel_text="تعطيل";
+                        toggel_icon="times";
+                       }else{
+                        toggel_text="تفعيل";
+                        toggel_icon="check";
+                       }
                         return `\
                             <a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start" data-kt-menu-flip="top-end">
                                 ...
@@ -149,14 +243,19 @@
                             <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
                                 <!--begin::Menu item-->
                                 <div class="menu-item px-3">
-                                    <a href="${edit_link}" class="menu-link px-3" data-kt-docs-table-filter="edit_row"> <i class="fa fa-edit me-2"></i>
+                                    <a href="#" class="menu-link px-3 update" val_id="${data.ID}" val_system_num="${data.SYSTEM_NUM}"  val_name="${data.SYSTEM_NAME}"> <i class="fa fa-edit me-2"></i>
                                         تعديل
+                                    </a>
+                                </div>
+                                <div class="menu-item px-3">
+                                    <a href="#" class="menu-link px-3 toggel" val_id="${data.ID}"  > <i class="fa fa-${toggel_icon} me-2"></i>
+                                        ${toggel_text}
                                     </a>
                                 </div>
                                 <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                 <div class="menu-item px-3">
-                                    <a href="#" val_id="${data.ID}" class="menu-link px-3" data-kt-docs-table-filter="delete_row"> <i class="fa fa-times me-2"></i>
+                                    <a href="#" val_id="${data.ID}" class="menu-link px-3" data-kt-docs-table-filter="delete_row"> <i class="fa fa-trash me-2"></i>
                                         حذف
                                     </a>
                                 </div>
@@ -209,7 +308,7 @@
                     const parent = e.target.closest('tr');
     
                     // Get customer name
-                    const customerName = parent.querySelectorAll('td')[1].innerText;
+                    const customerName = parent.querySelectorAll('td')[2].innerText;
                     const id = $(this).attr('val_id'); 
                     // SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
                     Swal.fire({
@@ -266,8 +365,89 @@
             });
         }
 
-       
-    
+     
+
+        // start save system
+        $(document).on('click', '.add', function (data, callbak) {
+            $('#addModal').modal('show');  
+        });
+
+        $("#save_btn").click(function(e){
+            e.preventDefault();
+            jQuery.ajax({
+                    type: "post",
+                    url: 'systems',
+                    data:{
+                        "_token": "{{ csrf_token() }}",
+                        "NAME": $("#NAME").val(),
+                        "TEAM_ID" : 0,
+                        "SYSTEM_NUM": $("#SYSTEM_NUM").val(),
+                        "SYSTEM_NAME": $("#SYSTEM_NAME").val(),
+                        "ACTIVE" : 1
+                    },
+                    dataType: 'json',
+                    success :function (data) {
+                        $('#addModal').modal('hide');
+                        $("#SYSTEM_NUM").val("");
+                        $("#SYSTEM_NAME").val("");
+                        dt.draw();
+                        toastr.success("تمت عملية الحفظ بنجاح");
+
+                    }
+                }); 
+        });
+        // end save system
+
+       //start edit system
+       $(document).on('click', '.update', function (data, callbak) {
+            $("#ID_UPDATE").val($(this).attr('val_id'));
+            $("#SYSTEM_NUM_UPDATE").val($(this).attr('val_system_num'));
+            $("#SYSTEM_NAME_UPDATE").val($(this).attr('val_name'));
+            $('#updateModal').modal('show');
+        });
+        
+        $("#update_btn").click(function(e){
+            e.preventDefault();
+            jQuery.ajax({
+                type: "PATCH",
+                url: 'systems/'+ $("#ID_UPDATE").val(),
+                data:{
+                    "_token": "{{ csrf_token() }}",
+                    "TEAM_ID" : 0,
+                    "SYSTEM_NUM": $("#SYSTEM_NUM_UPDATE").val(),
+                    "SYSTEM_NAME": $("#SYSTEM_NAME_UPDATE").val(),
+                    "ACTIVE": 1
+                },
+                dataType: 'json',
+                success :function (data) {
+                    $('#updateModal').modal('hide');
+                    $("#SYSTEM_NUM_UPDATE").val("");
+                    $("#SYSTEM_NAME_UPDATE").val("");
+                    $("#ID_UPDATE").val("");
+                    dt.draw();
+                    toastr.success("تمت عملية الحفظ بنجاح");
+
+                }
+            }); 
+        });
+
+        // end edit system
+        
+        // toggel 
+        $(document).on('click', '.toggel', function (data, callbak) {
+            var id = $(this).attr('val_id');
+        jQuery.ajax({
+                type: "get",
+                url: 'systems/toggel/'+id,
+               
+                dataType: 'json',
+                success :function (data) {
+                    dt.draw();
+                    toastr.success("تمت العملية  بنجاح");
+
+                }
+            }); 
+        });
         // Public methods
         return {
             init: function () {

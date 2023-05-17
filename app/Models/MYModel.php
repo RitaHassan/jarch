@@ -12,7 +12,7 @@ class MYModel extends Model
     public $table_names = array(
         'teams' => 'teams',
         'MEMBERS' => 'MEMBERS',
-        'system_team' => 'system_team',
+        'SYSTEMS' => 'SYSTEMS',
         'tasks' => 'tasks'
 
 

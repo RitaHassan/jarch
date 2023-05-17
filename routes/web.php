@@ -31,6 +31,7 @@ Route::resource('members', 'MemberController');
 
 
 Route::get('systems/datatable', 'SystemController@datatable')->name('systems.datatable');
+Route::get('systems/toggel/{id}', 'SystemController@toggel')->name('systems.toggel');
 Route::resource('systems', 'SystemController');
 
 

@@ -15,7 +15,15 @@ class TeamController extends Controller
      */
     public function index()
     {
-        return view('teams.index');
+        $html_breadcrumbs = [
+            'title' => 'الفرق',
+            'title_url' => route('teams.index'),
+            'subtitle' => 'فهرس',
+            'datatable' => true,
+        ];
+        $html_new_path = '#';
+
+        return view('teams.index',compact('html_breadcrumbs','html_new_path'));
     }
 
     public function datatable(Request $request)
@@ -52,7 +60,7 @@ class TeamController extends Controller
         $team = new Team();
         $request->request->add(['CREATED_BY' => 1]);
         $result = Team::Save_(change_key($request->only($team->getFillable())));
-        return back()->with('success', 'تمت عملية الحفظ بنجاح');
+       return [];
      //   return view('systems.create');
     }
 
@@ -164,21 +172,17 @@ class TeamController extends Controller
             'TEAM_ID' => 'sometimes'
 
         ]);
-     //  dd('request');
 
      $team=new Team();
-     //dd((int)$id); 
         $id1 = (int)$id;
         $request->request->add([ 'CREATED_BY' => 1 , 'TEAM_ID'=>$id1]);
        
         $result = Team::Save_by_id(change_key($request->only($team->getFillable())));
-       // dd($request->only($member->getFillable()));
         if($result['STATUS']==1){
             return back()->with('success',$result['MSG'] );
 
         }else {
             return back()->with('error',$result['MSG'] );
-           // return redirect('study')->with('success', 'تم اضافة الدراسة بنجاح');
         }
     }
 }
