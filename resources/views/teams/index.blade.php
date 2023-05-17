@@ -469,7 +469,7 @@
                     "ACTIVE":1
                 },
                 dataType: 'json',
-                success :function (data) {
+                success :function () {
                    // $('#addModal').modal('hide');
                     $("#ID_NUM").val(""); 
                     $("#MEM_NAME").val("");
