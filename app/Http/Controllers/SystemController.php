@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\System;
-
+use App\Models\Member;
+use App\Models\SystemMembers;
 
 class SystemController extends Controller
 {
@@ -22,7 +23,8 @@ class SystemController extends Controller
             'datatable' => true,
         ];
         $html_new_path = '#';
-        return view('systems.index',compact('html_breadcrumbs','html_new_path'));
+        $members = Member::LOAD_DATA(null,0,100)['data'];
+        return view('systems.index',compact('html_breadcrumbs','html_new_path','members'));
     }
 
     /**
@@ -62,8 +64,6 @@ class SystemController extends Controller
             'ACTIVE' => 'required'
 
         ]);
-      // dd('request');
-
      $system = new System();
      $request->request->add(['CREATED_BY' => 1]);
      $result = System::Save_(change_key($request->only($system->getFillable())));
@@ -142,8 +142,41 @@ class SystemController extends Controller
         return [];
     }
 
-    function toggel($id){
+    public function toggel($id){
         System::TOGGEL($id);
+        return [];
+    }
+
+    public function add_members(Request $request)
+    {
+        $request->validate([
+            'SYSTEM_ID' => 'required',
+            'MEMBER_ID' => 'required'
+        ]);
+        $SystemMembers = new SystemMembers();
+        $request->request->add(['CREATED_BY' => 1]);
+        $result = SystemMembers::Save_(change_key($request->only($SystemMembers->getFillable())));
+        if($result['STATUS']==1){
+            return ['status'=>1];
+ 
+         }else {
+             return ['status'=>-1,'msg'=>$result['MSG']];
+ 
+         }
+    }
+
+    public function members($id)
+    {
+        $members = SystemMembers::get_systems_by_id($id)['data'];
+        return $members;
+    }
+
+    public function delete_member($id)
+    {
+        $member = new SystemMembers();
+        if ($member->find_by_id($id)) {
+            $member->delete_by_id($id);
+        }
         return [];
     }
 

@@ -13,7 +13,8 @@ class MYModel extends Model
         'teams' => 'teams',
         'MEMBERS' => 'MEMBERS',
         'SYSTEMS' => 'SYSTEMS',
-        'tasks' => 'tasks'
+        'tasks' => 'tasks',
+        'SYSTEM_MEMBERS' => 'SYSTEM_MEMBERS'
 
 
     );

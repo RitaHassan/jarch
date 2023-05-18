@@ -32,6 +32,9 @@ Route::resource('members', 'MemberController');
 
 Route::get('systems/datatable', 'SystemController@datatable')->name('systems.datatable');
 Route::get('systems/toggel/{id}', 'SystemController@toggel')->name('systems.toggel');
+Route::post('systems/members', 'SystemController@add_members')->name('systems.members.store');
+Route::get('systems/members/{id}', 'SystemController@members')->name('systems.members.delete');
+Route::delete('systems/members/{id}', 'SystemController@delete_member')->name('systems.members');
 Route::resource('systems', 'SystemController');
 
 

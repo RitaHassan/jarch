@@ -102,102 +102,30 @@
                                 <span class="menu-title">الرئيسية</span>
                             </a>
                         </div>
-                                                                                                                                                                                        
-                            <div data-kt-menu-trigger="click" class="menu-item here menu-accordion">
-                                <span class="menu-link">
+                        <div class="menu-item">
+                            <a class="menu-link" href="{{route('teams.index')}}">
                                     <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <span class="svg-icon svg-icon-2">
-                                           <i class="fa fa-users"></i>
-                                        </span>
-                                        <!--end::Svg Icon-->
+                                            <i class="fa fa-users"></i>
+                                         </span>
                                     </span>
-                                    <span class="menu-title">الفرق</span>
-                                    <span class="menu-arrow"></span>
-                                </span>
-                                    <div class="menu-sub menu-sub-accordion menu-active-bg">
-                                            <div class="menu-item">
-                                                    <a class="menu-link" href="{{route('teams.index')}}">
-                                            <span class="menu-bullet">
-                                                <span class="bullet bullet-dot"></span>
-                                            </span>
-                                                        <span class="menu-title">عرض الفرق</span>
-                                                    </a>
-                                                </div>
-                                            <div class="menu-item">
-                                                    <a class="menu-link" href="{{route('teams.create')}}">
-                                            <span class="menu-bullet">
-                                                <span class="bullet bullet-dot"></span>
-                                            </span>
-                                                        <span class="menu-title">إضافة فريق</span>
-                                                    </a>
-                                                </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>
-                                </div>
-
-
-                                <div data-kt-menu-trigger="click" class="menu-item here menu-accordion">
-                                    <span class="menu-link">
-                                        <span class="menu-icon">
-                                            <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                            <span class="svg-icon svg-icon-2">
-                                                <img src="/assets/media/icons/research.svg">
-                                            </span>
-                                            <!--end::Svg Icon-->
-                                        </span>
-                                        <span class="menu-title">أعضاء الفرق</span>
-                                        <span class="menu-arrow"></span>
+                                <span class="menu-title">الفرق</span>
+                            </a>
+                        </div>
+                        <div class="menu-item">
+                            <a class="menu-link" href="{{route('systems.index')}}">
+                                    <span class="menu-icon">
+                                        <span class="svg-icon svg-icon-2">
+                                            <i class="fa fa-users"></i>
+                                         </span>
                                     </span>
-                                        <div class="menu-sub menu-sub-accordion menu-active-bg">
-                                                <div class="menu-item">
-                                                        <a class="menu-link" href="{{route('members.index')}}">
-                                                <span class="menu-bullet">
-                                                    <span class="bullet bullet-dot"></span>
-                                                </span>
-                                                            <span class="menu-title">عرض الأعضاء</span>
-                                                        </a>
-                                                    </div>
-                                                <div class="menu-item">
-                                                        <a class="menu-link" href="{{route('members.create')}}">
-                                                <span class="menu-bullet">
-                                                    <span class="bullet bullet-dot"></span>
-                                                </span>
-                                                            <span class="menu-title">إضافة الأعضاء</span>
-                                                        </a>
-                                                    </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
-                                    </div>
-                                    <div data-kt-menu-trigger="click" class="menu-item here menu-accordion">
-                                        <span class="menu-link">
-                                            <span class="menu-icon">
-                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                                <span class="svg-icon svg-icon-2">
-                                                    <img src="/assets/media/icons/research.svg">
-                                                </span>
-                                                <!--end::Svg Icon-->
-                                            </span>
-                                            <span class="menu-title">أنظمة الفرق</span>
-                                            <span class="menu-arrow"></span>
-                                        </span>
-                                            <div class="menu-sub menu-sub-accordion menu-active-bg">
-                                                    <div class="menu-item">
-                                                            <a class="menu-link" href="{{route('systems.index')}}">
-                                                    <span class="menu-bullet">
-                                                        <span class="bullet bullet-dot"></span>
-                                                    </span>
-                                                                <span class="menu-title">عرض الأنظمة</span>
-                                                            </a>
-                                                        </div>
-                                                    <div class="menu-item">
-                                                            <a class="menu-link" href="{{route('systems.create')}}">
-                                                    <span class="menu-bullet">
-                                                        <span class="bullet bullet-dot"></span>
-                                                    </span>
-                                                                <span class="menu-title">إضافة الأنظمة</span>
-                                                            </a>
-                                                        </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
-                                        </div>
+                                <span class="menu-title">الانظمة</span>
+                            </a>
+                        </div>
+                                                                                                                                                                                        
+                         
+
+                              
                                         <div data-kt-menu-trigger="click" class="menu-item here menu-accordion">
                                             <span class="menu-link">
                                                 <span class="menu-icon">

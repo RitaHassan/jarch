@@ -151,6 +151,49 @@
     </div>
 </div>
 {{-- end modal to update system  --}}
+<div id="membersModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">عرض أعضاء الفريق</h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <input type='hidden'  id ="SYSTEM_ID" name="SYSTEM_ID" value=""/>
+
+                <div class="col-sm-10 form-group mb-10">
+                    <label class="required form-label fw-bolder">اسم العضو</label>
+                    <select name="MEMBER_ID" id="MEMBER_ID" class="form-control form-control-solid"  >
+                         <option value="" >--اختر--</option>
+                        @foreach($members as $member)
+                            <option value="{{$member->ID}}">{{$member->MEM_NAME}}</option>
+                        @endforeach 
+                    </select>  
+                </div>
+                
+                <div class="col-xl-2 form-group mb-2">
+                    <br>
+                <button type="button" id="add_member" class='btn btn-sm btn-icon btn-xl btn-xl btn-primary btn-add-member'><i class='fa fa-plus'></i></button>
+            </div>
+
+            </div>
+            <table class="table table-bordered table-hover table-striped dataTable" id="members_table">
+
+                <thead>
+                    <tr>
+                    <th>#</th>
+                    <th>الاسم</th>
+                    <th></th>
+                    </tr>
+                  </thead>   
+                  <tbody >
+                  </tbody> 
+            </table>
+            </div>
+           
+        </div>
+    </div>
+</div>
 @endsection
 @push('javascript')
 
@@ -242,6 +285,11 @@
                             <!--begin::Menu-->
                             <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
                                 <!--begin::Menu item-->
+                                <div class="menu-item px-3">
+                                    <a href="#" class="menu-link px-3 members" val_id="${data.ID}" val_system_num="${data.SYSTEM_NUM}"> <i class="fa fa-users me-2"></i>
+                                        الاعضاء
+                                    </a>
+                                </div>
                                 <div class="menu-item px-3">
                                     <a href="#" class="menu-link px-3 update" val_id="${data.ID}" val_system_num="${data.SYSTEM_NUM}"  val_name="${data.SYSTEM_NAME}"> <i class="fa fa-edit me-2"></i>
                                         تعديل
@@ -405,7 +453,85 @@
             $("#SYSTEM_NAME_UPDATE").val($(this).attr('val_name'));
             $('#updateModal').modal('show');
         });
+        $(document).on('click', '.members', function (data, callbak) {
+            $("#SYSTEM_ID").val($(this).attr('val_id'));
+            draw_members($(this).attr('val_id'));
+             $('#membersModal').modal('show');
+        })
         
+        function draw_members(system_id){
+            jQuery.ajax({
+                    type: "get",
+                    url: 'systems/members/'+ system_id,
+                    dataType: 'json',
+                    success :function (data) {
+                        $("#members_table").find('tbody').empty();
+                        data.forEach((d, index)  => {
+                            $("#members_table").find('tbody').append("<tr><td>"+(index+1)+"</td><td>"+d.MEM_NAME+"</td><td><a val-id='"+d.ID+"' val_name='"+d.MEM_NAME+"' val_system_id ='"+d.SYSTEM_ID+"' class='btn btn-icon btn-xs btn-sm btn-danger btn-member-delete'><i class='fa fa-trash'></i></a></td><td></td></tr>");
+                    
+                        });
+                    }
+                }); 
+
+            $('#viewModal').modal('show');
+        }
+
+        $(document).on('click', '.btn-member-delete', function (data, callbak) {
+            const id =  $(this).attr('val-id');
+            const customerName = $(this).attr('val_name');
+            const system_id = $(this).attr('val_system_id'); 
+            Swal.fire({
+                text: "هل أنت متأكد من عملية الحذف",
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: "نعم , احذف!",
+                cancelButtonText: "لا , الغاء",
+                customClass: {
+                    confirmButton: "btn fw-bold btn-danger",
+                    cancelButton: "btn fw-bold btn-active-light-primary"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    // Simulate delete request -- for demo purpose only
+                    jQuery.ajax({
+                        type: "DELETE",
+                        url: 'systems/members/'+id,
+                        data:{
+                            "_token": "{{ csrf_token() }}",
+                        },
+                        dataType: 'json',
+                        success :function (data) {
+                            Swal.fire({
+                            text: "تم حذف  " + customerName + "!.",
+                            icon: "success",
+                            buttonsStyling: false,
+                            confirmButtonText: "حسنًا ، موافق!",
+                            customClass: {
+                                confirmButton: "btn fw-bold btn-primary",
+                            }
+                        }).then(function () {
+                            // delete row data from server and re-draw datatable
+                            draw_members(system_id);
+                        });
+                        }
+                    });
+                        
+                
+                } else if (result.dismiss === 'cancel') {
+                    Swal.fire({
+                        text: customerName + " تم الغاء عملية الحذف.",
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: "حسنًا ، موافق!",
+                        customClass: {
+                            confirmButton: "btn fw-bold btn-primary",
+                        }
+                    });
+                }
+            });
+        });
+
         $("#update_btn").click(function(e){
             e.preventDefault();
             jQuery.ajax({
@@ -430,13 +556,39 @@
                 }
             }); 
         });
+        $("#add_member").click(function(e){
+        e.preventDefault();
+        var SYSTEM_ID  = $('#SYSTEM_ID').val();
+        jQuery.ajax({
+                type: "post",
+                url: 'systems/members',
+                data:{
+                    "_token": "{{ csrf_token() }}",
+                    "SYSTEM_ID":SYSTEM_ID,
+                    "MEMBER_ID": $("#MEMBER_ID").val(), 
+                },
+                dataType: 'json',
+                success :function (data) {
+                    if(data.status ==1){
+                        $("#ID_NUM").val(""); 
+                        $("#MEM_NAME").val("");
+                        toastr.success("تمت عملية الحفظ بنجاح");
+                        draw_members(team_id);
+                    }else{
+                        toastr.error(data.msg);
+                    }
+                    
 
+
+                }
+            }); 
+    });
         // end edit system
         
         // toggel 
         $(document).on('click', '.toggel', function (data, callbak) {
             var id = $(this).attr('val_id');
-        jQuery.ajax({
+            jQuery.ajax({
                 type: "get",
                 url: 'systems/toggel/'+id,
                

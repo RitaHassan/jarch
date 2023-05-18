@@ -3,9 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use PDO;
 
-class SYSTEM_MEMBERS extends MYModel
+class SystemMembers extends MYModel
 {
     use HasFactory;
     protected $fillable = [
@@ -61,7 +62,7 @@ public static function get_systems_by_id($P_SYSTEM_ID){
         $cursor =null;
         $data = array();
         $stmt = DB::getPdo()->prepare("begin SYSTEM_MEMBERS_PKG.get_systems_by_id(:P_SYSTEM_ID,:out_cursor); end;");
-        $stmt->bindValue(':P_SYSTEM_ID', $array_in['P_SYSTEM_ID'], PDO::PARAM_NULL);
+        $stmt->bindValue(':P_SYSTEM_ID', $P_SYSTEM_ID, PDO::PARAM_NULL);
         $stmt->bindParam(':out_cursor', $cursor, PDO::PARAM_STMT, 0, \OCI_B_CURSOR);
         $stmt->execute();
         oci_execute($cursor, OCI_DEFAULT);

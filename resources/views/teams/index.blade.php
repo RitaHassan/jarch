@@ -75,7 +75,7 @@
                     <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
                     </div>
                 </th>
-                <th class="text-center fw-bolder">اسم الفريق</th>
+                <th class="fw-bolder">اسم الفريق</th>
                 <th class="text-end fw-bolder">الاجراءات</th>
             </thead>
 
@@ -164,8 +164,8 @@
                         placeholder="اسم الموظف">
                     </div>
                     <div class="col-xl-2 form-group mb-2">
-
-                    <button type="button" id="add_member" class='btn btn-icon btn-xl btn-xl btn-primary btn-add-member'><i class='fa fa-plus'></i></button>
+                        <br>
+                    <button type="button" id="add_member" class='btn btn-sm btn-icon btn-xl btn-xl btn-primary btn-add-member'><i class='fa fa-plus'></i></button>
                 </div>
 
                 </div>
@@ -227,7 +227,7 @@
                 },
                 columns: [
                     { data: 'ID',"searchable": false },
-                    { data: 'NAME',"searchable": false },
+                    { data: 'NAME',"searchable": false ,},
                     { data: null,"searchable": false ,"width": "100px"}
                 ],
                 columnDefs: [
@@ -381,6 +381,8 @@
 
     // start add team
     $(document).on('click', '.add', function (data, callbak) {
+        $("#ID_NUM").val("");
+        $("#MEM_NAME").val("");
         $('#addModal').modal('show');  
     });
 
@@ -443,26 +445,29 @@
 
     $("#add_member").click(function(e){
         e.preventDefault();
-        var name  = $('#TEAM_ID').val();
-       // alert(name);
+        var team_id  = $('#TEAM_ID').val();
         jQuery.ajax({
                 type: "post",
                 url: 'members',
                 data:{
                     "_token": "{{ csrf_token() }}",
-                    "TEAM_ID":name,
+                    "TEAM_ID":team_id,
                     "ID_NUM": $("#ID_NUM").val(), 
                     "MEM_NAME": $("#MEM_NAME").val(),
                     "ROLE":0,
                     "ACTIVE":1
                 },
                 dataType: 'json',
-                success :function () {
-                   // $('#addModal').modal('hide');
-                    $("#ID_NUM").val(""); 
-                    $("#MEM_NAME").val("");
-                    toastr.success("تمت عملية الحفظ بنجاح");
-                    draw_members(team_id);
+                success :function (data) {
+                    if(data.status ==1){
+                        $("#ID_NUM").val(""); 
+                        $("#MEM_NAME").val("");
+                        toastr.success("تمت عملية الحفظ بنجاح");
+                        draw_members(team_id);
+                    }else{
+                        toastr.error(data.msg);
+                    }
+                    
 
 
                 }
@@ -506,7 +511,6 @@
     const id =  $(this).attr('val-id');
     const customerName = $(this).attr('val_name'); 
     const team_id = $(this).attr('val_team_id');
-    alert(id);
     Swal.fire({
         text: "هل أنت متأكد من عملية الحذف",
         icon: "warning",

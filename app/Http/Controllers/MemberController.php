@@ -64,11 +64,11 @@ class MemberController extends Controller
         $request->request->add(['CREATED_BY' => 1]);
         $result = Member::Save_(change_key($request->only($member->getFillable())));
         if($result['STATUS']==1){
-            return back()->with('success',$result['MSG'] );
+           return ['status'=>1];
 
         }else {
-            return back()->with('error',$result['MSG'] );
-           // return redirect('study')->with('success', 'تم اضافة الدراسة بنجاح');
+            return ['status'=>-1,'msg'=>$result['MSG']];
+
         }
      /*   header('Content-Type: application/json');
         echo json_encode($result);*/
