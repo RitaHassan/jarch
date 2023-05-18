@@ -76,7 +76,7 @@
                                     @foreach($system as $m)
                                         <option value="{{ $m->ID }}" {{$tasks->SYSTEM_ID == $m->ID  ? 'selected' : ''}}>{{ $m->SYSTEM_NAME}}</option>
                                     @endforeach
-                                    </select> 
+                                </select> 
                             </div>
                               
                             <div class="col-xl-6 form-group mb-6">

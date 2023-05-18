@@ -35,7 +35,7 @@ class Tasks extends MYModel
         'DURATION_TYPE',
         'MEM_ID' ,
         'ACTUAL_FINISH_MONTH',
-        'ACTUAL_FINISH_YEAR'
+        'ACTUAL_FINISH_YEAR',
 
     ];
 
@@ -47,14 +47,15 @@ class Tasks extends MYModel
         $this->table_name = $this->table_names['tasks'];
     }
 
-    public static function LOAD_DATA($P_TITLE,$P_ACTUAL_FINISH_MONTH,$P_ACTUAL_FINISH_YEAR,$P_STRAT,$P_LENGTH){
+    public static function LOAD_DATA($P_TITLE,$P_ACTUAL_FINISH_MONTH,$P_ACTUAL_FINISH_YEAR,$P_MEM_ID,$P_STRAT,$P_LENGTH){
         $cursor =null;
         $data = array();
         $P_recordsTotal = 0;
-        $stmt = DB::getPdo()->prepare("begin TASKS_PKG.LOAD_DATA(:P_TITLE,:P_ACTUAL_FINISH_MONTH,:P_ACTUAL_FINISH_YEAR,:P_STRAT, :P_LENGTH, :P_recordsTotal, :out_cursor); end;");
+        $stmt = DB::getPdo()->prepare("begin TASKS_PKG.LOAD_DATA(:P_TITLE,:P_ACTUAL_FINISH_MONTH,:P_ACTUAL_FINISH_YEAR,:P_MEM_ID,:P_STRAT,:P_LENGTH,:P_recordsTotal,:out_cursor); end;");
         $stmt->bindValue(':P_TITLE', $P_TITLE, PDO::PARAM_NULL);
         $stmt->bindValue(':P_ACTUAL_FINISH_MONTH', $P_ACTUAL_FINISH_MONTH, PDO::PARAM_NULL);
         $stmt->bindValue(':P_ACTUAL_FINISH_YEAR', $P_ACTUAL_FINISH_YEAR, PDO::PARAM_NULL);
+        $stmt->bindValue(':P_MEM_ID', $P_MEM_ID, PDO::PARAM_NULL);
         $stmt->bindValue(':P_STRAT', $P_STRAT, PDO::PARAM_NULL);
         $stmt->bindValue(':P_LENGTH', $P_LENGTH, PDO::PARAM_NULL);
         $stmt->bindParam(':P_recordsTotal', $P_recordsTotal, PDO::PARAM_INT);
@@ -237,6 +238,23 @@ class Tasks extends MYModel
          ];
          return $res;
          }
+
+
+
+         public static function get_all_members(){
+            $cursor =null;
+            $data = array();
+            $stmt = DB::getPdo()->prepare("begin TASKS_PKG.get_all_members(:out_cursor); end;");
+            $stmt->bindParam(':out_cursor', $cursor, PDO::PARAM_STMT, 0, \OCI_B_CURSOR);
+            $stmt->execute();
+            oci_execute($cursor, OCI_DEFAULT);
+            while($row = oci_fetch_object($cursor, OCI_ASSOC | OCI_RETURN_NULLS)){
+                $data[] = $row;
+            }
+    
+            oci_free_cursor($cursor);
+            return ['data'=>$data];
+        }
     
     
        

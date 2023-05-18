@@ -1,6 +1,11 @@
 @extends('layout')
 @section('contents')
 
+@php
+use App\Models\Tasks;
+$tasks = new Tasks();
+$get_all_members= $tasks->get_all_members()['data'];
+@endphp
 
 
 <div id="waitModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
@@ -8,7 +13,6 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h3 id="modalTitle">اضافة سبب التأجيل</h3>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
 
                 </div>
                 <div class="modal-body">
@@ -24,7 +28,6 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary save" data-dismiss="modal">حفظ</button>
-                    <button type="button" class="btn btn-secondary close" data-dismiss="modal">اغلاق</button>
                 </div>
             </div>
         </div>
@@ -37,7 +40,6 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3 id="modalTitle">اضافة سبب الالغاء</h3>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">×</button>
     
                     </div>
                     <div class="modal-body">
@@ -53,7 +55,6 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary save_cancel" data-dismiss="modal">حفظ</button>
-                        <button type="button" class="btn btn-secondary close" data-dismiss="modal">اغلاق</button>
                     </div>
                 </div>
             </div>
@@ -105,24 +106,34 @@
             <div class="card-body">
                 <form action="">
                     <div class="row">
-                            <div class="col-sm-2">
-                            <div class="form-group" id="">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+
+                                <select name="MEM_ID" id="MEM_ID" class="form-control form-control-solid w-250px ps-15" data-kt-docs-table-filter="search4" >
+                                    <option value="option_select" disabled selected>--اختر--</option>
+                                    @foreach($get_all_members as $member)
+                                        <option value="{{ $member->ID }}" {{$member->ID}}>{{ $member->MEM_NAME}}</option>
+                                    @endforeach
+                                </select> 
+
+                            </div>
+                        </div>
+                            <div class="col-sm-3">
+                            <div class="form-group">
                                 <input type="text" data-kt-docs-table-filter="search" class="form-control form-control-solid w-250px ps-15" placeholder="عنوان المهمة" >
                             </div>
                         </div>
-                        &ensp;
-                        <div class="col-sm-2">
-                        <div class="form-group" id="">
+                        <div class="col-sm-3">
+                        <div class="form-group">
                             <input type="text" data-kt-docs-table-filter="search2"  id="ACTUAL_FINISH_MONTH" class="form-control form-control-solid w-250px ps-15" placeholder="شهر" >
                         </div>
                         </div>
-                        &ensp;
-                        <div class="col-sm-2">
-                            <div class="form-group" id="">
+                        <div class="col-sm-3">
+                            <div class="form-group">
                                 <input type="text" data-kt-docs-table-filter="search3"  id="ACTUAL_FINISH_YEAR" class="form-control form-control-solid w-250px ps-15" placeholder="سنة" >
                             </div>
-                            </form>
-                        </div>
+                        </div>  
+                     
                     </div>
                 </form>
             </div>
@@ -193,6 +204,7 @@
                 "data": function ( d ) {
                     d.ACTUAL_FINISH_MONTH = $('#ACTUAL_FINISH_MONTH').val();
                     d.ACTUAL_FINISH_YEAR= $('#ACTUAL_FINISH_YEAR').val();
+                    d.MEM_ID= $('#MEM_ID').val();
                     // d.CARD_ID = $('#CARD_ID').val(); 
                     // d.LICENSE_NUMBER = $('#LICENSE_NUMBER').val();
                     // d.LICENSE_EXPIRATION_DATE = $('#LICENSE_EXPIRATION_DATE').val(); 
@@ -391,6 +403,13 @@
             filterSearch3.addEventListener('keyup', function (x) {
                  dt.draw();
              });
+        }  
+        
+        var handleSearchDatatable4 = function () {
+            const filterSearch4= document.querySelector('[data-kt-docs-table-filter="search4"]');
+            filterSearch4.addEventListener('change', function (x) {
+                 dt.draw();
+             });
         }    
         // Delete user
         var handleDeleteRows = () => {
@@ -523,6 +542,7 @@
                 handleSearchDatatable();
                 handleSearchDatatable2();
                 handleSearchDatatable3();
+                handleSearchDatatable4();
                 handleupdateRows();
                 handleupdatecancel();
             }
