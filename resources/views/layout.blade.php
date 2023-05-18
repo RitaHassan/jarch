@@ -116,7 +116,7 @@
                             <a class="menu-link" href="{{route('systems.index')}}">
                                     <span class="menu-icon">
                                         <span class="svg-icon svg-icon-2">
-                                            <i class="fa fa-users"></i>
+                                            <i class="icon-xl fas fa-window-restore"></i>
                                          </span>
                                     </span>
                                 <span class="menu-title">الانظمة</span>

@@ -573,7 +573,7 @@
                         $("#ID_NUM").val(""); 
                         $("#MEM_NAME").val("");
                         toastr.success("تمت عملية الحفظ بنجاح");
-                        draw_members(team_id);
+                        draw_members(SYSTEM_ID);
                     }else{
                         toastr.error(data.msg);
                     }
