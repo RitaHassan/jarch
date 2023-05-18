@@ -161,7 +161,7 @@
                     <div class="col-sm-6 form-group mb-6">
                         <label class="required form-label fw-bolder">اسم الموظف</label>
                         <input type="text"  id="MEM_NAME" name="MEM_NAME"   class="form-control form-control-solid" 
-                        placeholder="اسم الموظف">
+                        placeholder="اسم الموظف" readonly>
                     </div>
                     <div class="col-xl-2 form-group mb-2">
                         <br>
