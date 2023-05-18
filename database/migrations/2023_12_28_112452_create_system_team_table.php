@@ -13,18 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('system_team', function (Blueprint $table) {
-            // $table->id();
-            // $table->timestamps();
-            // $table->string('SYSTEM_NAME',255);
-            // $table->integer('TEAM_ID');
-            // $table->integer('ID_NUM');
-            // $table->integer('SYSTEM_NUM');
-            // $table->integer('ACTIVE');
-            // $table->integer('created_by')->unsigned()->nullable();
-            // $table->integer('updated_by')->unsigned()->nullable();
-            // $table->softDeletes();
-        });
+        // Schema::create('system_team', function (Blueprint $table) {
+        //     // $table->id();
+        //     // $table->timestamps();
+        //     // $table->string('SYSTEM_NAME',255);
+        //     // $table->integer('TEAM_ID');
+        //     // $table->integer('ID_NUM');
+        //     // $table->integer('SYSTEM_NUM');
+        //     // $table->integer('ACTIVE');
+        //     // $table->integer('created_by')->unsigned()->nullable();
+        //     // $table->integer('updated_by')->unsigned()->nullable();
+        //     // $table->softDeletes();
+        // });
     }
 
     /**

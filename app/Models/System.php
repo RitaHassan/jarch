@@ -21,7 +21,7 @@ class System extends MYModel
 
     public function __construct() {
         parent::__construct();
-        $this->table_name = $this->table_names['system_team'];
+        $this->table_name = $this->table_names['SYSTEMS'];
     }
 
     public static function LOAD_DATA($P_NAME,$P_STRAT,$P_LENGTH){
@@ -76,6 +76,12 @@ class System extends MYModel
         }
         oci_free_cursor($cursor);
         return ['data'=>$data];
+    }
+
+    public static function TOGGEL($id){
+        $stmt = DB::getPdo()->prepare("begin SYSTEM_PKG.TOGGEL(:p_id); end;");
+        $stmt->bindValue(':P_ID', $id, PDO::PARAM_NULL);
+        $stmt->execute();
     }
    
 

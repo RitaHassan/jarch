@@ -15,7 +15,14 @@ class SystemController extends Controller
      */
     public function index()
     {
-        return view('systems.index');
+        $html_breadcrumbs = [
+            'title' => 'الأنظمة',
+            'title_url' => route('systems.index'),
+            'subtitle' => 'فهرس',
+            'datatable' => true,
+        ];
+        $html_new_path = '#';
+        return view('systems.index',compact('html_breadcrumbs','html_new_path'));
     }
 
     /**
@@ -48,8 +55,6 @@ class SystemController extends Controller
      */
     public function store(Request $request)
     {
-     
-   
       $request->validate([
             'TEAM_ID' => 'required',
             'SYSTEM_NUM' => 'required',
@@ -61,9 +66,8 @@ class SystemController extends Controller
 
      $system = new System();
      $request->request->add(['CREATED_BY' => 1]);
-        $result = System::Save_(change_key($request->only($system->getFillable())));
-      // dd($result);
-        return back()->with('success', 'تمت عملية الحفظ بنجاح');
+     $result = System::Save_(change_key($request->only($system->getFillable())));
+        return [];
     }
 
     /**
@@ -120,7 +124,7 @@ class SystemController extends Controller
       
         $request->request->add(['UPDATED_BY' => 1,'ID'=>$id]);
         $result = System::Update_(change_key($request->only((new System())->getFillable())));
-        return back()->with('success', 'تمت عملية الحفظ بنجاح');
+        return [];
     }
 
     /**
@@ -138,5 +142,9 @@ class SystemController extends Controller
         return [];
     }
 
+    function toggel($id){
+        System::TOGGEL($id);
+        return [];
+    }
 
 }

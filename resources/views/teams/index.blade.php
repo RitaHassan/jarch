@@ -3,19 +3,7 @@
 
 
 <div class="card shadow-sm">
-    <div class="d-flex align-items-center py-1">
 
-        <!--begin::Button-->
-            <a href="#" class="btn btn-sm btn-primary add" id="kt_toolbar_primary_button">
-            <span class="svg-icon svg-icon-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black"></rect>
-                    <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black"></rect>
-                </svg>
-            </span> 
-            إضافة فريق</a>
-        <!--end::Button-->
-    </div>
     
     <div class="card-body">
         <!--begin::Wrapper-->
@@ -88,7 +76,7 @@
                     </div>
                 </th>
                 <th class="text-center fw-bolder">اسم الفريق</th>
-                <th class="text-end min-w-100px">الاجراءات</th>
+                <th class="text-end fw-bolder">الاجراءات</th>
             </thead>
 
         </table>
@@ -99,29 +87,29 @@
 
 <div id="addModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 id="modalTitle">اضافة فريق</h3>
-                </div>
-                <div class="modal-body">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">اضافة فريق</h3>
+            </div>
+            <div class="modal-body">
 
-                                <div class="col-xl-12 form-group mb-12">
-                                    <label class="required form-label fw-bolder">اسم الفريق</label>
-                                    <input type="text"  id="NAME" name="NAME"  class="form-control form-control-solid" 
-                                    placeholder="الفريق">
-                                </div>
-    
-                            <div class="card-footer">
-                                <button type="submit" class="btn btn-primary" id="save_btn">
-                                    <i class="fa fa-check me-2"></i> حفظ
-                                </button>
+                            <div class="col-xl-12 form-group mb-12">
+                                <label class="required form-label fw-bolder">اسم الفريق</label>
+                                <input type="text"  id="NAME" name="NAME"  class="form-control form-control-solid" 
+                                placeholder="الفريق">
                             </div>
 
-                </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary" id="save_btn">
+                                <i class="fa fa-check me-2"></i> حفظ
+                            </button>
+                        </div>
 
             </div>
+
         </div>
     </div>
+</div>
 
     <div id="updateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
@@ -240,7 +228,7 @@
                 columns: [
                     { data: 'ID',"searchable": false },
                     { data: 'NAME',"searchable": false },
-                    { data: null,"searchable": false }
+                    { data: null,"searchable": false ,"width": "100px"}
                 ],
                 columnDefs: [
                     {
