@@ -40,13 +40,14 @@ class TasksController extends Controller
         $search2 = null;
         $search3 = null;
         $search4 = null;
+        $search5 = null;
         $tasks = new Tasks();
         $get_all_members= $tasks->get_all_members()['data'];
 
         if($request->search['value'] != ""){
             $search = $request->search['value'];
         }
-       return json_encode(Tasks::LOAD_DATA($search,$request->ACTUAL_FINISH_MONTH,$request->ACTUAL_FINISH_YEAR,$request->MEM_ID,0,10));
+       return json_encode(Tasks::LOAD_DATA($search,$request->ACTUAL_FINISH_MONTH,$request->ACTUAL_FINISH_YEAR,$request->MEM_ID,$request->COMPLETION_STATUS,0,10));
 
     }
     /**

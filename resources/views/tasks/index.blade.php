@@ -108,7 +108,6 @@ $get_all_members= $tasks->get_all_members()['data'];
                     <div class="row">
                         <div class="col-sm-3">
                             <div class="form-group">
-
                                 <select name="MEM_ID" id="MEM_ID" class="form-control form-control-solid w-250px ps-15" data-kt-docs-table-filter="search4" >
                                     <option value="option_select" disabled selected>--اختر--</option>
                                     @foreach($get_all_members as $member)
@@ -131,6 +130,19 @@ $get_all_members= $tasks->get_all_members()['data'];
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <input type="text" data-kt-docs-table-filter="search3"  id="ACTUAL_FINISH_YEAR" class="form-control form-control-solid w-250px ps-15" placeholder="سنة" >
+                            </div>
+                        </div>  
+
+                        <div class="col-sm-34">
+                            <div class="form-group">
+                                <select name="COMPLETION_STATUS" id="COMPLETION_STATUS" class="form-control form-control-solid w-250px ps-15" data-kt-docs-table-filter="search5" >
+                                    <option value="-1" disabled selected>--اختر--</option>
+                                    <option value="0">غير محدد</option>
+                                    <option value="1">منجز</option>
+                                    <option value="2">غير منجز</option>
+                                    <option value="3">مؤجل</option>
+                                    <option value="4">قيد العمل</option>
+                                </select>
                             </div>
                         </div>  
                      
@@ -205,7 +217,12 @@ $get_all_members= $tasks->get_all_members()['data'];
                     d.ACTUAL_FINISH_MONTH = $('#ACTUAL_FINISH_MONTH').val();
                     d.ACTUAL_FINISH_YEAR= $('#ACTUAL_FINISH_YEAR').val();
                     d.MEM_ID= $('#MEM_ID').val();
-                    // d.CARD_ID = $('#CARD_ID').val(); 
+                    //d.COMPLETION_STATUS =  $("#COMPLETION_STATUS").val(x).select2();
+                    d.COMPLETION_STATUS = $('.COMPLETION_STATUS').select2().val()
+
+                                                                                                                                         
+
+                    //$('#COMPLETION_STATUS').select2(d); 
                     // d.LICENSE_NUMBER = $('#LICENSE_NUMBER').val();
                     // d.LICENSE_EXPIRATION_DATE = $('#LICENSE_EXPIRATION_DATE').val(); 
                     // d.NAME = $('#NAME').val();
@@ -411,6 +428,13 @@ $get_all_members= $tasks->get_all_members()['data'];
                  dt.draw();
              });
         }    
+        
+        var handleSearchDatatable5 = function () {
+            const filterSearch5= document.querySelector('[data-kt-docs-table-filter="search5"]');
+            filterSearch5.addEventListener('change', function (x) {
+                 dt.draw();
+             });
+        }    
         // Delete user
         var handleDeleteRows = () => {
             // Select all delete buttons
@@ -543,6 +567,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                 handleSearchDatatable2();
                 handleSearchDatatable3();
                 handleSearchDatatable4();
+                handleSearchDatatable5();
                 handleupdateRows();
                 handleupdatecancel();
             }
@@ -625,5 +650,18 @@ $("button[data-dismiss=modal]").click(function()
 
  }); 
 
+
+  $( '#MEM_ID' ).select2( {
+           enableFiltering: true,
+           maxHeight: 350
+           
+         } ) ; 
+        
+        
+    $( '#COMPLETION_STATUS' ).select2( {
+           enableFiltering: true,
+            maxHeight: 350
+           
+       } ) ;
     </script>
 @endpush
