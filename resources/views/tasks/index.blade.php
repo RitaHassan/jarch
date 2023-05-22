@@ -108,8 +108,8 @@ $get_all_members= $tasks->get_all_members()['data'];
                     <div class="row">
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <select name="MEM_ID" id="MEM_ID" class="form-control form-control-solid w-250px ps-15" data-kt-docs-table-filter="search4" >
-                                    <option value="option_select" disabled selected>--اختر--</option>
+                                <select name="MEM_ID" id="MEM_ID" class="form-control form-control-solid w-250px ps-15"  data-kt-docs-table-filter="search5">
+                                    <option value=""  selected>--اختر--</option>
                                     @foreach($get_all_members as $member)
                                         <option value="{{ $member->ID }}" {{$member->ID}}>{{ $member->MEM_NAME}}</option>
                                     @endforeach
@@ -117,27 +117,28 @@ $get_all_members= $tasks->get_all_members()['data'];
 
                             </div>
                         </div>
-                            <div class="col-sm-3">
+                        <div class="col-sm-3">
                             <div class="form-group">
                                 <input type="text" data-kt-docs-table-filter="search" class="form-control form-control-solid w-250px ps-15" placeholder="عنوان المهمة" >
                             </div>
                         </div>
                         <div class="col-sm-3">
-                        <div class="form-group">
-                            <input type="text" data-kt-docs-table-filter="search2"  id="ACTUAL_FINISH_MONTH" class="form-control form-control-solid w-250px ps-15" placeholder="شهر" >
-                        </div>
+                            <div class="form-group">
+                                <input type="text" data-kt-docs-table-filter="search2"  id="ACTUAL_FINISH_MONTH" class="form-control form-control-solid w-250px ps-15" placeholder="شهر" >
+                            </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <input type="text" data-kt-docs-table-filter="search3"  id="ACTUAL_FINISH_YEAR" class="form-control form-control-solid w-250px ps-15" placeholder="سنة" >
                             </div>
-                        </div>  
-
-                        <div class="col-sm-34">
+                        </div>   
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
                             <div class="form-group">
-                                <select name="COMPLETION_STATUS" id="COMPLETION_STATUS" class="form-control form-control-solid w-250px ps-15" data-kt-docs-table-filter="search5" >
+                                <select name="COMPLETION_STATUS" id="COMPLETION_STATUS" class="form-control form-control-solid w-250px ps-15" data-kt-docs-table-filter="search4" >
                                     <option value="-1" disabled selected>--اختر--</option>
-                                    <option value="0">غير محدد</option>
+                                    <option value="">غير محدد</option>
                                     <option value="1">منجز</option>
                                     <option value="2">غير منجز</option>
                                     <option value="3">مؤجل</option>
@@ -145,7 +146,6 @@ $get_all_members= $tasks->get_all_members()['data'];
                                 </select>
                             </div>
                         </div>  
-                     
                     </div>
                 </form>
             </div>
@@ -217,15 +217,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                     d.ACTUAL_FINISH_MONTH = $('#ACTUAL_FINISH_MONTH').val();
                     d.ACTUAL_FINISH_YEAR= $('#ACTUAL_FINISH_YEAR').val();
                     d.MEM_ID= $('#MEM_ID').val();
-                    //d.COMPLETION_STATUS =  $("#COMPLETION_STATUS").val(x).select2();
-                    d.COMPLETION_STATUS = $('.COMPLETION_STATUS').select2().val()
-
-                                                                                                                                         
-
-                    //$('#COMPLETION_STATUS').select2(d); 
-                    // d.LICENSE_NUMBER = $('#LICENSE_NUMBER').val();
-                    // d.LICENSE_EXPIRATION_DATE = $('#LICENSE_EXPIRATION_DATE').val(); 
-                    // d.NAME = $('#NAME').val();
+                    d.COMPLETION_STATUS = $('#COMPLETION_STATUS').val();
                 }
                 },
                 columns: [
@@ -268,16 +260,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                           return "شهر";
                         }
                     }},
-                    // { data: 'COMPLETION_STATUS',"searchable": false ,render: function (data){
-                    //     if(data == '1'){
-                    //         return "منجز";
-                    //     }else if(data=='2'){
-                    //         return "غير منجز";
-                    //     }else if(data=='3'){
-                    //       return "مؤجل";
-                    //     }else{
-                    //         return "قيد العمل";
-                    //     }
+      
                         {
                             data: null,
                            // 'title': 'الحالة',
@@ -365,8 +348,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                 <!--end::Menu item-->  
                                 <!--begin::Menu item-->
                                 <div class="menu-item px-3">
-                                    <a href="#" val_id="${data.ID}" class="menu-link px-3 cancel"  data-kt-docs-table-filter="add_reason2"> <i class="fa fa-times me-2"></i>
-قيد العمل
+                                    <a href="#" val_id="${data.ID}" class="menu-link px-3 cancel"  data-kt-docs-table-filter="add_reason2"> <i class="fa fa-times me-2"></i>قيد العمل
                                   </a>
                                 </div>
                                 <!--end::Menu item--> 
@@ -415,26 +397,13 @@ $get_all_members= $tasks->get_all_members()['data'];
             });
         }  
         
-         var handleSearchDatatable3 = function () {
+        var handleSearchDatatable3 = function () {
             const filterSearch3 = document.querySelector('[data-kt-docs-table-filter="search3"]');
             filterSearch3.addEventListener('keyup', function (x) {
                  dt.draw();
              });
         }  
-        
-        var handleSearchDatatable4 = function () {
-            const filterSearch4= document.querySelector('[data-kt-docs-table-filter="search4"]');
-            filterSearch4.addEventListener('change', function (x) {
-                 dt.draw();
-             });
-        }    
-        
-        var handleSearchDatatable5 = function () {
-            const filterSearch5= document.querySelector('[data-kt-docs-table-filter="search5"]');
-            filterSearch5.addEventListener('change', function (x) {
-                 dt.draw();
-             });
-        }    
+
         // Delete user
         var handleDeleteRows = () => {
             // Select all delete buttons
@@ -556,8 +525,13 @@ $get_all_members= $tasks->get_all_members()['data'];
                 
         }
 
-       
-    
+        $('#MEM_ID' ).on('change', function (data, callbak) {
+            dt.draw();
+        });
+
+        $('#COMPLETION_STATUS' ).on('change', function (data, callbak) {
+            dt.draw();
+        });
         // Public methods
         return {
             init: function () {
@@ -566,8 +540,6 @@ $get_all_members= $tasks->get_all_members()['data'];
                 handleSearchDatatable();
                 handleSearchDatatable2();
                 handleSearchDatatable3();
-                handleSearchDatatable4();
-                handleSearchDatatable5();
                 handleupdateRows();
                 handleupdatecancel();
             }
@@ -578,7 +550,7 @@ $get_all_members= $tasks->get_all_members()['data'];
     KTUtil.onDOMContentLoaded(function () {
         KTDatatablesServerSide.init();
     });
-
+ 
     $(document).on('click', '.wait', function (data, callbak) {
                     $('#waitModal').modal('show');
        
@@ -625,30 +597,30 @@ $("button[data-dismiss=modal]").click(function()
                     });
 
                     
- $(".save_cancel").click(function(){
-                        var id = $("#cancel_id").val(); 
-                      //  alert(id);
-                    jQuery.ajax({
-                            type: "post",
-                            url: 'tasks/update_reason/'+id,
-                            data:{
-                                "_token": "{{ csrf_token() }}",       
-                                "id": id,
-                                "ISDELAY":0,
-                                "ISCANCEL":1,
-                                "DELAIED_REASON":null, 
-                                "CANCELED_REASON":$( "#CANCELED_REASON" ).val(),
-                                "UPDATED_BY":1
-                            },
-                            dataType: 'json',
-                            success :function (data) {
-                            
-                                toastr.success();
+                    $(".save_cancel").click(function(){
+                                            var id = $("#cancel_id").val(); 
+                                        //  alert(id);
+                                        jQuery.ajax({
+                                                type: "post",
+                                                url: 'tasks/update_reason/'+id,
+                                                data:{
+                                                    "_token": "{{ csrf_token() }}",       
+                                                    "id": id,
+                                                    "ISDELAY":0,
+                                                    "ISCANCEL":1,
+                                                    "DELAIED_REASON":null, 
+                                                    "CANCELED_REASON":$( "#CANCELED_REASON" ).val(),
+                                                    "UPDATED_BY":1
+                                                },
+                                                dataType: 'json',
+                                                success :function (data) {
+                                                
+                                                    toastr.success();
 
-                                   }
-                        }); 
+                                                    }
+                                            }); 
 
- }); 
+                    }); 
 
 
   $( '#MEM_ID' ).select2( {

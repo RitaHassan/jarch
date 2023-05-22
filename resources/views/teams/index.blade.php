@@ -300,179 +300,174 @@
             filterSearch.addEventListener('keyup', function (e) {
                 dt.search(e.target.value).draw();
             });
-        //
-        // const btnFilterSearch = document.querySelector('[data-kt-docs-table-filter="search_btn"]');
-        // btnFilterSearch.addEventListener('click', function (e) {
-        //     e.preventDefault();
-        //     dt.search('').draw();
-        // });
-    }
+
+        }
     
-    // Delete user
-    var handleDeleteRows = () => {
-        // Select all delete buttons
-        const deleteButtons = document.querySelectorAll('[data-kt-docs-table-filter="delete_row"]');
+        // Delete user
+        var handleDeleteRows = () => {
+            // Select all delete buttons
+            const deleteButtons = document.querySelectorAll('[data-kt-docs-table-filter="delete_row"]');
 
-        deleteButtons.forEach(d => {
-            // Delete button on click
-            d.addEventListener('click', function (e) {
-                e.preventDefault();
-                // Select parent row
-                const parent = e.target.closest('tr');
+            deleteButtons.forEach(d => {
+                // Delete button on click
+                d.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    // Select parent row
+                    const parent = e.target.closest('tr');
 
-                // Get customer name
-                const customerName = parent.querySelectorAll('td')[1].innerText;
-                const id = $(this).attr('val_id'); 
-                var str = $("#TEAM_ID").val(id);
-                // SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
-                Swal.fire({
-                    text: "هل أنت متأكد من حذف  " + customerName + " ؟",
-                    icon: "warning",
-                    showCancelButton: true,
-                    buttonsStyling: false,
-                    confirmButtonText: "نعم , احذف!",
-                    cancelButtonText: "لا , الغاء",
-                    customClass: {
-                        confirmButton: "btn fw-bold btn-danger",
-                        cancelButton: "btn fw-bold btn-active-light-primary"
-                    }
-                }).then(function (result) {
-                    if (result.value) {
-                        // Simulate delete request -- for demo purpose only
-                        jQuery.ajax({
-                            type: "DELETE",
-                            url: 'teams/'+id,
-                            data:{
-                                "_token": "{{ csrf_token() }}",
-                            },
-                            dataType: 'json',
-                            success :function (data) {
-                                Swal.fire({
-                                text: "تم حذف  " + customerName + "!.",
-                                icon: "success",
+                    // Get customer name
+                    const customerName = parent.querySelectorAll('td')[1].innerText;
+                    const id = $(this).attr('val_id'); 
+                    var str = $("#TEAM_ID").val(id);
+                    // SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
+                    Swal.fire({
+                        text: "هل أنت متأكد من حذف  " + customerName + " ؟",
+                        icon: "warning",
+                        showCancelButton: true,
+                        buttonsStyling: false,
+                        confirmButtonText: "نعم , احذف!",
+                        cancelButtonText: "لا , الغاء",
+                        customClass: {
+                            confirmButton: "btn fw-bold btn-danger",
+                            cancelButton: "btn fw-bold btn-active-light-primary"
+                        }
+                    }).then(function (result) {
+                        if (result.value) {
+                            // Simulate delete request -- for demo purpose only
+                            jQuery.ajax({
+                                type: "DELETE",
+                                url: 'teams/'+id,
+                                data:{
+                                    "_token": "{{ csrf_token() }}",
+                                },
+                                dataType: 'json',
+                                success :function (data) {
+                                    Swal.fire({
+                                    text: "تم حذف  " + customerName + "!.",
+                                    icon: "success",
+                                    buttonsStyling: false,
+                                    confirmButtonText: "حسنًا ، موافق!",
+                                    customClass: {
+                                        confirmButton: "btn fw-bold btn-primary",
+                                    }
+                                }).then(function () {
+                                    // delete row data from server and re-draw datatable
+                                    dt.draw();
+                                });
+                                }
+                            });
+                                
+                        
+                        } else if (result.dismiss === 'cancel') {
+                            Swal.fire({
+                                text: customerName + " تم الغاء عملية الحذف.",
+                                icon: "error",
                                 buttonsStyling: false,
                                 confirmButtonText: "حسنًا ، موافق!",
                                 customClass: {
                                     confirmButton: "btn fw-bold btn-primary",
                                 }
-                            }).then(function () {
-                                // delete row data from server and re-draw datatable
-                                dt.draw();
                             });
-                            }
-                        });
-                            
-                    
-                    } else if (result.dismiss === 'cancel') {
-                        Swal.fire({
-                            text: customerName + " تم الغاء عملية الحذف.",
-                            icon: "error",
-                            buttonsStyling: false,
-                            confirmButtonText: "حسنًا ، موافق!",
-                            customClass: {
-                                confirmButton: "btn fw-bold btn-primary",
-                            }
-                        });
-                    }
-                });
-            })
+                        }
+                    });
+                })
+            });
+        }
+
+        // start add team
+        $(document).on('click', '.add', function (data, callbak) {
+            $("#ID_NUM").val("");
+            $("#MEM_NAME").val("");
+            $('#addModal').modal('show');  
         });
-    }
 
-    // start add team
-    $(document).on('click', '.add', function (data, callbak) {
-        $("#ID_NUM").val("");
-        $("#MEM_NAME").val("");
-        $('#addModal').modal('show');  
-    });
-
-    $("#save_btn").click(function(e){
-        e.preventDefault();
-        jQuery.ajax({
-                type: "post",
-                url: 'teams',
-                data:{
-                    "_token": "{{ csrf_token() }}",
-                    "NAME": $("#NAME").val(),
-                },
-                dataType: 'json',
-                success :function (data) {
-                    $('#addModal').modal('hide');
-                    $("#NAME").val("");
-                    dt.draw();
-                    toastr.success("تمت عملية الحفظ بنجاح");
-
-                }
-            }); 
-    });
-    // end add team
-
-    //start edit team
-    $(document).on('click', '.update', function (data, callbak) {
-        $("#ID").val($(this).attr('val_id'));
-        $("#NAME_UPDATE").val($(this).attr('val_name'));
-        $('#updateModal').modal('show');
-    });
-    
-    $("#btn_update").click(function(e){
-        e.preventDefault();
-        jQuery.ajax({
-                type: "PATCH",
-                url: 'teams/'+ $("#ID").val(),
-                data:{
-                    "_token": "{{ csrf_token() }}",
-                    "NAME": $("#NAME_UPDATE").val(),
-                },
-                dataType: 'json',
-                success :function (data) {
-                    $('#updateModal').modal('hide');
-                    $("#NAME_UPDATE").val("");
-                    $("#ID").val("");
-                    dt.draw();
-                    toastr.success("تمت عملية الحفظ بنجاح");
-
-                }
-            }); 
-    });
-    //end edit team
-
-    //start show members
-    $(document).on('click', '.view', function (data, callbak) {
-        var team_id = $(this).attr('val_id');
-        $('#TEAM_ID').val(team_id);
-        draw_members(team_id);
-    });
-
-    $("#add_member").click(function(e){
-        e.preventDefault();
-        var team_id  = $('#TEAM_ID').val();
-        jQuery.ajax({
-                type: "post",
-                url: 'members',
-                data:{
-                    "_token": "{{ csrf_token() }}",
-                    "TEAM_ID":team_id,
-                    "ID_NUM": $("#ID_NUM").val(), 
-                    "MEM_NAME": $("#MEM_NAME").val(),
-                    "ROLE":0,
-                    "ACTIVE":1
-                },
-                dataType: 'json',
-                success :function (data) {
-                    if(data.status ==1){
-                        $("#ID_NUM").val(""); 
-                        $("#MEM_NAME").val("");
+        $("#save_btn").click(function(e){
+            e.preventDefault();
+            jQuery.ajax({
+                    type: "post",
+                    url: 'teams',
+                    data:{
+                        "_token": "{{ csrf_token() }}",
+                        "NAME": $("#NAME").val(),
+                    },
+                    dataType: 'json',
+                    success :function (data) {
+                        $('#addModal').modal('hide');
+                        $("#NAME").val("");
+                        dt.draw();
                         toastr.success("تمت عملية الحفظ بنجاح");
-                        draw_members(team_id);
-                    }else{
-                        toastr.error(data.msg);
+
                     }
-                    
+                }); 
+        });
+        // end add team
+
+        //start edit team
+        $(document).on('click', '.update', function (data, callbak) {
+            $("#ID").val($(this).attr('val_id'));
+            $("#NAME_UPDATE").val($(this).attr('val_name'));
+            $('#updateModal').modal('show');
+        });
+        
+        $("#btn_update").click(function(e){
+            e.preventDefault();
+            jQuery.ajax({
+                    type: "PATCH",
+                    url: 'teams/'+ $("#ID").val(),
+                    data:{
+                        "_token": "{{ csrf_token() }}",
+                        "NAME": $("#NAME_UPDATE").val(),
+                    },
+                    dataType: 'json',
+                    success :function (data) {
+                        $('#updateModal').modal('hide');
+                        $("#NAME_UPDATE").val("");
+                        $("#ID").val("");
+                        dt.draw();
+                        toastr.success("تمت عملية الحفظ بنجاح");
+
+                    }
+                }); 
+        });
+        //end edit team
+
+        //start show members
+        $(document).on('click', '.view', function (data, callbak) {
+            var team_id = $(this).attr('val_id');
+            $('#TEAM_ID').val(team_id);
+            draw_members(team_id);
+        });
+
+        $("#add_member").click(function(e){
+            e.preventDefault();
+            var team_id  = $('#TEAM_ID').val();
+            jQuery.ajax({
+                    type: "post",
+                    url: 'members',
+                    data:{
+                        "_token": "{{ csrf_token() }}",
+                        "TEAM_ID":team_id,
+                        "ID_NUM": $("#ID_NUM").val(), 
+                        "MEM_NAME": $("#MEM_NAME").val(),
+                        "ROLE":0,
+                        "ACTIVE":1
+                    },
+                    dataType: 'json',
+                    success :function (data) {
+                        if(data.status ==1){
+                            $("#ID_NUM").val(""); 
+                            $("#MEM_NAME").val("");
+                            toastr.success("تمت عملية الحفظ بنجاح");
+                            draw_members(team_id);
+                        }else{
+                            toastr.error(data.msg);
+                        }
+                        
 
 
-                }
-            }); 
-    });
+                    }
+                }); 
+        });
 
         $("#ID_NUM").change(function(){
             if($(this).val().length==9){
@@ -491,78 +486,78 @@
         });
         }
         });
-    function draw_members (team_id){
-        jQuery.ajax({
-                type: "get",
-                url: 'teams/giveMembers/'+ team_id,
-                dataType: 'json',
-                success :function (data) {
-                    $("#members_table").find('tbody').empty();
-                    data.forEach((d, index)  => {
-                        $("#members_table").find('tbody').append("<tr><td>"+(index+1)+"</td><td>"+d.MEM_NAME+"</td><td><a val-id='"+d.MEM_ID+"' val_name='"+d.MEM_NAME+"' val_team_id='"+team_id+"' class='btn btn-icon btn-xs btn-sm btn-danger btn-member-delete'><i class='fa fa-trash'></i></a></td><td></td></tr>");
-                   
+        function draw_members (team_id){
+            jQuery.ajax({
+                    type: "get",
+                    url: 'teams/giveMembers/'+ team_id,
+                    dataType: 'json',
+                    success :function (data) {
+                        $("#members_table").find('tbody').empty();
+                        data.forEach((d, index)  => {
+                            $("#members_table").find('tbody').append("<tr><td>"+(index+1)+"</td><td>"+d.MEM_NAME+"</td><td><a val-id='"+d.MEM_ID+"' val_name='"+d.MEM_NAME+"' val_team_id='"+team_id+"' class='btn btn-icon btn-xs btn-sm btn-danger btn-member-delete'><i class='fa fa-trash'></i></a></td><td></td></tr>");
+                    
+                        });
+                    }
+                }); 
+
+            $('#viewModal').modal('show');
+        }
+        $(document).on('click', '.btn-member-delete', function (data, callbak) {
+            const id =  $(this).attr('val-id');
+            const customerName = $(this).attr('val_name'); 
+            const team_id = $(this).attr('val_team_id');
+            Swal.fire({
+                text: "هل أنت متأكد من عملية الحذف",
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: "نعم , احذف!",
+                cancelButtonText: "لا , الغاء",
+                customClass: {
+                    confirmButton: "btn fw-bold btn-danger",
+                    cancelButton: "btn fw-bold btn-active-light-primary"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    // Simulate delete request -- for demo purpose only
+                    jQuery.ajax({
+                        type: "DELETE",
+                        url: 'members/'+id,
+                        data:{
+                            "_token": "{{ csrf_token() }}",
+                        },
+                        dataType: 'json',
+                        success :function (data) {
+                            Swal.fire({
+                            text: "تم حذف  " + customerName + "!.",
+                            icon: "success",
+                            buttonsStyling: false,
+                            confirmButtonText: "حسنًا ، موافق!",
+                            customClass: {
+                                confirmButton: "btn fw-bold btn-primary",
+                            }
+                        }).then(function () {
+                            // delete row data from server and re-draw datatable
+                            draw_members(team_id);
+                        });
+                        }
+                    });
+                        
+                
+                } else if (result.dismiss === 'cancel') {
+                    Swal.fire({
+                        text: customerName + " تم الغاء عملية الحذف.",
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: "حسنًا ، موافق!",
+                        customClass: {
+                            confirmButton: "btn fw-bold btn-primary",
+                        }
                     });
                 }
-            }); 
-
-        $('#viewModal').modal('show');
-    }
- $(document).on('click', '.btn-member-delete', function (data, callbak) {
-    const id =  $(this).attr('val-id');
-    const customerName = $(this).attr('val_name'); 
-    const team_id = $(this).attr('val_team_id');
-    Swal.fire({
-        text: "هل أنت متأكد من عملية الحذف",
-        icon: "warning",
-        showCancelButton: true,
-        buttonsStyling: false,
-        confirmButtonText: "نعم , احذف!",
-        cancelButtonText: "لا , الغاء",
-        customClass: {
-            confirmButton: "btn fw-bold btn-danger",
-            cancelButton: "btn fw-bold btn-active-light-primary"
-        }
-    }).then(function (result) {
-        if (result.value) {
-            // Simulate delete request -- for demo purpose only
-            jQuery.ajax({
-                type: "DELETE",
-                url: 'members/'+id,
-                data:{
-                    "_token": "{{ csrf_token() }}",
-                },
-                dataType: 'json',
-                success :function (data) {
-                    Swal.fire({
-                    text: "تم حذف  " + customerName + "!.",
-                    icon: "success",
-                    buttonsStyling: false,
-                    confirmButtonText: "حسنًا ، موافق!",
-                    customClass: {
-                        confirmButton: "btn fw-bold btn-primary",
-                    }
-                }).then(function () {
-                    // delete row data from server and re-draw datatable
-                    draw_members(team_id);
-                });
-                }
             });
-                
-        
-        } else if (result.dismiss === 'cancel') {
-            Swal.fire({
-                text: customerName + " تم الغاء عملية الحذف.",
-                icon: "error",
-                buttonsStyling: false,
-                confirmButtonText: "حسنًا ، موافق!",
-                customClass: {
-                    confirmButton: "btn fw-bold btn-primary",
-                }
-            });
-        }
-    });
- });
-    //end show members
+        });
+        //end show members
         // Public methods
         return {
             init: function () {
