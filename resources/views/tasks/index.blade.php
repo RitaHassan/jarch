@@ -263,7 +263,6 @@ $get_all_members= $tasks->get_all_members()['data'];
       
                         {
                             data: null,
-                           // 'title': 'الحالة',
                             'bSort': true,
                             render: function(data) {
                                 if (data.COMPLETION_STATUS == 0) {
@@ -286,7 +285,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                             },"searchable": false
 
 
-                     },
+                        },
                     { data: 'IN_PLAN',"searchable": false,render: function (data) {
                         if(data == '1'){
                             return "نعم";
@@ -298,7 +297,14 @@ $get_all_members= $tasks->get_all_members()['data'];
                 ],
                 columnDefs: [
                     {
-                      
+                        targets: 0,
+                        orderable: false,
+                        render: function (data) {
+                            return `
+                                <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                    <input class="form-check-input" type="checkbox" value="${data}" />
+                                </div>`;
+                        }
                     },
                     {
                     targets: -1,
@@ -309,7 +315,29 @@ $get_all_members= $tasks->get_all_members()['data'];
                         var edit_link = '/tasks/'+data.ID+'/edit';
                       //  var update_can = '/tasks/update_reason/'+data.ID;
                         var update_del = '/tasks/update_reason/'+data.ID;
+
+                        var toggel_text="";
+                        var toggel_icon="check";
+
+                       if(data.COMPLETION_STATUS == 1){
+                        toggel_text="منجز";
+                        toggel_icon="check";
+
+                       }else if(data.COMPLETION_STATUS == 2){
+                        toggel_text="غير منجز";
+                        toggel_icon="cancel";
                        
+                       }else if(data.COMPLETION_STATUS == 3){
+                        toggel_text="مؤجل";
+                        toggel_icon="check";
+                       }else if(data.COMPLETION_STATUS == 4){
+                        toggel_text="قيد العمل";
+                        toggel_icon="edit";
+                       }else{
+                        toggel_text="غير محدد";
+                        toggel_icon="times";
+                       }
+                    
                         return `\
                             <a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start" data-kt-menu-flip="top-end">
                                 ...
@@ -334,8 +362,8 @@ $get_all_members= $tasks->get_all_members()['data'];
                                 
                                 <!--begin::Menu item-->
                                 <div class="menu-item px-3">
-                                    <a href="#"  val_id="${data.ID}" class="menu-link px-3 wait" data-kt-docs-table-filter="add_reason"> <i class="fa fa-times me-2"  ></i>
-                                        منجز
+                                    <a href="#"  val_id="${data.ID}" class="menu-link px-3 toggel" data-kt-docs-table-filter=""> <i class="fa fa-times me-2"  ></i>
+                                        ${toggel_text}
                                     </a>
                                 </div>
                                 <!--end::Menu item-->  
@@ -620,8 +648,23 @@ $("button[data-dismiss=modal]").click(function()
                                                     }
                                             }); 
 
-                    }); 
+                     }); 
 
+
+
+        $(document).on('click', '.toggel', function (data, callbak) {
+            var id = $(this).attr('val_id');
+            jQuery.ajax({
+                type: "get",
+                url: 'tasks/change_status/'+id,
+                dataType: 'json',
+                success :function (data) {
+                    dt.draw();
+                    toastr.success("تم تحويل المهمة الى منجز");
+
+                }
+            }); 
+        });
 
   $( '#MEM_ID' ).select2( {
            enableFiltering: true,
@@ -635,5 +678,8 @@ $("button[data-dismiss=modal]").click(function()
             maxHeight: 350
            
        } ) ;
+
+
+       
     </script>
 @endpush

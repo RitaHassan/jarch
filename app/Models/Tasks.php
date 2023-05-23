@@ -256,7 +256,26 @@ class Tasks extends MYModel
             oci_free_cursor($cursor);
             return ['data'=>$data];
         }
-    
+
+
+
+        public static function change_status($P_ID){
+            $cursor =null;
+            $data = array();
+            $stmt = DB::getPdo()->prepare("begin TASKS_PKG.change_status(:P_ID,:P_STATUS,:P_MSG); end;");
+            $stmt->bindValue(':P_ID', $P_ID, PDO::PARAM_NULL);
+            $stmt->bindParam(':P_STATUS', $P_STATUS,PDO::PARAM_INT|PDO::PARAM_INPUT_OUTPUT, -1);
+            $stmt->bindParam(':P_MSG', $P_MSG, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
+           
+            $stmt->execute();
+         
+            $res=[
+                'MSG' => $P_MSG, 
+                'STATUS' => $P_STATUS, 
+            ];
+            return $res;
+
+        }
     
        
 }

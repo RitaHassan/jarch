@@ -38,6 +38,8 @@ Route::delete('systems/members/{id}', 'SystemController@delete_member')->name('s
 Route::resource('systems', 'SystemController');
 
 
+
+Route::get('tasks/change_status/{id}', 'TasksController@change_status')->name('tasks.change_status');
 Route::post('tasks/update_reason/{ID}', 'TasksController@update_reason')->name('tasks.update_reason');
 Route::get('tasks/giveMembers/{TEAM_ID}', 'TasksController@giveMembers')->name('tasks.giveMembers');
 Route::get('tasks/sysName_mem/{ID_NUM}', 'TasksController@sysName_mem')->name('tasks.sysName_mem');

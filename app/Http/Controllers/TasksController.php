@@ -235,6 +235,17 @@ class TasksController extends Controller
         }
     }
 
+    public function change_status($P_ID)
+    { 
+
+        $tasks = new Tasks();
+        $res= $tasks->change_status($P_ID);
+        return [];
+    
+    } 
+
+
+
 
 
 }
