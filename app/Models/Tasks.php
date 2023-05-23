@@ -259,11 +259,12 @@ class Tasks extends MYModel
 
 
 
-        public static function change_status($P_ID){
+        public static function change_status($P_ID,$P_COMPLETION_STATUS){
             $cursor =null;
             $data = array();
-            $stmt = DB::getPdo()->prepare("begin TASKS_PKG.change_status(:P_ID,:P_STATUS,:P_MSG); end;");
-            $stmt->bindValue(':P_ID', $P_ID, PDO::PARAM_NULL);
+            $stmt = DB::getPdo()->prepare("begin TASKS_PKG.change_status(:P_ID,:P_COMPLETION_STATUS,:P_STATUS,:P_MSG); end;");
+            $stmt->bindValue(':P_ID', $P_ID, PDO::PARAM_NULL); 
+            $stmt->bindValue(':P_COMPLETION_STATUS', $P_COMPLETION_STATUS, PDO::PARAM_NULL);
             $stmt->bindParam(':P_STATUS', $P_STATUS,PDO::PARAM_INT|PDO::PARAM_INPUT_OUTPUT, -1);
             $stmt->bindParam(':P_MSG', $P_MSG, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
            
