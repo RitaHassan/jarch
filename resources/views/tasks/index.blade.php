@@ -369,14 +369,14 @@ $get_all_members= $tasks->get_all_members()['data'];
                                 <!--end::Menu item-->  
                                  <!--begin::Menu item-->
                                 <div class="menu-item px-3">
-                                    <a href="#" val_id="${data.ID}" class="menu-link px-3 cancel"  data-kt-docs-table-filter="add_reason2"> <i class="fa fa-times me-2"></i>
+                                    <a href="#" val_id="${data.ID}" class="menu-link px-3 wait"  data-kt-docs-table-filter="add_reason"> <i class="fa fa-times me-2"></i>
                                   تأجيل                              
                                   </a>
                                 </div>
                                 <!--end::Menu item-->  
                                 <!--begin::Menu item-->
                                 <div class="menu-item px-3">
-                                    <a href="#" val_id="${data.ID}" class="menu-link px-3"  data-kt-docs-table-filter="add_reason2"> <i class="fa fa-times me-2"></i>قيد العمل
+                                    <a href="#" val_id="${data.ID}" class="menu-link px-3"  data-kt-docs-table-filter=""> <i class="fa fa-times me-2"></i>قيد العمل
                                   </a>
                                 </div>
                                 <!--end::Menu item--> 
@@ -575,6 +575,59 @@ $get_all_members= $tasks->get_all_members()['data'];
                 }
             }); 
         });
+
+        $(".save").click(function(){
+                        var id = $("#wait_id").val(); 
+                      //  alert(id);
+                    jQuery.ajax({
+                            type: "post",
+                            url: 'tasks/update_reason/'+id,
+                            data:{
+                                "_token": "{{ csrf_token() }}",       
+                                "id": id,
+                                "ISDELAY":1,
+                                "ISCANCEL":0,
+                                "DELAIED_REASON":$( "#DELAIED_REASON" ).val(), 
+                                "CANCELED_REASON":null,
+                                "UPDATED_BY":1
+                            },
+                            dataType: 'json',
+                            success :function (data) {
+                            
+                                toastr.success("تم تأجيل المهمة بنجاح");
+
+                                   }
+                        }); 
+
+
+                    });
+
+
+                                     
+                    $(".save_cancel").click(function(){
+                                            var id = $("#cancel_id").val(); 
+                                        //  alert(id);
+                                        jQuery.ajax({
+                                                type: "post",
+                                                url: 'tasks/update_reason/'+id,
+                                                data:{
+                                                    "_token": "{{ csrf_token() }}",       
+                                                    "id": id,
+                                                    "ISDELAY":0,
+                                                    "ISCANCEL":1,
+                                                    "DELAIED_REASON":null, 
+                                                    "CANCELED_REASON":$( "#CANCELED_REASON" ).val(),
+                                                    "UPDATED_BY":1
+                                                },
+                                                dataType: 'json',
+                                                success :function (data) {
+                                                
+                                                    toastr.success("تم الغاء المهمة بنجاح");
+
+                                                    }
+                                            }); 
+
+                     }); 
         // Public methods
         return {
             init: function () {
@@ -613,57 +666,9 @@ $("button[data-dismiss=modal]").click(function()
   $(".modal").modal('hide');
 });
 
-                    $(".save").click(function(){
-                        var id = $("#wait_id").val(); 
-                      //  alert(id);
-                    jQuery.ajax({
-                            type: "post",
-                            url: 'tasks/update_reason/'+id,
-                            data:{
-                                "_token": "{{ csrf_token() }}",       
-                                "id": id,
-                                "ISDELAY":1,
-                                "ISCANCEL":0,
-                                "DELAIED_REASON":$( "#DELAIED_REASON" ).val(), 
-                                "CANCELED_REASON":null,
-                                "UPDATED_BY":1
-                            },
-                            dataType: 'json',
-                            success :function (data) {
-                            
-                                toastr.success();
+               
 
-                                   }
-                        }); 
-
-
-                    });
-
-                    
-                    $(".save_cancel").click(function(){
-                                            var id = $("#cancel_id").val(); 
-                                        //  alert(id);
-                                        jQuery.ajax({
-                                                type: "post",
-                                                url: 'tasks/update_reason/'+id,
-                                                data:{
-                                                    "_token": "{{ csrf_token() }}",       
-                                                    "id": id,
-                                                    "ISDELAY":0,
-                                                    "ISCANCEL":1,
-                                                    "DELAIED_REASON":null, 
-                                                    "CANCELED_REASON":$( "#CANCELED_REASON" ).val(),
-                                                    "UPDATED_BY":1
-                                                },
-                                                dataType: 'json',
-                                                success :function (data) {
-                                                
-                                                    toastr.success();
-
-                                                    }
-                                            }); 
-
-                     }); 
+   
 
 
 

@@ -228,11 +228,8 @@ class TasksController extends Controller
         
         $request->request->add(['UPDATED_BY' => 1,'ID'=>$id]);
         $result = Tasks::update_reason(change_key($request->only((new Tasks())->getFillable())));
-        if($result['STATUS']==1){
-            return back()->with('success',$result['MSG'] );
-        }else {
-            return back()->with('error',$result['MSG'] );
-        }
+        return [];
+
     }
 
     public function change_status($P_ID)
