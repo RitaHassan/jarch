@@ -560,6 +560,21 @@ $get_all_members= $tasks->get_all_members()['data'];
         $('#COMPLETION_STATUS' ).on('change', function (data, callbak) {
             dt.draw();
         });
+
+
+        $(document).on('click', '.toggel', function (data, callbak) {
+            var id = $(this).attr('val_id');
+            jQuery.ajax({
+                type: "get",
+                url: 'tasks/change_status/'+id,
+                dataType: 'json',
+                success :function (data) {
+                    dt.draw();
+                    toastr.success("تم تحويل المهمة الى منجز");
+
+                }
+            }); 
+        });
         // Public methods
         return {
             init: function () {
@@ -652,19 +667,6 @@ $("button[data-dismiss=modal]").click(function()
 
 
 
-        $(document).on('click', '.toggel', function (data, callbak) {
-            var id = $(this).attr('val_id');
-            jQuery.ajax({
-                type: "get",
-                url: 'tasks/change_status/'+id,
-                dataType: 'json',
-                success :function (data) {
-                    dt.draw();
-                    toastr.success("تم تحويل المهمة الى منجز");
-
-                }
-            }); 
-        });
 
   $( '#MEM_ID' ).select2( {
            enableFiltering: true,
