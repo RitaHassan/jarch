@@ -376,7 +376,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                 <!--end::Menu item-->  
                                 <!--begin::Menu item-->
                                 <div class="menu-item px-3">
-                                    <a href="#" val_id="${data.ID}" class="menu-link px-3 cancel"  data-kt-docs-table-filter="add_reason2"> <i class="fa fa-times me-2"></i>قيد العمل
+                                    <a href="#" val_id="${data.ID}" class="menu-link px-3"  data-kt-docs-table-filter="add_reason2"> <i class="fa fa-times me-2"></i>قيد العمل
                                   </a>
                                 </div>
                                 <!--end::Menu item--> 
