@@ -220,78 +220,65 @@
 
 @push('javascript')
 <script type="text/javascript">
-$(function() {
-            $(".date2").flatpickr({
-              //  maxDate: new Date(),
-                dateFormat: 'd/m/Y'
-            });
+    $(function() {
+        $(".date2").flatpickr({
+            dateFormat: 'd/m/Y'
         });
-
-
-      $(document).ready(function () {
-
-            $("#TEAM_ID").change(function (e, x) {
-
-                var TEAM_ID = $("#TEAM_ID").val();
-
-                $.ajax({
-                    url: '/tasks/giveMembers/'+TEAM_ID,
-                    type: 'get',
-                    data: {TEAM_ID: TEAM_ID},
-                    dataType: 'json',
-                    success: function (data) {
-                        var len = data.length;
-
-                        $("#MEM_ID").empty();
-                        $("#MEM_ID").append("<option value=''>--اختر--</option>");
-
-                        for (var i = 0; i < len; i++) {
-                            var id = data[i]['ID'];
-                            var name = data[i]['MEM_NAME'];
-                            $("#MEM_ID").append("<option value='" + id + "'>" + name + "</option>");
-                        }
-
-                        $("#MEM_ID").val(x);
-                        $("#MEM_ID").trigger('change', x);
-                    }
-                });
-            });
-
-        });
-
-
-        $(document).ready(function () {
-
-$("#MEM_ID").change(function (e, x) {
-
-    var MEM_ID = $("#MEM_ID").val();
-
-    $.ajax({
-        url: '/tasks/sysName_mem/'+MEM_ID,
-        type: 'get',
-        data: {ID_NUM: MEM_ID},
-        dataType: 'json',
-        success: function (data) {
-            var len = data.length;
-
-            $("#SYSTEM_ID").empty();
-            $("#SYSTEM_ID").append("<option value=''>--اختر--</option>");
-
-            for (var i = 0; i < len; i++) {
-                var id = data[i]['ID'];
-                var name = data[i]['SYSTEM_NAME'];
-
-
-                $("#SYSTEM_ID").append("<option value='" + id + "'>" + name + "</option>");
-            }
-
-            $("#SYSTEM_ID").val(x);
-            $("#SYSTEM_ID").trigger('change', x);
-        }
     });
-});
 
-});
+    $(document).ready(function () {
+        $("#TEAM_ID").change(function (e, x) {
+            var TEAM_ID = $("#TEAM_ID").val();
+            $.ajax({
+                url: '/tasks/giveMembers/'+TEAM_ID,
+                type: 'get',
+                data: {TEAM_ID: TEAM_ID},
+                dataType: 'json',
+                success: function (data) {
+                    var len = data.length;
+
+                    $("#MEM_ID").empty();
+                    $("#MEM_ID").append("<option value=''>--اختر--</option>");
+
+                    for (var i = 0; i < len; i++) {
+                        var id = data[i]['MEM_ID'];
+                        var name = data[i]['MEM_NAME'];
+                        $("#MEM_ID").append("<option value='" + id + "'>" + name + "</option>");
+                    }
+
+                    // $("#MEM_ID").val(x);
+                    // $("#MEM_ID").trigger('change', x);
+                }
+            });
+        });
+
+    });
+
+
+    $(document).ready(function () {
+
+        $("#MEM_ID").change(function (e, x) {
+            var MEM_ID = $("#MEM_ID").val();
+            $.ajax({
+                url: '/systems/get_by_user_id/'+MEM_ID,
+                type: 'get',
+                dataType: 'json',
+                success: function (data) {
+                    var len = data.length;
+
+                    $("#SYSTEM_ID").empty();
+                    $("#SYSTEM_ID").append("<option value=''>--اختر--</option>");
+
+                    for (var i = 0; i < len; i++) {
+                        var id = data[i]['ID'];
+                        var name = data[i]['SYSTEM_NAME'];
+                        $("#SYSTEM_ID").append("<option value='" + id + "'>" + name + "</option>");
+                    }
+                }
+            });
+        });
+
+    });
         </script>
 @endpush
 

@@ -792,12 +792,6 @@ $("button[data-dismiss=modal]").click(function()
                      }); 
 
 
-
-<<<<<<< HEAD
-
-=======
->>>>>>> f04ff0c5a8ec4eda23dc196b4fe87d337cc1bf45
-
   $( '#MEM_ID' ).select2( {
            enableFiltering: true,
            maxHeight: 350

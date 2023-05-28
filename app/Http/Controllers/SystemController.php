@@ -180,4 +180,9 @@ class SystemController extends Controller
         return [];
     }
 
+    public function get_by_user_id($user_id)
+    {
+       $data = SystemMembers::get_systems_by_user_id($user_id);
+       return $data['data'];
+    }
 }

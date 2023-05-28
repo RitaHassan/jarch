@@ -58,11 +58,26 @@ class SystemMembers extends MYModel
     }
 
 
-public static function get_systems_by_id($P_SYSTEM_ID){
+    public static function get_systems_by_id($P_SYSTEM_ID){
         $cursor =null;
         $data = array();
         $stmt = DB::getPdo()->prepare("begin SYSTEM_MEMBERS_PKG.get_systems_by_id(:P_SYSTEM_ID,:out_cursor); end;");
         $stmt->bindValue(':P_SYSTEM_ID', $P_SYSTEM_ID, PDO::PARAM_NULL);
+        $stmt->bindParam(':out_cursor', $cursor, PDO::PARAM_STMT, 0, \OCI_B_CURSOR);
+        $stmt->execute();
+        oci_execute($cursor, OCI_DEFAULT);
+        while($row = oci_fetch_object($cursor, OCI_ASSOC | OCI_RETURN_NULLS)){
+            $data[] = $row;
+        }
+        oci_free_cursor($cursor);
+        return ['data'=>$data];
+    }
+
+    public static function get_systems_by_user_id($p_user_id){
+        $cursor =null;
+        $data = array();
+        $stmt = DB::getPdo()->prepare("begin SYSTEM_MEMBERS_PKG.get_systems_by_user_id(:p_user_id,:out_cursor); end;");
+        $stmt->bindValue(':p_user_id', $p_user_id, PDO::PARAM_NULL);
         $stmt->bindParam(':out_cursor', $cursor, PDO::PARAM_STMT, 0, \OCI_B_CURSOR);
         $stmt->execute();
         oci_execute($cursor, OCI_DEFAULT);
