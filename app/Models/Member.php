@@ -157,4 +157,17 @@ public static function giveMembers_by_ID($p_TEAM_ID){
     oci_free_cursor($cursor);
     return ['data'=>$data];
 }
+
+public static function GET_BY_ID($P_ID_NUM){
+    $cursor =null;
+    $data = array();
+    $stmt = DB::getPdo()->prepare("begin MEMBER_PKG.GET_BY_ID(:P_ID_NUM,:out_cursor); end;");
+    $stmt->bindValue(':P_ID_NUM', $P_ID_NUM, PDO::PARAM_NULL);
+    $stmt->bindParam(':out_cursor', $cursor, PDO::PARAM_STMT, 0, \OCI_B_CURSOR);
+    $stmt->execute();
+    oci_execute($cursor, OCI_DEFAULT);
+    $row = oci_fetch_object($cursor, OCI_ASSOC | OCI_RETURN_NULLS);
+    oci_free_cursor($cursor);
+    return $row;
+}
 }
