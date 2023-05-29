@@ -5,6 +5,7 @@
 use App\Models\Tasks;
 $tasks = new Tasks();
 $get_all_members= $tasks->get_all_members()['data'];
+
 @endphp
 
 
@@ -16,15 +17,12 @@ $get_all_members= $tasks->get_all_members()['data'];
 
                 </div>
                 <div class="modal-body">
-                    <form class="row" method="POST" >
                         <input type="hidden" id="wait_id"/>
-
                         <div class="col-xl-6 form-group mb-6">
                             <label class="required form-label fw-bolder">سبب التأجيل</label>
                             <textarea id="DELAIED_REASON" name="DELAIED_REASON" class="form-control form-control-solid mb-8 f-family tinymce-editor"
                                 rows="4" cols="4"></textarea>
                             </div>
-                    </form>    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary save" data-dismiss="modal">حفظ</button>
@@ -40,18 +38,16 @@ $get_all_members= $tasks->get_all_members()['data'];
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3 id="modalTitle">اضافة سبب الالغاء</h3>
-    
                     </div>
                     <div class="modal-body">
-                        <form class="row" method="POST" >    
-                            
+
                             <input type="hidden" id="cancel_id"/>
 
                             <div class="col-xl-6 form-group mb-6">
                                 <label class="required form-label fw-bolder">سبب الالغاء</label>
                                 <textarea id="CANCELED_REASON" name="CANCELED_REASON" class="form-control form-control-solid mb-8 f-family tinymce-editor"
-                                rows="4" cols="4"></textarea>
-                                </div>    
+                                rows="4" cols="4">{{old('CANCELED_REASON',$tasks->CANCELED_REASON)}}</textarea>
+                            </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary save_cancel" data-dismiss="modal">حفظ</button>
@@ -280,6 +276,9 @@ $get_all_members= $tasks->get_all_members()['data'];
                                   if (data.COMPLETION_STATUS== 4) {
                                     return '<span class="badge badge-success val">قيد العمل</span>';
                                 }
+                                if (data.COMPLETION_STATUS== 5) {
+                                    return '<span class="badge badge-danger val">الغاء</span>';
+                                }
                                 
                                 return '-';
                             },"searchable": false
@@ -318,24 +317,167 @@ $get_all_members= $tasks->get_all_members()['data'];
 
                         var toggel_text="";
                         var toggel_icon="check";
-
+                        var action ="";
                        if(data.COMPLETION_STATUS == 1){
-                        toggel_text="منجز";
-                        toggel_icon="check";
+                        action = `\
+                                 <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="0" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                            غير محدد
+                                        </a>
+                                    </div>
+                                <!--end::Menu item--> 
+                                <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="2" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                            غير منجز
+                                        </a>
+                                    </div>
+                                <!--end::Menu item-->
+                                <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="4" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                            قيد العمل
+                                        </a>
+                                    </div>
+                                <!--end::Menu item--> 
+                        `;
+                        // toggel_text="منجز";
+                        // toggel_icon="check";
 
                        }else if(data.COMPLETION_STATUS == 2){
-                        toggel_text="غير منجز";
-                        toggel_icon="cancel";
+                        action = `\
+                                 <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="0" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                            غير محدد
+                                        </a>
+                                    </div>
+                                <!--end::Menu item--> 
+                                <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="1" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                             منجز
+                                        </a>
+                                    </div>
+                                <!--end::Menu item-->
+                                <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="4" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                            قيد العمل
+                                        </a>
+                                    </div>
+                                <!--end::Menu item--> 
+                                <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="3" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                            مؤجل 
+                                        </a>
+                                    </div>
+                                <!--end::Menu item--> 
+                        `;
+                        // toggel_text="غير منجز";
+                        // toggel_icon="cancel";
                        
                        }else if(data.COMPLETION_STATUS == 3){
-                        toggel_text="مؤجل";
-                        toggel_icon="check";
+                        action = `\
+                                 <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="0" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                            غير محدد
+                                        </a>
+                                    </div>
+                                <!--end::Menu item--> 
+                                <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="1" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                             منجز
+                                        </a>
+                                    </div>
+                                <!--end::Menu item-->
+                                <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="4" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                            قيد العمل
+                                        </a>
+                                    </div>
+                                <!--end::Menu item--> 
+                                <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="2" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                            غير منجز 
+                                        </a>
+                                    </div>
+                                <!--end::Menu item--> 
+                        `;
+                        // toggel_text="مؤجل";
+                        // toggel_icon="check";
                        }else if(data.COMPLETION_STATUS == 4){
-                        toggel_text="قيد العمل";
-                        toggel_icon="edit";
+                        action = `\
+                                 <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="0" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                            غير محدد
+                                        </a>
+                                    </div>
+                                <!--end::Menu item--> 
+                                <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="1" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                             منجز
+                                        </a>
+                                    </div>
+                                <!--end::Menu item-->
+                                <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="3" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                            مؤجل
+                                        </a>
+                                    </div>
+                                <!--end::Menu item--> 
+                                <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="2" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                            غير منجز 
+                                        </a>
+                                    </div>
+                                <!--end::Menu item--> 
+                        `;
+
+                        // toggel_text="قيد العمل";
+                        // toggel_icon="edit";
                        }else{
-                        toggel_text="غير محدد";
-                        toggel_icon="times";
+                        action = `\
+                                 <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="4" class="menu-link px-3 toggel" > <i class="fa fa-tasks me-2"></i>
+                                            قيد العمل
+                                        </a>
+                                    </div>
+                                <!--end::Menu item--> 
+                                <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="1" class="menu-link px-3 toggel" > <i class="fa fa-tasks me-2"></i>
+                                             منجز
+                                        </a>
+                                    </div>
+                                <!--end::Menu item-->
+                                <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="3" class="menu-link px-3 toggel" > <i class="fa fa-tasks me-2"></i>
+                                            مؤجل
+                                        </a>
+                                    </div>
+                                <!--end::Menu item--> 
+                                <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="2" class="menu-link px-3 toggel" > <i class="fa fa-tasks me-2"></i>
+                                            غير منجز 
+                                        </a>
+                                    </div>
+                                <!--end::Menu item--> 
+                        `;
+
                        }
                     
                         return `\
@@ -359,27 +501,9 @@ $get_all_members= $tasks->get_all_members()['data'];
                                     </a>
                                 </div>
                                 <!--end::Menu item--> 
-                                
-                                <!--begin::Menu item-->
-                                <div class="menu-item px-3">
-                                    <a href="#"  val_id="${data.ID}" class="menu-link px-3 toggel" data-kt-docs-table-filter=""> <i class="fa fa-times me-2"  ></i>
-                                        ${toggel_text}
-                                    </a>
-                                </div>
-                                <!--end::Menu item-->  
-                                 <!--begin::Menu item-->
-                                <div class="menu-item px-3">
-                                    <a href="#" val_id="${data.ID}" class="menu-link px-3 wait"  data-kt-docs-table-filter="add_reason"> <i class="fa fa-times me-2"></i>
-                                  تأجيل                              
-                                  </a>
-                                </div>
-                                <!--end::Menu item-->  
-                                <!--begin::Menu item-->
-                                <div class="menu-item px-3">
-                                    <a href="#" val_id="${data.ID}" class="menu-link px-3"  data-kt-docs-table-filter=""> <i class="fa fa-times me-2"></i>قيد العمل
-                                  </a>
-                                </div>
-                                <!--end::Menu item--> 
+
+                                `+action+
+                                `/                      
                                  <!--begin::Menu item-->
                                 <div class="menu-item px-3">
                                     <a href="#" val_id="${data.ID}" class="menu-link px-3 cancel"  data-kt-docs-table-filter="add_reason2"> <i class="fa fa-times me-2"></i>
@@ -560,54 +684,61 @@ $get_all_members= $tasks->get_all_members()['data'];
         $('#COMPLETION_STATUS' ).on('change', function (data, callbak) {
             dt.draw();
         });
-
-
         $(document).on('click', '.toggel', function (data, callbak) {
             var id = $(this).attr('val_id');
+            var status = $(this).attr('val_val');
             jQuery.ajax({
                 type: "get",
                 url: 'tasks/change_status/'+id,
+                data:{
+                    "COMPLETION_STATUS": status,
+                },
                 dataType: 'json',
                 success :function (data) {
                     dt.draw();
-                    toastr.success("تم تحويل المهمة الى منجز");
+                    toastr.success("تم تعديل حالة المهمة");
 
                 }
             }); 
         });
 
         $(".save").click(function(){
-                        var id = $("#wait_id").val(); 
-                      //  alert(id);
-                    jQuery.ajax({
+                        var id = $("#wait_id").val();
+                        var Content = tinymce.get("DELAIED_REASON").getContent(); 
+                        
+                        jQuery.ajax({
+
                             type: "post",
-                            url: 'tasks/update_reason/'+id,
+                            url: 'tasks/update_reason/'+status,
                             data:{
                                 "_token": "{{ csrf_token() }}",       
                                 "id": id,
                                 "ISDELAY":1,
                                 "ISCANCEL":0,
-                                "DELAIED_REASON":$( "#DELAIED_REASON" ).val(), 
+                                "DELAIED_REASON":Content, 
                                 "CANCELED_REASON":null,
-                                "UPDATED_BY":1
+                                "COMPLETION_STATUS": 3,
+                                "UPDATED_BY":1,
+
                             },
                             dataType: 'json',
                             success :function (data) {
-                            
+                                dt.draw();
                                 toastr.success("تم تأجيل المهمة بنجاح");
 
-                                   }
-                        }); 
+                                tinyMCE.get('#DELAIED_REASON').getContent()
 
 
-                    });
+                            }
+                                            }); 
 
+                     }); 
 
                                      
                     $(".save_cancel").click(function(){
                                             var id = $("#cancel_id").val(); 
-                                        //  alert(id);
-                                        jQuery.ajax({
+                                            var Content = tinymce.get("CANCELED_REASON").getContent(); 
+                                            jQuery.ajax({
                                                 type: "post",
                                                 url: 'tasks/update_reason/'+id,
                                                 data:{
@@ -616,19 +747,23 @@ $get_all_members= $tasks->get_all_members()['data'];
                                                     "ISDELAY":0,
                                                     "ISCANCEL":1,
                                                     "DELAIED_REASON":null, 
-                                                    "CANCELED_REASON":$( "#CANCELED_REASON" ).val(),
+                                                    "CANCELED_REASON": Content,
+                                                    "COMPLETION_STATUS": 5,
                                                     "UPDATED_BY":1
                                                 },
                                                 dataType: 'json',
                                                 success :function (data) {
-                                                
+                                                    dt.draw();
                                                     toastr.success("تم الغاء المهمة بنجاح");
+                                                    tinyMCE.get('CANCELED_REASON').getContent()
 
                                                     }
                                             }); 
-
                      }); 
-        // Public methods
+
+
+                
+
         return {
             init: function () {
                 initDatatable();
@@ -665,12 +800,6 @@ $("button[data-dismiss=modal]").click(function()
 {
   $(".modal").modal('hide');
 });
-
-               
-
-   
-
-
 
 
   $( '#MEM_ID' ).select2( {

@@ -47,7 +47,7 @@ class TasksController extends Controller
         if($request->search['value'] != ""){
             $search = $request->search['value'];
         }
-       return json_encode(Tasks::LOAD_DATA($search,$request->ACTUAL_FINISH_MONTH,$request->ACTUAL_FINISH_YEAR,$request->MEM_ID,$request->COMPLETION_STATUS,0,10));
+       return json_encode(Tasks::LOAD_DATA($search,$request->ACTUAL_FINISH_MONTH,$request->ACTUAL_FINISH_YEAR,$request->MEM_ID,$request->COMPLETION_STATUS,$request->start,$request->length));
 
     }
     /**
@@ -232,11 +232,11 @@ class TasksController extends Controller
 
     }
 
-    public function change_status($P_ID)
+    public function change_status($P_ID,Request $request)
     { 
 
         $tasks = new Tasks();
-        $res= $tasks->change_status($P_ID);
+        $res= $tasks->change_status($P_ID,$request->COMPLETION_STATUS);
         return [];
     
     } 
