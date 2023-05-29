@@ -108,6 +108,17 @@ $get_all_members= $tasks->get_all_members()['data'];
                     <div class="row">
                         <div class="col-sm-3">
                             <div class="form-group">
+                                <select name="SYSTEM_ID" id="SYSTEM_ID" class="form-control form-control-solid w-250px ps-15" >
+                                    <option value=""  selected>--اختر--</option>
+                                    @foreach($systems as $system)
+                                        <option value="{{ $system->ID }}" {{$system->ID}}>{{ $system->SYSTEM_NAME}}</option>
+                                    @endforeach
+                                </select> 
+
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
                                 <select name="MEM_ID" id="MEM_ID" class="form-control form-control-solid w-250px ps-15"  data-kt-docs-table-filter="search5">
                                     <option value=""  selected>--اختر--</option>
                                     @foreach($get_all_members as $member)
@@ -216,7 +227,8 @@ $get_all_members= $tasks->get_all_members()['data'];
                 "data": function ( d ) {
                     d.ACTUAL_FINISH_MONTH = $('#ACTUAL_FINISH_MONTH').val();
                     d.ACTUAL_FINISH_YEAR= $('#ACTUAL_FINISH_YEAR').val();
-                    d.MEM_ID= $('#MEM_ID').val();
+                    d.MEM_ID= $('#MEM_ID').val(); 
+                    d.SYSTEM_ID= $('#SYSTEM_ID').val();
                     d.COMPLETION_STATUS = $('#COMPLETION_STATUS').val();
                 }
                 },
@@ -680,7 +692,9 @@ $get_all_members= $tasks->get_all_members()['data'];
         $('#MEM_ID' ).on('change', function (data, callbak) {
             dt.draw();
         });
-
+        $('#SYSTEM_ID').on('change', function (data, callbak) {
+            dt.draw();
+        });
         $('#COMPLETION_STATUS' ).on('change', function (data, callbak) {
             dt.draw();
         });
@@ -805,6 +819,10 @@ $("button[data-dismiss=modal]").click(function()
            
        } ) ;
 
+    $( '#SYSTEM_ID' ).select2( {
+           enableFiltering: true,
+           
+       } ) ;
 
        
     </script>

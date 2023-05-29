@@ -222,7 +222,7 @@ class MemberController extends Controller
     {
        
        $member = new Member();
-       $X= $member->memberTeamSelect(80456574);
+       $X= $member->memberTeamSelect($P_member_id);
         echo json_decode($X);
 
     

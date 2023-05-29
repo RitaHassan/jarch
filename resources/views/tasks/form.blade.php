@@ -78,15 +78,15 @@
                             </div>
 
                             <div class="col-xl-6 form-group mb-6">
-                                <label class="required form-label fw-bolder">وصف المهمة </label>
+                                <label class="form-label fw-bolder">وصف المهمة </label>
                                 <textarea id="DESCRIPTION" name="DESCRIPTION" class="form-control form-control-solid mb-8 f-family tinymce-editor"
                                 rows="3">{{ old('DESCRIPTION',$tasks->DESCRIPTION)}}</textarea>
                             </div>
 
                             <div class="col-xl-6 form-group mb-6">
-                                <label class="required form-label fw-bolder">الأولوية</label>
+                                <label class="form-label fw-bolder">الأولوية</label>
                                 <select name="PRIORITY" id="PRIORITY" class="form-control form-control-solid">
-                                    <option value="-1" disabled selected>--اختر--</option>
+                                    <option value=""  selected>--اختر--</option>
                                     <option value="1" @selected($tasks->PRIORITY == '1')>1</option>
                                     <option value="2"  @selected($tasks->PRIORITY == '2')>2</option>
                                     <option value="3"  @selected($tasks->PRIORITY == '3')>3</option>
@@ -102,7 +102,7 @@
 
                                    
                                 <div class="col-xl-6 form-group mb-6">
-                                    <label class="required form-label fw-bolder">نوع المهمة</label>
+                                    <label class="required form-label fw-bolder">مصدر المهمة</label>
                                     <select name="TASK_TYPE" id="TASK_TYPE" class="form-control form-control-solid" >
                                     <option value="-1" disabled selected>--اختر--</option>
                                     <option value="1" @selected($tasks->TASK_TYPE == '1')>تحليل</option>
@@ -111,6 +111,8 @@
                                     <option value="4" @selected($tasks->TASK_TYPE == '4') >دعم فني</option>
                                     <option value="5"  @selected($tasks->TASK_TYPE == '5')>تقرير</option>
                                     <option value="6" @selected($tasks->TASK_TYPE == '6')>اختبار</option>
+                                    <option value="7" @selected($tasks->TASK_TYPE == '7')>مراسلة</option>
+                                    <option value="8" @selected($tasks->TASK_TYPE == '8')>أمن معلومات</option>
                                     </select>  
                                 </div>
 
@@ -130,27 +132,27 @@
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </div>
                                 <div class="col-xl-6 form-group mb-6">
-                                    <label class="required form-label fw-bolder">تاريخ البدء الفعلي</label>
+                                    <label class="form-label fw-bolder">تاريخ البدء الفعلي</label>
                                     <input class="date2 form-control" type="text" name="ACTUAL_START_DT" minlength="5" maxlength="200" 
                                     value="{{ old('ACTUAL_START_DT', $tasks->ACTUAL_START_DT) }}" autocomplete="off">
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </div>
                                 <div class="col-xl-6 form-group mb-6">
-                                    <label class="required form-label fw-bolder">تاريخ الانتهاء الفعلي</label>
+                                    <label class="form-label fw-bolder">تاريخ الانتهاء الفعلي</label>
                                     <input class="date2 form-control" type="text" name="ACTUAL_FINISH_DT" minlength="5" maxlength="200" 
                                     value="{{ old('ACTUAL_FINISH_DT', $tasks->ACTUAL_FINISH_DT) }}" autocomplete="off">
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </div>
                                 <div class="col-xl-6 form-group mb-6">
-                                    <label class="required form-label fw-bolder">مدة الانجاز</label>
+                                    <label class="form-label fw-bolder">مدة الانجاز</label>
                                       <input type="text"  id="COMPLETION_PERIOD" name="COMPLETION_PERIOD" value="{{old('COMPLETION_PERIOD',$tasks->COMPLETION_PERIOD)}}"  class="form-control form-control-solid" 
                                       placeholder="مدة الانجاز">
                                 </div>
 
                                 <div class="col-xl-6 form-group mb-6">
-                                    <label class="required form-label fw-bolder">نوع مدة الانجاز</label>
+                                    <label class="form-label fw-bolder">نوع مدة الانجاز</label>
                                     <select name="DURATION_TYPE" id="DURATION_TYPE" class="form-control form-control-solid" >
                                         <option value="-1" disabled selected>--اختر--</option>
                                         <option value="1" @selected($tasks->DURATION_TYPE == '1')>يوم</option>
@@ -164,7 +166,7 @@
                                 <div class="col-xl-6 form-group mb-6">
                                     <label class="required form-label fw-bolder">حالة الانجاز</label>
                                     <select name="COMPLETION_STATUS" id="COMPLETION_STATUS" class="form-control form-control-solid" >
-                                        <option value="-1" disabled selected>--اختر--</option>
+                                        <option value=""  selected>--اختر--</option>
                                         <option value="0" @selected($tasks->COMPLETION_STATUS == '0')>غير محدد</option>
                                         <option value="1" @selected($tasks->COMPLETION_STATUS == '1')>منجز</option>
                                         <option value="2" @selected($tasks->COMPLETION_STATUS == '2')>غير منجز</option>
@@ -174,16 +176,23 @@
                                       </select>
                                 </div>
 
-
                                 <div class="col-xl-6 form-group mb-6">
-                                    <label class="required form-label fw-bolder">داخل الخطة أم لا</label>
-                                    <select name="IN_PLAN" id="IN_PLAN" class="form-control form-control-solid" >
-                                        <option value="option_select" disabled selected>--اختر--</option>
-                                        <option value="1" @selected($tasks->IN_PLAN == '1')>نعم</option>
-                                        <option value="2" @selected($tasks->IN_PLAN == '2')>لا</option>
-                                    
-                                      </select>
+                                    <label>داخل الخطة</label>
+                                    <div class="radio-inline">
+                                        <label class="radio radio-lg">
+                                            <input type="radio" @checked($tasks->IN_PLAN == '1') @checked($tasks->IN_PLAN == null) value="1" name="IN_PLAN">
+                                            <span></span>
+                                            نعم
+                                        </label>
+                                        <label class="radio radio-lg">
+                                            <input type="radio" @checked($tasks->IN_PLAN == '2') name="IN_PLAN" value="2">
+                                            <span></span>
+                                           لا
+                                        </label>
+                                       
+                                    </div>
                                 </div>
+
 
                                 <div class="col-xl-6 form-group mb-6">
                                     <label class="required form-label fw-bolder">ملاحظات</label>

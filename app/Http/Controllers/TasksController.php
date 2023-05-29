@@ -15,7 +15,8 @@ class TasksController extends Controller
      */
     public function index()
     {
-        return view('tasks.index');
+        $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
+        return view('tasks.index',compact('systems'));
     }
 
     /**
@@ -47,7 +48,7 @@ class TasksController extends Controller
         if($request->search['value'] != ""){
             $search = $request->search['value'];
         }
-       return json_encode(Tasks::LOAD_DATA($search,$request->ACTUAL_FINISH_MONTH,$request->ACTUAL_FINISH_YEAR,$request->MEM_ID,$request->COMPLETION_STATUS,$request->start,$request->length));
+       return json_encode(Tasks::LOAD_DATA($search,$request->ACTUAL_FINISH_MONTH,$request->ACTUAL_FINISH_YEAR,$request->MEM_ID,$request->COMPLETION_STATUS,$request->SYSTEM_ID,$request->start,$request->length));
 
     }
     /**
@@ -58,17 +59,17 @@ class TasksController extends Controller
      */
     public function store(Request $request)
     {
-     
+    
      $request->validate([
             
            'SYSTEM_ID'=>'required',
-           'DESCRIPTION'=>'required',
+           'DESCRIPTION'=>'sometimes',
            'priority'=>'sometimes',
            'TASK_TYPE'=>'required',
            'PLANNED_START_DT'=>'sometimes',
            'PLANNED_FINISH_DT'=>'sometimes',
-           'ACTUAL_START_DT'=>'sometimes',
-           'ACTUAL_FINISH_DT'=>'sometimes',
+           'ACTUAL_START_DT'=>'sometimes|date_format:d/m/Y',
+           'ACTUAL_FINISH_DT'=>'nullable|date_format:d/m/Y|after_or_equal:PLANNED_START_DT',
            'COMPLETION_PERIOD'=>'sometimes',
            'COMPLETION_STATUS'=>'sometimes',
            'NOTES'=>'sometimes',
@@ -112,14 +113,14 @@ class TasksController extends Controller
     public function edit($id)
     {
         $tasks = new Tasks();
-        $system= $tasks->systemSelect()['data'];
-        $member2= $tasks->teamSelect()['data'];
-        $GET_MEMBERS= $tasks->GET_MEMBERS()['data'];
+        $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
+        // $member2= $tasks->teamSelect()['data'];
         $tasks  = $tasks->find_by_id($id);
         if (!$tasks) {
             abort(404);
         }
-        return view('tasks.form',compact('tasks','member2','system','GET_MEMBERS'));
+        $GET_MEMBERS = SystemMembers::get_systems_by_id($tasks->SYSTEM_ID)['data'];
+        return view('tasks.form',compact('tasks','systems','GET_MEMBERS'));
     }
 
     /**
@@ -132,15 +133,14 @@ class TasksController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'TEAM_ID' => 'required',
            'SYSTEM_ID'=>'required',
-           'DESCRIPTION'=>'required',
+           'DESCRIPTION'=>'sometimes',
            'priority'=>'sometimes',
            'TASK_TYPE'=>'required',
            'PLANNED_START_DT'=>'sometimes',
            'PLANNED_FINISH_DT'=>'sometimes',
            'ACTUAL_START_DT'=>'sometimes',
-           'ACTUAL_FINISH_DT'=>'sometimes',
+           'ACTUAL_FINISH_DT'=>'nullable|date_format:d/m/Y|after_or_equal:PLANNED_START_DT',
            'COMPLETION_PERIOD'=>'sometimes',
            'COMPLETION_STATUS'=>'sometimes',
            'NOTES'=>'sometimes',
