@@ -73,11 +73,10 @@ class Tasks extends MYModel
 
  
     public static function Save_($array_in){
-        $stmt = DB::getPdo()->prepare("begin TASKS_PKG.SAVE(:P_TEAM_ID,:P_SYSTEM_ID,:P_DESCRIPTION,:P_PRIORITY,:P_TASK_TYPE,:P_PLANNED_START_DT,:P_PLANNED_FINISH_DT,:P_ACTUAL_START_DT,:P_ACTUAL_FINISH_DT,:P_COMPLETION_PERIOD,:P_COMPLETION_STATUS,:P_NOTES,:P_IN_PLAN,:p_created_by,:P_TITLE,:P_DURATION_TYPE,:P_MEM_ID,:P_STATUS,:P_MSG); end;");
+        $stmt = DB::getPdo()->prepare("begin TASKS_PKG.SAVE(:P_SYSTEM_ID,:P_DESCRIPTION,:P_PRIORITY,:P_TASK_TYPE,:P_PLANNED_START_DT,:P_PLANNED_FINISH_DT,:P_ACTUAL_START_DT,:P_ACTUAL_FINISH_DT,:P_COMPLETION_PERIOD,:P_COMPLETION_STATUS,:P_NOTES,:P_IN_PLAN,:p_created_by,:P_TITLE,:P_DURATION_TYPE,:P_MEM_ID,:P_STATUS,:P_MSG); end;");
       /*  foreach ($array_in as $key => $value) {
             $stmt->bindValue(":$key",$value , PDO::PARAM_NULL);
         }*/
-        $stmt->bindValue(':P_TEAM_ID', $array_in['P_TEAM_ID'], PDO::PARAM_NULL);
         $stmt->bindValue(':P_SYSTEM_ID', $array_in['P_SYSTEM_ID'], PDO::PARAM_NULL);
         $stmt->bindValue(':P_DESCRIPTION', $array_in['P_DESCRIPTION'], PDO::PARAM_NULL);
         $stmt->bindValue(':P_PRIORITY', $array_in['P_PRIORITY'], PDO::PARAM_NULL);

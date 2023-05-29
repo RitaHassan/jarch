@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Tasks;
-
+use App\Models\SystemMembers;
 
 class TasksController extends Controller
 {
@@ -26,11 +26,11 @@ class TasksController extends Controller
     public function create()
     {
           $tasks = new Tasks();
-          $member2= $tasks->teamSelect()['data'];
-          $system= $tasks->systemSelect()['data'];
+          
+          $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
           $GET_MEMBERS= $tasks->GET_MEMBERS()['data'];
 
-          return view('tasks.form',compact('tasks','member2','system','GET_MEMBERS'));
+          return view('tasks.form',compact('tasks','systems','GET_MEMBERS'));
         
     }
 
@@ -61,7 +61,6 @@ class TasksController extends Controller
      
      $request->validate([
             
-           'TEAM_ID' => 'required',
            'SYSTEM_ID'=>'required',
            'DESCRIPTION'=>'required',
            'priority'=>'sometimes',

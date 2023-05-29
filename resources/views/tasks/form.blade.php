@@ -46,12 +46,14 @@
                         @endif
                     </div>
                             <div class="col-xl-6 form-group mb-6">
-                            <label class="required form-label fw-bolder">اسم الفريق</label>
-                            <select name="TEAM_ID" id="TEAM_ID" class="form-control form-control-solid" >
-                                <option value="option_select" disabled selected>--اختر--</option>
-                                @foreach($member2 as $m)
-                                    <option value="{{ $m->ID }}" {{$tasks->TEAM_ID == $m->ID  ? 'selected' : ''}}>{{ $m->NAME}}</option>
-                                @endforeach
+                                <label class="required form-label fw-bolder">اسم النظام</label>
+                
+
+                                <select name="SYSTEM_ID" id="SYSTEM_ID" class="form-control form-control-solid" >
+                                    <option value="option_select" disabled selected>--اختر--</option>
+                                    @foreach($systems as $m)
+                                        <option value="{{ $m->ID }}" {{$tasks->SYSTEM_ID == $m->ID  ? 'selected' : ''}}>{{ $m->SYSTEM_NAME}}</option>
+                                    @endforeach
                                 </select> 
                             </div>
 
@@ -67,17 +69,7 @@
 
                                 </div>
 
-                            <div class="col-xl-6 form-group mb-6">
-                                <label class="required form-label fw-bolder">اسم النظام</label>
-                
-
-                                <select name="SYSTEM_ID" id="SYSTEM_ID" class="form-control form-control-solid" >
-                                    <option value="option_select" disabled selected>--اختر--</option>
-                                    @foreach($system as $m)
-                                        <option value="{{ $m->ID }}" {{$tasks->SYSTEM_ID == $m->ID  ? 'selected' : ''}}>{{ $m->SYSTEM_NAME}}</option>
-                                    @endforeach
-                                </select> 
-                            </div>
+                          
                               
                             <div class="col-xl-6 form-group mb-6">
                                 <label class="required form-label fw-bolder">عنوان المهمة </label>
@@ -227,12 +219,12 @@
     });
 
     $(document).ready(function () {
-        $("#TEAM_ID").change(function (e, x) {
-            var TEAM_ID = $("#TEAM_ID").val();
+
+        $("#SYSTEM_ID").change(function (e, x) {
+            var SYSTEM_ID = $("#SYSTEM_ID").val();
             $.ajax({
-                url: '/tasks/giveMembers/'+TEAM_ID,
+                url: '/systems/members/'+SYSTEM_ID,
                 type: 'get',
-                data: {TEAM_ID: TEAM_ID},
                 dataType: 'json',
                 success: function (data) {
                     var len = data.length;
@@ -241,38 +233,9 @@
                     $("#MEM_ID").append("<option value=''>--اختر--</option>");
 
                     for (var i = 0; i < len; i++) {
-                        var id = data[i]['MEM_ID'];
+                        var id = data[i]['ID'];
                         var name = data[i]['MEM_NAME'];
                         $("#MEM_ID").append("<option value='" + id + "'>" + name + "</option>");
-                    }
-
-                    // $("#MEM_ID").val(x);
-                    // $("#MEM_ID").trigger('change', x);
-                }
-            });
-        });
-
-    });
-
-
-    $(document).ready(function () {
-
-        $("#MEM_ID").change(function (e, x) {
-            var MEM_ID = $("#MEM_ID").val();
-            $.ajax({
-                url: '/systems/get_by_user_id/'+MEM_ID,
-                type: 'get',
-                dataType: 'json',
-                success: function (data) {
-                    var len = data.length;
-
-                    $("#SYSTEM_ID").empty();
-                    $("#SYSTEM_ID").append("<option value=''>--اختر--</option>");
-
-                    for (var i = 0; i < len; i++) {
-                        var id = data[i]['ID'];
-                        var name = data[i]['SYSTEM_NAME'];
-                        $("#SYSTEM_ID").append("<option value='" + id + "'>" + name + "</option>");
                     }
                 }
             });
