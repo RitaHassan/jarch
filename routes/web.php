@@ -43,6 +43,7 @@ Route::resource('systems', 'SystemController');
 
 
 Route::get('tasks/change_status/{id}', 'TasksController@change_status')->name('tasks.change_status');
+Route::get('tasks/change_status_2/{id}', 'TasksController@change_status_2')->name('tasks.change_status_2');
 Route::post('tasks/update_reason/{ID}', 'TasksController@update_reason')->name('tasks.update_reason');
 Route::get('tasks/giveMembers/{TEAM_ID}', 'TasksController@giveMembers')->name('tasks.giveMembers');
 Route::get('tasks/sysName_mem/{ID_NUM}', 'TasksController@sysName_mem')->name('tasks.sysName_mem');

@@ -254,12 +254,36 @@ class Tasks extends MYModel
 
 
 
-        public static function change_status($P_ID,$P_COMPLETION_STATUS){
+        public static function change_status($P_ID,$P_COMPLETION_STATUS,$P_ACTUAL_START_DT){
             $cursor =null;
             $data = array();
-            $stmt = DB::getPdo()->prepare("begin TASKS_PKG.change_status(:P_ID,:P_COMPLETION_STATUS,:P_STATUS,:P_MSG); end;");
+            $stmt = DB::getPdo()->prepare("begin TASKS_PKG.change_status(:P_ID,:P_COMPLETION_STATUS,:P_ACTUAL_START_DT,:P_STATUS,:P_MSG); end;");
             $stmt->bindValue(':P_ID', $P_ID, PDO::PARAM_NULL); 
             $stmt->bindValue(':P_COMPLETION_STATUS', $P_COMPLETION_STATUS, PDO::PARAM_NULL);
+            $stmt->bindValue(':P_ACTUAL_START_DT', $P_ACTUAL_START_DT, PDO::PARAM_NULL);
+            $stmt->bindParam(':P_STATUS', $P_STATUS,PDO::PARAM_INT|PDO::PARAM_INPUT_OUTPUT, -1);
+            $stmt->bindParam(':P_MSG', $P_MSG, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
+           
+            $stmt->execute();
+         
+            $res=[
+                'MSG' => $P_MSG, 
+                'STATUS' => $P_STATUS, 
+            ];
+            return $res;
+
+        }
+
+        public static function change_status_2($P_ID,$P_COMPLETION_STATUS,$P_ACTUAL_START_DT,$P_ACTUAL_FINISH_DT,$P_COMPLETION_PERIOD,$P_DURATION_TYPE){
+            $cursor =null;
+            $data = array();
+            $stmt = DB::getPdo()->prepare("begin TASKS_PKG.change_status_v2(:P_ID,:P_COMPLETION_STATUS,:P_ACTUAL_START_DT,:P_ACTUAL_FINISH_DT,:P_COMPLETION_PERIOD,:P_DURATION_TYPE,:P_STATUS,:P_MSG); end;");
+            $stmt->bindValue(':P_ID', $P_ID, PDO::PARAM_NULL); 
+            $stmt->bindValue(':P_COMPLETION_STATUS', $P_COMPLETION_STATUS, PDO::PARAM_NULL);
+            $stmt->bindValue(':P_ACTUAL_START_DT', $P_ACTUAL_START_DT, PDO::PARAM_NULL);
+            $stmt->bindValue(':P_ACTUAL_FINISH_DT', $P_ACTUAL_FINISH_DT, PDO::PARAM_NULL);
+            $stmt->bindValue(':P_COMPLETION_PERIOD', $P_COMPLETION_PERIOD, PDO::PARAM_NULL);
+            $stmt->bindValue(':P_DURATION_TYPE', $P_DURATION_TYPE, PDO::PARAM_NULL);
             $stmt->bindParam(':P_STATUS', $P_STATUS,PDO::PARAM_INT|PDO::PARAM_INPUT_OUTPUT, -1);
             $stmt->bindParam(':P_MSG', $P_MSG, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
            

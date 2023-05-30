@@ -37,28 +37,100 @@ $get_all_members= $tasks->get_all_members()['data'];
 
     <div id="cancelModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 id="modalTitle">اضافة سبب الالغاء</h3>
-    
-                    </div>
-                    <div class="modal-body">
-                        <form class="row" method="POST" >    
-                            
-                            <input type="hidden" id="cancel_id"/>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">اضافة سبب الالغاء</h3>
 
-                            <div class="col-xl-6 form-group mb-6">
-                                <label class="required form-label fw-bolder">سبب الالغاء</label>
-                                <textarea id="CANCELED_REASON" name="CANCELED_REASON" class="form-control form-control-solid mb-8 f-family tinymce-editor"
-                                rows="4" cols="4"></textarea>
-                                </div>    
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary save_cancel" data-dismiss="modal">حفظ</button>
-                    </div>
+                </div>
+                <div class="modal-body">
+                    <form class="row" method="POST" >    
+                        
+                        <input type="hidden" id="cancel_id"/>
+
+                        <div class="col-xl-6 form-group mb-6">
+                            <label class="required form-label fw-bolder">سبب الالغاء</label>
+                            <textarea id="CANCELED_REASON" name="CANCELED_REASON" class="form-control form-control-solid mb-8 f-family tinymce-editor"
+                            rows="4" cols="4"></textarea>
+                            </div>    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary save_cancel" data-dismiss="modal">حفظ</button>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div id="toggel_4_Modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">قيد العمل</h3>
+
+                </div>
+                <div class="modal-body">
+                        
+                        <input type="hidden" id="val_id"/>
+
+                        <div class="col-xl-12 form-group mb-12">
+                            <input type="text" name="ACTUAL_START_DT" id="ACTUAL_START_DT" class="date2 form-control">
+                            </div>    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="toggel_4_save" data-dismiss="modal">حفظ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toggel_1_Modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">منجز</h3>
+
+                </div>
+                <div class="modal-body">
+                        
+                        <input type="hidden" id="val_id_1"/>   
+                        <input type="hidden" id="val_dat"/>
+                        <div class="row">  
+                            <div class="col-xl-4 form-group mb-4">
+                                <label class="form-label fw-bolder">تاريخ البدء الفعلي</label>
+                                <input type="text" name="ACTUAL_START_DT_1" id="ACTUAL_START_DT_1" class="date3 form-control">
+                                </div>    
+                            <div class="col-xl-4 form-group mb-4">
+                                <label class="form-label fw-bolder">تاريخ الانتهاء الفعلي</label>
+                                <input type="text" name="ACTUAL_FINISH_DT" id="ACTUAL_FINISH_DT" class="date2 form-control">
+                            </div>
+                            <div class="col-xl-4 form-group mb-4">
+                                <label class="form-label fw-bolder">مدة الانجاز</label>
+                                  <input type="text"  id="COMPLETION_PERIOD" name="COMPLETION_PERIOD" value="{{old('COMPLETION_PERIOD',$tasks->COMPLETION_PERIOD)}}"  class="form-control form-control-solid" 
+                                  placeholder="مدة الانجاز">
+                            </div>  
+                            <div class="col-xl-4 form-group mb-4">
+                                <label class="form-label fw-bolder">نوع مدة الانجاز</label>
+                                <select name="DURATION_TYPE" id="DURATION_TYPE" class="form-control form-control-solid" >
+                                    <option value=""  >--اختر--</option>
+                                    <option value="1" >يوم</option>
+                                    <option value="2">ساعة</option>
+                                    <option value="3">ساعتين</option>
+                                    <option value="4" >شهر</option>
+                                
+                                  </select>
+                            </div>   
+                        </div>
+                          
+                        
+
+                        
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="toggel_1_save" data-dismiss="modal">حفظ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 <div class="card shadow-sm">
     <div class="card-body">
         <!--begin::Wrapper-->
@@ -135,12 +207,31 @@ $get_all_members= $tasks->get_all_members()['data'];
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <input type="text" data-kt-docs-table-filter="search2"  id="ACTUAL_FINISH_MONTH" class="form-control form-control-solid w-250px ps-15" placeholder="شهر" >
+                                {{-- <input type="text"     placeholder="شهر" > --}}
+                                <select name="" id="ACTUAL_FINISH_MONTH" class="form-control form-control-solid w-250px ps-15" data-kt-docs-table-filter="search2">
+                                    <option value="">-- شهر --</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <input type="text" data-kt-docs-table-filter="search3"  id="ACTUAL_FINISH_YEAR" class="form-control form-control-solid w-250px ps-15" placeholder="سنة" >
+                                {{-- <input type="text"  placeholder="سنة" > --}}
+                                <select data-kt-docs-table-filter="search3"  id="ACTUAL_FINISH_YEAR" class="form-control form-control-solid w-250px ps-15">
+                                    <option value="">-- سنة --</option>
+                                    <option value="2023">2023</option>
+                                </select>
                             </div>
                         </div>   
                     </div>
@@ -335,21 +426,21 @@ $get_all_members= $tasks->get_all_members()['data'];
                         action = `\
                                  <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_val="0" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                        <a href="#" val_id="${data.ID}" val_val="0" class="menu-link px-3 toggel" > <i class="fa fa-tasks me-2"></i>
                                             غير محدد
                                         </a>
                                     </div>
                                 <!--end::Menu item--> 
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_val="2" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                        <a href="#" val_id="${data.ID}" val_val="2" class="menu-link px-3 toggel" > <i class="fa fa-tasks me-2"></i>
                                             غير منجز
                                         </a>
                                     </div>
                                 <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_val="4" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                        <a href="#" val_id="${data.ID}" val_val="4" class="menu-link px-3 toggel_4" > <i class="fa fa-tasks me-2"></i>
                                             قيد العمل
                                         </a>
                                     </div>
@@ -369,14 +460,14 @@ $get_all_members= $tasks->get_all_members()['data'];
                                 <!--end::Menu item--> 
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_val="1" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                        <a href="#" val_id="${data.ID}" val_dat="${data.ACTUAL_START_DT}" val_val="1" class="menu-link px-3 toggel_1" > <i class="fa fa-tasks me-2"></i>
                                              منجز
                                         </a>
                                     </div>
                                 <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_val="4" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                        <a href="#" val_id="${data.ID}" val_val="4" class="menu-link px-3 toggel_4" > <i class="fa fa-tasks me-2"></i>
                                             قيد العمل
                                         </a>
                                     </div>
@@ -403,14 +494,14 @@ $get_all_members= $tasks->get_all_members()['data'];
                                 <!--end::Menu item--> 
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_val="1" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                        <a href="#" val_dat="${data.ACTUAL_START_DT}" val_id="${data.ID}" val_val="1" class="menu-link px-3 toggel_1" > <i class="fa fa-tasks me-2"></i>
                                              منجز
                                         </a>
                                     </div>
                                 <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_val="4" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                        <a href="#" val_id="${data.ID}" val_val="4" class="menu-link px-3 toggel_4" > <i class="fa fa-tasks me-2"></i>
                                             قيد العمل
                                         </a>
                                     </div>
@@ -436,7 +527,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                 <!--end::Menu item--> 
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_val="1" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                        <a href="#" val_dat="${data.ACTUAL_START_DT}" val_id="${data.ID}" val_val="1" class="menu-link px-3 toggel_1" > <i class="fa fa-tasks me-2"></i>
                                              منجز
                                         </a>
                                     </div>
@@ -470,7 +561,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                 <!--end::Menu item--> 
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_val="1" class="menu-link px-3 toggel" > <i class="fa fa-tasks me-2"></i>
+                                        <a href="#" val_dat="${data.ACTUAL_START_DT}" val_id="${data.ID}" val_val="1" class="menu-link px-3 toggel_1" > <i class="fa fa-tasks me-2"></i>
                                              منجز
                                         </a>
                                     </div>
@@ -715,6 +806,56 @@ $get_all_members= $tasks->get_all_members()['data'];
                 }
             }); 
         });
+        $(document).on('click', '.toggel_4', function (data, callbak) {
+            $("#val_id").val($(this).attr('val_id'));
+            $("#toggel_4_Modal").modal("show");
+        });
+
+        $(document).on('click', '.toggel_1', function (data, callbak) {
+            $("#val_id_1").val($(this).attr('val_id'));
+            $("#ACTUAL_START_DT_1").val($(this).attr('val_dat'));
+            $("#toggel_1_Modal").modal("show");
+        });
+        
+        $("#toggel_4_save").click(function(){
+            var id = $("#val_id").val();
+            var status = 4;
+            jQuery.ajax({
+                type: "get",
+                url: 'tasks/change_status/'+id,
+                data:{
+                    "COMPLETION_STATUS": status,
+                    "ACTUAL_START_DT" : $("#ACTUAL_START_DT").val(),
+                },
+                dataType: 'json',
+                success :function (data) {
+                    dt.draw();
+                    toastr.success("تم تعديل حالة المهمة");
+
+                }
+            }); 
+        });
+        $("#toggel_1_save").click(function(){
+            var id = $("#val_id_1").val();
+            var status = 1;
+            jQuery.ajax({
+                type: "get",
+                url: 'tasks/change_status_2/'+id,
+                data:{
+                    "COMPLETION_STATUS": status,
+                    "ACTUAL_START_DT" : $("#ACTUAL_START_DT_1").val(),
+                    "ACTUAL_FINISH_DT" : $("#ACTUAL_FINISH_DT").val(),
+                    "COMPLETION_PERIOD" : $("#COMPLETION_PERIOD").val(),
+                    "DURATION_TYPE" : $("#DURATION_TYPE").val(),
+                },
+                dataType: 'json',
+                success :function (data) {
+                    dt.draw();
+                    toastr.success("تم تعديل حالة المهمة");
+
+                }
+            }); 
+        });
         // Public methods
         return {
             init: function () {
@@ -824,6 +965,16 @@ $("button[data-dismiss=modal]").click(function()
            
        } ) ;
 
-       
+       $(function() {
+            $(".date2").flatpickr({
+                dateFormat: 'd/m/Y',
+                defaultDate: "today",
+            });
+        });
+        $(function() {
+            $(".date3").flatpickr({
+                dateFormat: 'd/m/Y',
+            });
+        });
     </script>
 @endpush
