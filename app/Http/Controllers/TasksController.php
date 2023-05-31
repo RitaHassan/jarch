@@ -27,12 +27,12 @@ class TasksController extends Controller
     public function create()
     {
           $tasks = new Tasks();
-          
+
           $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
           $GET_MEMBERS= $tasks->GET_MEMBERS()['data'];
 
           return view('tasks.form',compact('tasks','systems','GET_MEMBERS'));
-        
+
     }
 
     public function datatable(Request $request)
@@ -59,9 +59,9 @@ class TasksController extends Controller
      */
     public function store(Request $request)
     {
-    
+
      $request->validate([
-            
+
            'SYSTEM_ID'=>'required',
            'DESCRIPTION'=>'sometimes',
            'priority'=>'sometimes',
@@ -78,7 +78,7 @@ class TasksController extends Controller
            'DURATION_TYPE'=>'sometimes',
            'MEM_ID' =>'required'
 
-           
+
         ]);
 
      $tasks = new Tasks();
@@ -151,14 +151,14 @@ class TasksController extends Controller
 
 
         ]);
-       
+
 
         $tasks = new Tasks();
         $tasks = $tasks->find_by_id($id);
         if (!$tasks) {
             abort(404);
         }
-        
+
         $request->request->add(['UPDATED_BY' => 1,'ID'=>$id]);
         $result = Tasks::Update_(change_key($request->only((new Tasks())->getFillable())));
         if($result['STATUS']==1){
@@ -197,34 +197,34 @@ class TasksController extends Controller
 
 
     public function giveMembers($TEAM_ID)
-    { 
+    {
 
         $tasks = new Tasks();
         $X= $tasks->giveMembers($TEAM_ID)['data'];
         return $X;
-    
-    } 
-    
-    
+
+    }
+
+
     public function sysName_mem($P_NUM_ID)
-    { 
+    {
 
         $tasks = new Tasks();
         $X= $tasks->sysName_mem($P_NUM_ID)['data'];
         return $X;
-    
-    } 
+
+    }
 
 
     public function update_reason (Request $request, $id)
     {
-      
+
         $tasks = new Tasks();
         $tasks = $tasks->find_by_id($id);
         if (!$tasks) {
             abort(404);
         }
-        
+
         $request->request->add(['UPDATED_BY' => 1,'ID'=>$id]);
         $result = Tasks::update_reason(change_key($request->only((new Tasks())->getFillable())));
         if($result['STATUS']==1){
@@ -235,13 +235,13 @@ class TasksController extends Controller
     }
 
     public function change_status($P_ID,Request $request)
-    { 
+    {
 
         $tasks = new Tasks();
         $res= $tasks->change_status($P_ID,$request->COMPLETION_STATUS);
         return [];
-    
-    } 
+
+    }
 
 
 

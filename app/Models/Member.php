@@ -60,17 +60,17 @@ class Member extends MYModel
         $stmt->execute();
 
         $res=[
-            'MSG' => $P_MSG, 
-            'STATUS' => $P_STATUS, 
+            'MSG' => $P_MSG,
+            'STATUS' => $P_STATUS,
         ];
         return $res;
-       
+
     }
 
 
     // public static function Save_by_id($array_in){
     //     $stmt = DB::getPdo()->prepare("begin TEAM_PKG.Save_by_id(:p_id_num,:p_created_by,:p_MEM_NAME,:p_active,:p_role,:P_TEAM_ID,:P_STATUS,:P_MSG); end;");
-        
+
     //     $stmt->bindValue(':P_ID_NUM', $array_in['P_ID_NUM'], PDO::PARAM_NULL);
     //     $stmt->bindValue(':P_CREATED_BY', $array_in['P_CREATED_BY'], PDO::PARAM_NULL);
     //     $stmt->bindValue(':P_MEM_NAME', $array_in['P_MEM_NAME'], PDO::PARAM_NULL);
@@ -79,13 +79,13 @@ class Member extends MYModel
     //     $stmt->bindValue(':P_TEAM_ID', $array_in['P_TEAM_ID'], PDO::PARAM_NULL);
     //     $stmt->bindParam(':P_STATUS', $P_STATUS,PDO::PARAM_INT|PDO::PARAM_INPUT_OUTPUT, -1);
     //     $stmt->bindParam(':P_MSG', $P_MSG, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
-    //         $stmt->execute();    
+    //         $stmt->execute();
     //         $res=[
-    //             'MSG' => $P_MSG, 
-    //             'STATUS' => $P_STATUS, 
+    //             'MSG' => $P_MSG,
+    //             'STATUS' => $P_STATUS,
     //         ];
     //         return $res;
-            
+
     // }
 
 
@@ -100,10 +100,10 @@ class Member extends MYModel
     $stmt->bindValue(':P_TEAM_ID', $array_in['P_TEAM_ID'], PDO::PARAM_NULL);
     $stmt->bindParam(':P_STATUS', $P_STATUS,PDO::PARAM_INT|PDO::PARAM_INPUT_OUTPUT, -1);
     $stmt->bindParam(':P_MSG', $P_MSG, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
-        $stmt->execute();    
+        $stmt->execute();
         $res=[
-            'MSG' => $P_MSG, 
-            'STATUS' => $P_STATUS, 
+            'MSG' => $P_MSG,
+            'STATUS' => $P_STATUS,
         ];
         return $res;
 
@@ -122,7 +122,7 @@ class Member extends MYModel
         oci_free_cursor($cursor);
         return ['data'=>$data];
     }
-   
+
 
 
 
