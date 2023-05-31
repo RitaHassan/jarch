@@ -4,7 +4,7 @@
 
 <div class="card shadow-sm">
 
-    
+   
     <div class="card-body">
         <!--begin::Wrapper-->
         <div class="d-flex flex-stack mb-5">
@@ -21,8 +21,21 @@
             </div>
             <!--end::Search-->
 
+            {{-- <a href="" class="btn btn-sm btn-primary print" id="kt_toolbar_primary_button">
+                <span class="svg-icon svg-icon-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black"></rect>
+                        <rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black"></rect>
+                    </svg>
+                </span>
+                تصدير اكسل</a> --}}
+
+                <div class="d-flex justify-content-end" data-kt-docs-table-toolbar="base">
+                    
+              <button type="button" id="print" class='btn btn-primary'><i class='fa fa-print'></i>تصدير اكسل</button>
+        
+            </div>
             <!--begin::Toolbar-->
-            <div class="d-flex justify-content-end" data-kt-docs-table-toolbar="base">
                 <!--begin::Filter-->
                 {{-- <button type="button" class="btn btn-light-primary me-3" data-bs-toggle="tooltip" title="Coming Soon">
                     <span class="svg-icon svg-icon-2">...</span>
@@ -31,7 +44,6 @@
                 <!--end::Filter-->
 
 
-            </div>
             <!--end::Toolbar-->
 
             <!--begin::Group actions-->
@@ -76,6 +88,7 @@
                     </div>
                 </th>
                 <th class="fw-bolder">اسم الفريق</th>
+                <th class="fw-bolder"> عدد الاعضاء</th>
                 <th class="text-end fw-bolder">الاجراءات</th>
             </thead>
 
@@ -228,6 +241,7 @@
                 columns: [
                     { data: 'ID',"searchable": false },
                     { data: 'NAME',"searchable": false ,},
+                    { data: 'TEAM_NUMBER',"searchable": false },
                     { data: null,"searchable": false ,"width": "100px"}
                 ],
                 columnDefs: [
@@ -235,10 +249,10 @@
                         targets: 0,
                         orderable: false,
                         render: function (data) {
-                            return `
-                                <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                    <input class="form-check-input" type="checkbox" value="${data}" />
-                                </div>`;
+                             return `
+                                 <div class="form-check form-check-sm form-check-custom form-check-solid" hidden>
+                                     <input class="form-check-input" type="checkbox" value="${data}" />
+                               </div>`;
                         }
                     },
                     {
@@ -316,12 +330,12 @@
                     const parent = e.target.closest('tr');
 
                     // Get customer name
-                    const customerName = parent.querySelectorAll('td')[1].innerText;
+                    const customerName = parent.querySelectorAll('td')[0].innerText;
                     const id = $(this).attr('val_id'); 
                     var str = $("#TEAM_ID").val(id);
                     // SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
                     Swal.fire({
-                        text: "هل أنت متأكد من حذف  " + customerName + " ؟",
+                        text: "هل أنت متأكد من حذف الفريق مع كافة أعضاءه" + customerName + " ؟",
                         icon: "warning",
                         showCancelButton: true,
                         buttonsStyling: false,
@@ -342,6 +356,33 @@
                                 },
                                 dataType: 'json',
                                 success :function (data) {
+
+                        $.ajax({
+                        type: "DELETE",
+                        url: 'members/'+id,
+                        data:{
+                            "_token": "{{ csrf_token() }}",
+                        },
+                        dataType: 'json',
+                        success :function (data) {
+                        //     Swal.fire({
+                        //     text: "تم حذف  " + customerName + "!.",
+                        //     icon: "success",
+                        //     buttonsStyling: false,
+                        //     confirmButtonText: "حسنًا ، موافق!",
+                        //     customClass: {
+                        //         confirmButton: "btn fw-bold btn-primary",
+                        //     }
+                        // }).then(function () {
+                        //     // delete row data from server and re-draw datatable
+                        //     draw_members(team_id);
+                        // });
+                        // dt.draw();
+
+                        }
+
+                    });
+
                                     Swal.fire({
                                     text: "تم حذف  " + customerName + "!.",
                                     icon: "success",
@@ -350,11 +391,15 @@
                                     customClass: {
                                         confirmButton: "btn fw-bold btn-primary",
                                     }
+
+
+
                                 }).then(function () {
                                     // delete row data from server and re-draw datatable
                                     dt.draw();
                                 });
                                 }
+
                             });
                                 
                         
@@ -392,10 +437,17 @@
                     },
                     dataType: 'json',
                     success :function (data) {
+                        if(data.status==1){
                         $('#addModal').modal('hide');
                         $("#NAME").val("");
                         dt.draw();
                         toastr.success("تمت عملية الحفظ بنجاح");
+                    }else{
+                        $('#addModal').modal('hide');
+                        $("#NAME").val("");
+                        dt.draw();
+                        toastr.error(data.msg);
+                    }
 
                     }
                 }); 
@@ -459,11 +511,19 @@
                             $("#MEM_NAME").val("");
                             toastr.success("تمت عملية الحفظ بنجاح");
                             draw_members(team_id);
+
+                        }else if(data.status ==-1){
+
+                            $("#ID_NUM").val(""); 
+                            $("#MEM_NAME").val("");
+                            toastr.info(data.msg);
+                            draw_members(team_id);
+
                         }else{
                             toastr.error(data.msg);
-                        }
-                        
 
+                        }
+                        dt.draw();
 
                     }
                 }); 
@@ -540,7 +600,10 @@
                             // delete row data from server and re-draw datatable
                             draw_members(team_id);
                         });
+                        dt.draw();
+
                         }
+
                     });
                         
                 
@@ -555,8 +618,16 @@
                         }
                     });
                 }
+                dt.draw();
+
             });
         });
+
+
+
+    
+
+
         //end show members
         // Public methods
         return {
@@ -572,11 +643,32 @@
     KTUtil.onDOMContentLoaded(function () {
         KTDatatablesServerSide.init();
     });
-    
-
-   
 
 
+
+
+    $(document).ready(function() {
+            $('#print').click(function() {
+              //  var final_active = $('#final_active').val();
+                $.ajax({
+                        url: 'teams/exportTeams',
+                        method: 'GET',
+                        xhrFields: {
+                            responseType: 'blob'
+                        },
+                        success: function (data) {
+                             var a = document.createElement('a');
+                             var url = window.URL.createObjectURL(data);
+                            a.href = url;
+                            a.download = Date.now()+'teams.xlsx';
+                            document.body.append(a);
+                            a.click();
+                            a.remove();
+                             window.URL.revokeObjectURL(url);
+                        }
+                    });
+            });
+        });
 
 
     </script>

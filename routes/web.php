@@ -16,6 +16,7 @@ use App\Http\Middleware\CheckLogin;
 Route::get('login', 'LoginController@index');
 Route::post('login', 'LoginController@login');
 Route::middleware([CheckLogin::class])->group(function () {
+
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
@@ -23,6 +24,8 @@ Route::get('teams/create_by_id/{ID}', 'TeamController@create_by_id')->name('team
 Route::post('teams/save_by_id/{ID}', 'TeamController@save_by_id')->name('teams.save_by_id');
 Route::get('teams/giveMembers/{TEAM_ID}', 'TeamController@giveMembers')->name('teams.giveMembers');
 Route::get('teams/datatable', 'TeamController@datatable')->name('teams.datatable');
+Route::get('teams/exportTeams', 'TeamController@exportTeams')->name('teams.exportTeams');
+
 Route::resource('teams', 'TeamController');
 
 
@@ -43,9 +46,13 @@ Route::resource('systems', 'SystemController');
 
 
 Route::get('tasks/change_status/{id}', 'TasksController@change_status')->name('tasks.change_status');
+Route::get('tasks/change_status_2/{id}', 'TasksController@change_status_2')->name('tasks.change_status_2');
 Route::post('tasks/update_reason/{ID}', 'TasksController@update_reason')->name('tasks.update_reason');
 Route::get('tasks/giveMembers/{TEAM_ID}', 'TasksController@giveMembers')->name('tasks.giveMembers');
 Route::get('tasks/sysName_mem/{ID_NUM}', 'TasksController@sysName_mem')->name('tasks.sysName_mem');
 Route::get('tasks/datatable', 'TasksController@datatable')->name('tasks.datatable');
 Route::resource('tasks', 'TasksController');
+
+
+
 });
