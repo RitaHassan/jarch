@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Team;
-
-
+use App\Exports\ExportTeam;
+use Maatwebsite\Excel\Facades\Excel;
 class TeamController extends Controller
 {
     /**
@@ -15,15 +15,21 @@ class TeamController extends Controller
      */
     public function index()
     {
+
+        //return Excel::download(new ExportTeam(), 'teams.xlsx');
         $html_breadcrumbs = [
             'title' => 'الفرق',
             'title_url' => route('teams.index'),
             'subtitle' => 'فهرس',
             'datatable' => true,
         ];
-        $html_new_path = '#';
+        $team = new Team();
+        $teams_report= $team->teams_report()['data'];
 
+        $html_new_path = '#';
         return view('teams.index',compact('html_breadcrumbs','html_new_path'));
+
+
     }
 
     public function datatable(Request $request)
@@ -60,8 +66,16 @@ class TeamController extends Controller
         $team = new Team();
         $request->request->add(['CREATED_BY' => 1]);
         $result = Team::Save_(change_key($request->only($team->getFillable())));
-       return [];
-     //   return view('systems.create');
+           if($result['STATUS']==1){
+        
+           return ['status'=>1];
+
+        }else {
+           
+            return ['status'=>-1,'msg'=>$result['MSG']];
+
+        }
+      // return [];
     }
 
     /**
@@ -184,5 +198,19 @@ class TeamController extends Controller
         }else {
             return back()->with('error',$result['MSG'] );
         }
+    }
+
+
+    public function exportTeams(Request $request)
+    {
+        return Excel::download(new ExportTeam(), 'teams.xlsx');
+
+       
+           // $x = $request->isactive;
+          //  return Excel::download(new ExportStudy($request->final_active,$request->title), 'studies.xlsx');
+        
+        // dd($request->isactive);
+        //dd($request->all());
+
     }
 }

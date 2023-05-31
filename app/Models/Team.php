@@ -38,6 +38,7 @@ class Team extends MYModel
         $stmt->bindValue(':P_LENGTH', $P_LENGTH, PDO::PARAM_NULL);
         $stmt->bindParam(':P_recordsTotal', $P_recordsTotal, PDO::PARAM_INT);
         $stmt->bindParam(':out_cursor', $cursor, PDO::PARAM_STMT, 0, \OCI_B_CURSOR);
+
         $stmt->execute();
         oci_execute($cursor, OCI_DEFAULT);
         while($row = oci_fetch_object($cursor, OCI_ASSOC | OCI_RETURN_NULLS)){
@@ -48,12 +49,18 @@ class Team extends MYModel
     }
 
     public static function Save_($array_in){
-        $stmt = DB::getPdo()->prepare("begin TEAM_PKG.SAVE(:p_name,:p_created_by); end;");
-        
-        foreach ($array_in as $key => $value) {
-            $stmt->bindValue(":$key",$value , PDO::PARAM_NULL);
-        }
+        $stmt = DB::getPdo()->prepare("begin TEAM_PKG.SAVE(:P_NAME,:p_created_by,:P_STATUS,:P_MSG); end;");
+        $stmt->bindValue(':P_NAME', $array_in['P_NAME'], PDO::PARAM_NULL);
+        $stmt->bindValue(':P_CREATED_BY', $array_in['P_CREATED_BY'], PDO::PARAM_NULL);
+        $stmt->bindParam(':P_STATUS', $P_STATUS,PDO::PARAM_INT|PDO::PARAM_INPUT_OUTPUT, -1);
+        $stmt->bindParam(':P_MSG', $P_MSG, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
         $stmt->execute();
+        $res=[
+            'MSG' => $P_MSG, 
+            'STATUS' => $P_STATUS, 
+        ];
+        return $res;
+
     }
 
 
@@ -109,6 +116,7 @@ class Team extends MYModel
         oci_free_cursor($cursor);
         return ['data'=>$data];
     }
+    
 
 
     public static function give_data($P_NAME,$P_STRAT,$P_LENGTH){
@@ -148,6 +156,21 @@ class Team extends MYModel
             ];
             return $res;
             
+    }
+
+
+    public static function teams_report(){
+        $cursor =null;
+        $data = array();
+        $stmt = DB::getPdo()->prepare("begin TEAM_PKG.teams_report(:out_cursor); end;");
+        $stmt->bindParam(':out_cursor', $cursor, PDO::PARAM_STMT, 0, \OCI_B_CURSOR);
+        $stmt->execute();
+        oci_execute($cursor, OCI_DEFAULT);
+        while($row = oci_fetch_object($cursor, OCI_ASSOC | OCI_RETURN_NULLS)){
+            $data[] = $row;
+        }
+        oci_free_cursor($cursor);
+        return ['data'=>$data];
     }
     
 
