@@ -233,8 +233,25 @@ class TasksController extends Controller
 
     public function change_status($P_ID,Request $request)
     {
+    
+        $tasks = new Tasks();
+        if($request->ACTUAL_START_DT){
+            $res= $tasks->change_status($P_ID,$request->COMPLETION_STATUS,$request->ACTUAL_START_DT);
+        }else{
+            $res= $tasks->change_status($P_ID,$request->COMPLETION_STATUS,NULL);
+        }
+        
+        return ['status'=>1];
+    
+    } 
+
+    public function change_status_2($P_ID,Request $request)
+    { 
+
         $tasks = new Tasks();
         $res= $tasks->change_status_2($P_ID,$request->COMPLETION_STATUS,$request->ACTUAL_START_DT,$request->ACTUAL_FINISH_DT,$request->COMPLETION_PERIOD,$request->DURATION_TYPE);
+
+        
         return [];
 
     }
