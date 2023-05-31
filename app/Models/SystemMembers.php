@@ -32,11 +32,11 @@ class SystemMembers extends MYModel
         $stmt->execute();
 
         $res=[
-            'MSG' => $P_MSG, 
-            'STATUS' => $P_STATUS, 
+            'MSG' => $P_MSG,
+            'STATUS' => $P_STATUS,
         ];
         return $res;
-       
+
     }
 
 
@@ -48,10 +48,10 @@ class SystemMembers extends MYModel
     $stmt->bindValue(':p_UPDATED_BY', $array_in['P_UPDATED_BY'], PDO::PARAM_NULL);
     $stmt->bindParam(':P_STATUS', $P_STATUS,PDO::PARAM_INT|PDO::PARAM_INPUT_OUTPUT, -1);
     $stmt->bindParam(':P_MSG', $P_MSG, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
-        $stmt->execute();    
+        $stmt->execute();
         $res=[
-            'MSG' => $P_MSG, 
-            'STATUS' => $P_STATUS, 
+            'MSG' => $P_MSG,
+            'STATUS' => $P_STATUS,
         ];
         return $res;
 

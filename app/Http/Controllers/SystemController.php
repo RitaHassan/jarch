@@ -38,16 +38,19 @@ class SystemController extends Controller
           $member2= $system->teamSelect()['data'];
 
           return view('systems.form',compact('system','member2'));
-        
+
     }
 
     public function datatable(Request $request)
     {
-        $search = null;
+
+       $search = null;
+       $search2 = null;
         if($request->search['value'] != ""){
             $search = $request->search['value'];
         }
-       return json_encode(System::LOAD_DATA($search,0,10));
+        // // dd(System::LOAD_DATA($search,0,10,$request->ACTIVE));
+       return json_encode(System::LOAD_DATA($search,0,10,$request->ACTIVE));
     }
     /**
      * Store a newly created resource in storage.
@@ -57,6 +60,7 @@ class SystemController extends Controller
      */
     public function store(Request $request)
     {
+
       $request->validate([
             'TEAM_ID' => 'required',
             'SYSTEM_NUM' => 'required',
@@ -67,7 +71,13 @@ class SystemController extends Controller
      $system = new System();
      $request->request->add(['CREATED_BY' => 1]);
      $result = System::Save_(change_key($request->only($system->getFillable())));
-        return [];
+
+     if($result['STATUS']==1){
+         return $result['STATUS'];
+
+     }else {
+         return $result['STATUS'];
+     }
     }
 
     /**
@@ -114,14 +124,14 @@ class SystemController extends Controller
             'SYSTEM_NAME' => 'required',
             'ACTIVE' => 'required'
         ]);
-       
+
 
         $system = new System();
         $system = $system->find_by_id($id);
         if (!$system) {
             abort(404);
         }
-      
+
         $request->request->add(['UPDATED_BY' => 1,'ID'=>$id]);
         $result = System::Update_(change_key($request->only((new System())->getFillable())));
         return [];
@@ -158,10 +168,10 @@ class SystemController extends Controller
         $result = SystemMembers::Save_(change_key($request->only($SystemMembers->getFillable())));
         if($result['STATUS']==1){
             return ['status'=>1];
- 
+
          }else {
              return ['status'=>-1,'msg'=>$result['MSG']];
- 
+
          }
     }
 

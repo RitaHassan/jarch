@@ -24,15 +24,18 @@ class System extends MYModel
         $this->table_name = $this->table_names['SYSTEMS'];
     }
 
-    public static function LOAD_DATA($P_NAME,$P_STRAT,$P_LENGTH){
+    public static function LOAD_DATA($P_SYSTEM_NAME,$P_STRAT,$P_LENGTH ,$P_ACTIVE){
         $cursor =null;
         $data = array();
+        // dd($P_ACTIVE);
         $P_recordsTotal = 0;
-        $stmt = DB::getPdo()->prepare("begin SYSTEM_PKG.LOAD_DATA(:P_SYSTEM_NAME,:P_STRAT, :P_LENGTH, :P_recordsTotal, :out_cursor); end;");
-        $stmt->bindValue(':P_SYSTEM_NAME', $P_NAME, PDO::PARAM_NULL);
+        //dd($P_NAME);
+        $stmt = DB::getPdo()->prepare("begin SYSTEM_PKG.LOAD_DATA(:P_SYSTEM_NAME,:P_STRAT, :P_LENGTH, :P_recordsTotal,:P_ACTIVE, :out_cursor); end;");
+        $stmt->bindValue(':P_SYSTEM_NAME', $P_SYSTEM_NAME, PDO::PARAM_NULL);
         $stmt->bindValue(':P_STRAT', $P_STRAT, PDO::PARAM_NULL);
         $stmt->bindValue(':P_LENGTH', $P_LENGTH, PDO::PARAM_NULL);
         $stmt->bindParam(':P_recordsTotal', $P_recordsTotal, PDO::PARAM_INT);
+        $stmt->bindValue(':P_ACTIVE', $P_ACTIVE, PDO::PARAM_NULL);
         $stmt->bindParam(':out_cursor', $cursor, PDO::PARAM_STMT, 0, \OCI_B_CURSOR);
         $stmt->execute();
         oci_execute($cursor, OCI_DEFAULT);
@@ -40,15 +43,26 @@ class System extends MYModel
             $data[] = $row;
         }
         oci_free_cursor($cursor);
+       // dd($data);
         return ['data'=>$data,'recordsFiltered'=>$P_recordsTotal,'recordsTotal'=>$P_recordsTotal];
     }
 
     public static function Save_($array_in){
-        $stmt = DB::getPdo()->prepare("begin SYSTEM_PKG.SAVE(:P_TEAM_ID,:P_SYSTEM_NUM,:P_SYSTEM_NAME,:p_active,:p_created_by); end;");
-        foreach ($array_in as $key => $value) {
-            $stmt->bindValue(":$key",$value , PDO::PARAM_NULL);
-        }
+        $stmt = DB::getPdo()->prepare("begin SYSTEM_PKG.SAVE(:P_TEAM_ID,:P_SYSTEM_NUM,:P_SYSTEM_NAME,:P_ACTIVE,:P_CREATED_BY,:P_STATUS,:P_MSG); end;");
+        $stmt->bindValue(':P_TEAM_ID', $array_in['P_TEAM_ID'], PDO::PARAM_NULL);
+        $stmt->bindValue(':P_SYSTEM_NUM', $array_in['P_SYSTEM_NUM'], PDO::PARAM_NULL);
+        $stmt->bindValue(':P_SYSTEM_NAME', $array_in['P_SYSTEM_NAME'], PDO::PARAM_NULL);
+        $stmt->bindValue(':P_ACTIVE', $array_in['P_ACTIVE'], PDO::PARAM_NULL);
+        $stmt->bindValue(':P_CREATED_BY', $array_in['P_CREATED_BY'], PDO::PARAM_NULL);
+        $stmt->bindParam(':P_STATUS', $P_STATUS,PDO::PARAM_INT|PDO::PARAM_INPUT_OUTPUT, -1);
+        $stmt->bindParam(':P_MSG', $P_MSG, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
         $stmt->execute();
+        $res=[
+            'MSG' => $P_MSG,
+            'STATUS' => $P_STATUS,
+        ];
+            return $res;
+
     }
 
 
@@ -83,7 +97,7 @@ class System extends MYModel
         $stmt->bindValue(':P_ID', $id, PDO::PARAM_NULL);
         $stmt->execute();
     }
-   
 
-   
+
+
 }
