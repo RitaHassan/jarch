@@ -149,10 +149,10 @@ $get_all_members= $tasks->get_all_members()['data'];
             <!--begin::Toolbar-->
             <div class="d-flex justify-content-end" data-kt-docs-table-toolbar="base">
                 <!--begin::Filter-->
-                {{-- <button type="button" class="btn btn-light-primary me-3" data-bs-toggle="tooltip" title="Coming Soon">
-                    <span class="svg-icon svg-icon-2">...</span>
-                    Filter
-                </button> --}}
+                <button  id="export" class="btn btn-light-primary me-3" data-bs-toggle="tooltip" title="">
+                    <span class="svg-icon svg-icon-2"></span>
+                    تصدير
+                </button>
                 <!--end::Filter-->
 
 
@@ -897,8 +897,7 @@ $("button[data-dismiss=modal]").click(function()
 
                     $(".save").click(function(){
                         var id = $("#wait_id").val(); 
-                      //  alert(id);
-                    jQuery.ajax({
+                        jQuery.ajax({
                             type: "post",
                             url: 'tasks/update_reason/'+id,
                             data:{
@@ -977,5 +976,43 @@ $("button[data-dismiss=modal]").click(function()
                 dateFormat: 'd/m/Y',
             });
         });
+
+        /*
+                    d.= ;
+                    d.= ; 
+                    d.= ;
+                    d. = ;*/
+
+        $("#export").click(function(e){
+            e.preventDefault();
+                jQuery.ajax({
+                    type: "get",
+                    url: 'tasks/export',
+                    data:{
+                        "ACTUAL_FINISH_MONTH": $('#ACTUAL_FINISH_MONTH').val(),
+                        "ACTUAL_FINISH_YEAR":$('#ACTUAL_FINISH_YEAR').val(),
+                        "MEM_ID":$('#MEM_ID').val(),
+                        "SYSTEM_ID":$('#SYSTEM_ID').val(), 
+                        "COMPLETION_STATUS":$('#COMPLETION_STATUS').val()   
+                                     },
+                                     xhrFields: {
+                            responseType: 'blob'
+                        },
+                    success :function (data) {
+                        var a = document.createElement('a');
+                        var url = window.URL.createObjectURL(data);
+                        a.href = url;
+                        a.download = Date.now()+'tasks.xlsx';
+                        document.body.append(a);
+                        a.click();
+                        a.remove();
+                        window.URL.revokeObjectURL(url);
+                        
+                    }
+                }); 
+
+
+            });
+
     </script>
 @endpush

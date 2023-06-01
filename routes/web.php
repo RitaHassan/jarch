@@ -51,6 +51,7 @@ Route::post('tasks/update_reason/{ID}', 'TasksController@update_reason')->name('
 Route::get('tasks/giveMembers/{TEAM_ID}', 'TasksController@giveMembers')->name('tasks.giveMembers');
 Route::get('tasks/sysName_mem/{ID_NUM}', 'TasksController@sysName_mem')->name('tasks.sysName_mem');
 Route::get('tasks/datatable', 'TasksController@datatable')->name('tasks.datatable');
+Route::get('tasks/export', 'TasksController@export')->name('tasks.export');
 Route::resource('tasks', 'TasksController');
 
 
