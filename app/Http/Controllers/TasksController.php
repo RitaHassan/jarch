@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Tasks;
 use App\Models\SystemMembers;
+use App\Exports\ExportTask;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TasksController extends Controller
 {
@@ -15,6 +17,8 @@ class TasksController extends Controller
      */
     public function index()
     {
+       
+        
         $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
         return view('tasks.index',compact('systems'));
     }
@@ -27,7 +31,6 @@ class TasksController extends Controller
     public function create()
     {
           $tasks = new Tasks();
-
           $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
           $GET_MEMBERS= $tasks->GET_MEMBERS()['data'];
 
@@ -233,6 +236,10 @@ class TasksController extends Controller
 
     public function change_status($P_ID,Request $request)
     {
+<<<<<<< HEAD
+=======
+    
+>>>>>>> cbc513eadad6501548eb666b6a4ad52b32c8cb7f
         $tasks = new Tasks();
         if($request->ACTUAL_START_DT){
             $res= $tasks->change_status($P_ID,$request->COMPLETION_STATUS,$request->ACTUAL_START_DT);
@@ -245,7 +252,11 @@ class TasksController extends Controller
     }
 
     public function change_status_2($P_ID,Request $request)
+<<<<<<< HEAD
     {
+=======
+    { 
+>>>>>>> cbc513eadad6501548eb666b6a4ad52b32c8cb7f
 
         $tasks = new Tasks();
         $res= $tasks->change_status_2($P_ID,$request->COMPLETION_STATUS,$request->ACTUAL_START_DT,$request->ACTUAL_FINISH_DT,$request->COMPLETION_PERIOD,$request->DURATION_TYPE);
@@ -253,6 +264,11 @@ class TasksController extends Controller
 
         return [];
 
+    }
+
+    public function export(Request $request)
+    {
+        return Excel::download(new ExportTask(null,$request->ACTUAL_FINISH_MONTH,$request->ACTUAL_FINISH_YEAR,$request->MEM_ID,$request->COMPLETION_STATUS,$request->SYSTEM_ID), 'teams.xlsx');
     }
 
 

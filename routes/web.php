@@ -54,6 +54,7 @@ Route::get('tasks/sysName_mem/{ID_NUM}', 'TasksController@sysName_mem')->name('t
 Route::get('tasks/MyTasks', 'TasksController@MyTasks')->name('tasks.MyTasks');
 Route::get('tasks/GetMyTask', 'TasksController@GetMyTask')->name('tasks.GetMyTask');
 Route::get('tasks/datatable', 'TasksController@datatable')->name('tasks.datatable');
+Route::get('tasks/export', 'TasksController@export')->name('tasks.export');
 Route::resource('tasks', 'TasksController');
 
 

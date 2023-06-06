@@ -297,6 +297,7 @@ class Tasks extends MYModel
 
         }
 
+<<<<<<< HEAD
 
         public static function MyTasks($P_TITLE,$P_ACTUAL_FINISH_MONTH,$P_ACTUAL_FINISH_YEAR,$P_MEM_ID,$P_COMPLETION_STATUS,$P_SYATEM_ID,$P_STRAT,$P_LENGTH){
             $cursor =null;
@@ -304,16 +305,28 @@ class Tasks extends MYModel
             $P_recordsTotal = 0;
            // dd(session('user')['user_id']);
             $stmt = DB::getPdo()->prepare("begin TASKS_PKG.MyTasks(:P_TITLE,:P_ACTUAL_FINISH_MONTH,:P_ACTUAL_FINISH_YEAR,:P_MEM_ID,:P_COMPLETION_STATUS,:P_USER_ID,:P_SYATEM_ID,:P_STRAT,:P_LENGTH,:P_recordsTotal,:out_cursor); end;");
+=======
+        public static function ALL_DATA($P_TITLE,$P_ACTUAL_FINISH_MONTH,$P_ACTUAL_FINISH_YEAR,$P_MEM_ID,$P_COMPLETION_STATUS,$P_SYATEM_ID){
+            $cursor =null;
+            $data = array();
+            $P_recordsTotal = 0;
+            $stmt = DB::getPdo()->prepare("begin TASKS_PKG.ALL_DATA(:P_TITLE,:P_ACTUAL_FINISH_MONTH,:P_ACTUAL_FINISH_YEAR,:P_MEM_ID,:P_COMPLETION_STATUS,:P_USER_ID,:P_SYATEM_ID,:out_cursor); end;");
+>>>>>>> cbc513eadad6501548eb666b6a4ad52b32c8cb7f
             $stmt->bindValue(':P_TITLE', $P_TITLE, PDO::PARAM_NULL);
             $stmt->bindValue(':P_ACTUAL_FINISH_MONTH', $P_ACTUAL_FINISH_MONTH, PDO::PARAM_NULL);
             $stmt->bindValue(':P_ACTUAL_FINISH_YEAR', $P_ACTUAL_FINISH_YEAR, PDO::PARAM_NULL);
             $stmt->bindValue(':P_MEM_ID', $P_MEM_ID, PDO::PARAM_NULL);
             $stmt->bindValue(':P_COMPLETION_STATUS', $P_COMPLETION_STATUS, PDO::PARAM_NULL);
+<<<<<<< HEAD
             $stmt->bindValue(':P_USER_ID', session('user')['user_id'], PDO::PARAM_NULL);
             $stmt->bindValue(':P_SYATEM_ID', $P_SYATEM_ID, PDO::PARAM_NULL);
             $stmt->bindValue(':P_STRAT', $P_STRAT, PDO::PARAM_NULL);
             $stmt->bindValue(':P_LENGTH', $P_LENGTH, PDO::PARAM_NULL);
             $stmt->bindParam(':P_recordsTotal', $P_recordsTotal, PDO::PARAM_INT);
+=======
+            $stmt->bindValue(':P_USER_ID', session('user')['user_id'], PDO::PARAM_NULL);  
+            $stmt->bindValue(':P_SYATEM_ID', $P_SYATEM_ID, PDO::PARAM_NULL);
+>>>>>>> cbc513eadad6501548eb666b6a4ad52b32c8cb7f
             $stmt->bindParam(':out_cursor', $cursor, PDO::PARAM_STMT, 0, \OCI_B_CURSOR);
             $stmt->execute();
             oci_execute($cursor, OCI_DEFAULT);
@@ -323,6 +336,12 @@ class Tasks extends MYModel
             oci_free_cursor($cursor);
             return ['data'=>$data,'recordsFiltered'=>$P_recordsTotal,'recordsTotal'=>$P_recordsTotal];
         }
+<<<<<<< HEAD
 
 
 }
+=======
+    
+       
+}
+>>>>>>> cbc513eadad6501548eb666b6a4ad52b32c8cb7f
