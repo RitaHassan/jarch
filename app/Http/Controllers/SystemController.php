@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\System;
 use App\Models\Member;
 use App\Models\SystemMembers;
+use App\Exports\ExportSystem;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SystemController extends Controller
 {
@@ -194,5 +196,20 @@ class SystemController extends Controller
     {
        $data = SystemMembers::get_systems_by_user_id($user_id);
        return $data['data'];
+    }
+
+
+    public function exportSystems(Request $request)
+    {
+
+        return Excel::download(new ExportSystem(), 'Systems.xlsx');
+
+
+           // $x = $request->isactive;
+          //  return Excel::download(new ExportStudy($request->final_active,$request->title), 'studies.xlsx');
+
+        // dd($request->isactive);
+        //dd($request->all());
+
     }
 }

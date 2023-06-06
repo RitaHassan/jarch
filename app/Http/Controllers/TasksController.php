@@ -259,25 +259,24 @@ class TasksController extends Controller
 
     public function change_status($P_ID,Request $request)
     {
-    
         $tasks = new Tasks();
         if($request->ACTUAL_START_DT){
             $res= $tasks->change_status($P_ID,$request->COMPLETION_STATUS,$request->ACTUAL_START_DT);
         }else{
             $res= $tasks->change_status($P_ID,$request->COMPLETION_STATUS,NULL);
         }
-        
+
         return ['status'=>1];
-    
-    } 
+
+    }
 
     public function change_status_2($P_ID,Request $request)
-    { 
+    {
 
         $tasks = new Tasks();
         $res= $tasks->change_status_2($P_ID,$request->COMPLETION_STATUS,$request->ACTUAL_START_DT,$request->ACTUAL_FINISH_DT,$request->COMPLETION_PERIOD,$request->DURATION_TYPE);
 
-        
+
         return [];
 
     }
@@ -294,6 +293,31 @@ class TasksController extends Controller
 
 
 
+
+    public function MyTasks()
+    {
+
+        $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
+        return view('tasks.MyTask',compact('systems'));
+    }
+
+
+    public function GetMyTask(Request $request)
+    {
+        $search = null;
+        $search2 = null;
+        $search3 = null;
+        $search4 = null;
+        $search5 = null;
+        $tasks = new Tasks();
+        $get_all_members= $tasks->get_all_members()['data'];
+
+        if($request->search['value'] != ""){
+            $search = $request->search['value'];
+        }
+       return json_encode(Tasks::MyTasks($search,$request->ACTUAL_FINISH_MONTH,$request->ACTUAL_FINISH_YEAR,session('user')['user_id'],$request->COMPLETION_STATUS,$request->SYSTEM_ID,$request->start,$request->length));
+
+    }
 
 
 }

@@ -18,6 +18,13 @@
                     </span>
                     <!--end::Svg Icon-->
                 </div>
+
+                <div class="d-flex justify-content-end" data-kt-docs-table-toolbar="base">
+
+                    <button type="button" id="print" class='btn btn-primary'><i class='fa fa-print'></i>تصدير
+                        اكسل</button>
+
+                </div>
                 <!--end::Search-->
 
                 <!--begin::Toolbar-->
@@ -61,7 +68,8 @@
 
                             <div class="col-sm-3">
                                 <div class="form-group">
-                                    <select name="ACTIVE" id="ACTIVE" data-kt-docs-table-filter="search2" class="form-control form-control-solid">
+                                    <select name="ACTIVE" id="ACTIVE" data-kt-docs-table-filter="search2"
+                                        class="form-control form-control-solid">
                                         <option value="">--اختر--</option>
                                         <option value="1">فعال</option>
                                         <option value="0">غير فعال</option>
@@ -75,23 +83,23 @@
                     </form>
                 </div>
             </div>
-    <!--begin::Datatable-->
-    <table id="kt_datatable_example_1" class="table align-middle table-row-bordered fs-6 gy-5">
-        <thead>
-            <th class="w-10px pe-2 text-center fw-bolder">
-                <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
-                </div>
-            </th>
-            <th class="text-center fw-bolder min-w-100px">رقم النظام</th>
-            <th class="text-center fw-bolder">اسم النظام</th>
-            <th>عدد الاعضاء </th>
-            <th>الحالة</th>
-            <th class="text-end fw-bolder">الاجراءات</th>
-        </thead>
+            <!--begin::Datatable-->
+            <table id="kt_datatable_example_1" class="table align-middle table-row-bordered fs-6 gy-5">
+                <thead>
+                    <th class="w-10px pe-2 text-center fw-bolder">
+                        <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
+                        </div>
+                    </th>
+                    <th class="text-center fw-bolder min-w-100px">رقم النظام</th>
+                    <th class="text-center fw-bolder">اسم النظام</th>
+                    <th>عدد الاعضاء </th>
+                    <th>الحالة</th>
+                    <th class="text-end fw-bolder">الاجراءات</th>
+                </thead>
 
-    </table>
-    <!--end::Datatable-->
-    </div>
+            </table>
+            <!--end::Datatable-->
+        </div>
     </div>
     {{-- start modal to add system  --}}
     <div id="addModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
@@ -240,8 +248,8 @@
                     ajax: {
                         url: '{{ route('systems.datatable') }}',
                         "data": function(d) {
-                             d.SYSTEM_NAME = $('#SYSTEM_NAME').val();
-                             d.ACTIVE = $('#ACTIVE').val();
+                            d.SYSTEM_NAME = $('#SYSTEM_NAME').val();
+                            d.ACTIVE = $('#ACTIVE').val();
                             // d.CARD_ID = $('#CARD_ID').val();
                             // d.LICENSE_NUMBER = $('#LICENSE_NUMBER').val();
                             // d.LICENSE_EXPIRATION_DATE = $('#LICENSE_EXPIRATION_DATE').val();
@@ -380,9 +388,9 @@
 
 
 
-            $('#ACTIVE' ).on('change', function (data, callbak) {
-            dt.draw();
-        });
+            $('#ACTIVE').on('change', function(data, callbak) {
+                dt.draw();
+            });
             // Delete user
             var handleDeleteRows = () => {
                 // Select all delete buttons
@@ -524,7 +532,7 @@
                                 "' val_name='" + d.MEM_NAME + "' val_system_id ='" + d
                                 .SYSTEM_ID +
                                 "' class='btn btn-icon btn-xs btn-sm btn-danger btn-member-delete'><i class='fa fa-trash'></i></a></td><td></td></tr>"
-                                );
+                            );
 
                         });
                     }
@@ -678,6 +686,30 @@
         // On document ready
         KTUtil.onDOMContentLoaded(function() {
             KTDatatablesServerSide.init();
+        });
+
+
+        $(document).ready(function() {
+            $('#print').click(function() {
+                //  var final_active = $('#final_active').val();
+                $.ajax({
+                    url: 'systems/exportSystems',
+                    method: 'GET',
+                    xhrFields: {
+                        responseType: 'blob'
+                    },
+                    success: function (data) {
+                            var a = document.createElement('a');
+                            var url = window.URL.createObjectURL(data);
+                            a.href = url;
+                            a.download = Date.now()+'system.xlsx';
+                            document.body.append(a);
+                            a.click();
+                            a.remove();
+                            window.URL.revokeObjectURL(url);
+                    }
+                });
+            });
         });
     </script>
 @endpush
