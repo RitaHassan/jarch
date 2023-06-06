@@ -17,8 +17,8 @@ class TasksController extends Controller
      */
     public function index()
     {
-       
-        
+
+
         $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
         return view('tasks.index',compact('systems'));
     }
@@ -236,10 +236,6 @@ class TasksController extends Controller
 
     public function change_status($P_ID,Request $request)
     {
-<<<<<<< HEAD
-=======
-    
->>>>>>> cbc513eadad6501548eb666b6a4ad52b32c8cb7f
         $tasks = new Tasks();
         if($request->ACTUAL_START_DT){
             $res= $tasks->change_status($P_ID,$request->COMPLETION_STATUS,$request->ACTUAL_START_DT);
@@ -252,11 +248,7 @@ class TasksController extends Controller
     }
 
     public function change_status_2($P_ID,Request $request)
-<<<<<<< HEAD
     {
-=======
-    { 
->>>>>>> cbc513eadad6501548eb666b6a4ad52b32c8cb7f
 
         $tasks = new Tasks();
         $res= $tasks->change_status_2($P_ID,$request->COMPLETION_STATUS,$request->ACTUAL_START_DT,$request->ACTUAL_FINISH_DT,$request->COMPLETION_PERIOD,$request->DURATION_TYPE);
