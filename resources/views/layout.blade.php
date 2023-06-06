@@ -139,6 +139,15 @@
                                                 <span class="menu-arrow"></span>
                                             </span>
                                                 <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                                    <div class="menu-item">
+                                                        <a class="menu-link" href="{{route('tasks.index_all')}}">
+                                                            <span class="menu-bullet">
+                                                                <span class="bullet bullet-dot"></span>
+                                                            </span>
+                                                            <span class="menu-title">المهام (الادارة)</span>
+                                                        </a>
+                                                    </div>
+
                                                         <div class="menu-item">
                                                                 <a class="menu-link" href="{{route('tasks.index')}}">
                                                         <span class="menu-bullet">

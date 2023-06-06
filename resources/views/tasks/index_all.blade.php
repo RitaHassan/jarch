@@ -987,15 +987,15 @@ $("button[data-dismiss=modal]").click(function()
             e.preventDefault();
                 jQuery.ajax({
                     type: "get",
-                    url: 'tasks/export',
+                    url: '/tasks/export_all',
                     data:{
                         "ACTUAL_FINISH_MONTH": $('#ACTUAL_FINISH_MONTH').val(),
                         "ACTUAL_FINISH_YEAR":$('#ACTUAL_FINISH_YEAR').val(),
                         "MEM_ID":$('#MEM_ID').val(),
                         "SYSTEM_ID":$('#SYSTEM_ID').val(), 
-                        "COMPLETION_STATUS":$('#COMPLETION_STATUS').val()
+                        "COMPLETION_STATUS":$('#COMPLETION_STATUS').val()   
                                      },
-                                     xhrFields: {
+                        xhrFields: {
                             responseType: 'blob'
                         },
                     success :function (data) {
