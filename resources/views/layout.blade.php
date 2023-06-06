@@ -86,7 +86,7 @@
                      data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer"
                      data-kt-scroll-wrappers="#kt_aside_menu" data-kt-scroll-offset="0" style="height: 127px;">
                     <!--begin::Menu-->
-                   
+
                     <div class="font-family-medium menu menu-column menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500" id="#kt_aside_menu" data-kt-menu="true" data-kt-menu-expand="false">
                         <div class="menu-item">
                             <a class="menu-link active" href="https://study.moi.gov.ps">
@@ -122,10 +122,10 @@
                                 <span class="menu-title">الانظمة</span>
                             </a>
                         </div>
-                                                                                                                                                                                        
-                         
 
-                              
+
+
+
                                         <div data-kt-menu-trigger="click" class="menu-item here menu-accordion">
                                             <span class="menu-link">
                                                 <span class="menu-icon">
@@ -147,6 +147,14 @@
                                                                     <span class="menu-title">عرض المهام</span>
                                                                 </a>
                                                             </div>
+                                                            <div class="menu-item">
+                                                                <a class="menu-link" href="{{route('tasks.MyTasks')}}">
+                                                        <span class="menu-bullet">
+                                                            <span class="bullet bullet-dot"></span>
+                                                        </span>
+                                                                    <span class="menu-title">مهامي</span>
+                                                                </a>
+                                                            </div>
                                                         <div class="menu-item">
                                                                 <a class="menu-link" href="{{route('tasks.create')}}">
                                                         <span class="menu-bullet">
@@ -157,10 +165,10 @@
                                                             </div>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             </div>
                                             </div>
-                                                                                                                                        
-                                                                                                                                        
-                                                                                                                                        
-                                                                                                                                        
+
+
+
+
                                                                                                                                                     </div>
                 </div>
             </div>
@@ -228,7 +236,7 @@
                         <!--begin::Topbar-->
                         <div class="d-flex align-items-stretch flex-shrink-0">
                             <!--begin::Toolbar wrapper-->
-                     
+
 
                             <div class="d-flex align-items-stretch flex-shrink-0">
                                 <!--begin::User-->
@@ -338,7 +346,7 @@
 
 	 	 	 	 	 	 	 	 <div class="d-flex align-items-center py-1">
 
-	 	 	 	 	 	 	 	 	 <!--begin::Button-->	 
+	 	 	 	 	 	 	 	 	 <!--begin::Button-->
                                              @if(isset($html_new_path))
                                              <a href="{{$html_new_path}}" class="btn btn-sm btn-primary add" id="kt_toolbar_primary_button">
                                                  <span class="svg-icon svg-icon-2">
@@ -356,9 +364,9 @@
                                                  <span class="kt-subheader__btn-daterange-title" id="kt_dashboard_daterangepicker_title">{{__('views.Today')}}</span>&nbsp;
                                                  <span class="kt-subheader__btn-daterange-date" id="kt_dashboard_daterangepicker_date">{{date('Y-m-d')}}</span>
                                              </a> --}}
-                                             @endif	 	 	 	 	 	 	 	 
+                                             @endif
 	 	 	 	 	 	 	 	 	 <!--end::Button-->
-	 	 	 	 	 	 	 	 	
+
 	 	 	 	 	 	 	 	 </div>
 
 	 	 	 	 	 	 	 </div>
@@ -384,7 +392,7 @@
     </div>
     <!--end::Page-->
 </div>
-            
+
 </div>
 </div>
 <!--end::Root-->
@@ -437,7 +445,7 @@
             });
         });
 
-        
+
 
     tinymce.init({
         selector: 'textarea.tinymce-editor',
