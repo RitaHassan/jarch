@@ -24,7 +24,7 @@ class StatisticsController extends Controller
         $MY_LAST_TOTAL_TASKS= $statistics->my_last_completed_tasks_count((session('user')['user_id']))['data'];
         $MY_TASKS_YEAR= $statistics->tasks_count_year()['data'];
         $MY_COMPLETED_TASKS_YEAR= $statistics->tasks_completed_year()['data'];
-         // dd($MY_TASKS_YEAR);
+         // dd($MY_TASKS_YEAR);       
   //DD($MY_LAST_TOTAL_TASKS);
         return view('welcome',compact('TOTAL_COUNT'
         ,'TOTAL_MEMBERS','TOTAL_SYSTEMS','SYSTEMS_DISABLE' 

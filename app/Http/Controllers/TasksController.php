@@ -232,9 +232,6 @@ class TasksController extends Controller
     }
 
     public function change_status($P_ID,Request $request)
-<<<<<<< HEAD
-    {
-=======
     { 
         $tasks = new Tasks();
         if($request->ACTUAL_START_DT){
@@ -249,7 +246,6 @@ class TasksController extends Controller
 
     public function change_status_2($P_ID,Request $request)
     { 
->>>>>>> 30b628d6567c41f7e94b162785b24050f2934cea
 
         $tasks = new Tasks();
         $res= $tasks->change_status_2($P_ID,$request->COMPLETION_STATUS,$request->ACTUAL_START_DT,$request->ACTUAL_FINISH_DT,$request->COMPLETION_PERIOD,$request->DURATION_TYPE);
