@@ -47,6 +47,7 @@ class System extends MYModel
         return ['data'=>$data,'recordsFiltered'=>$P_recordsTotal,'recordsTotal'=>$P_recordsTotal];
     }
 
+
     public static function Save_($array_in){
         $stmt = DB::getPdo()->prepare("begin SYSTEM_PKG.SAVE(:P_TEAM_ID,:P_SYSTEM_NUM,:P_SYSTEM_NAME,:P_ACTIVE,:P_CREATED_BY,:P_STATUS,:P_MSG); end;");
         $stmt->bindValue(':P_TEAM_ID', $array_in['P_TEAM_ID'], PDO::PARAM_NULL);
@@ -96,6 +97,28 @@ class System extends MYModel
         $stmt = DB::getPdo()->prepare("begin SYSTEM_PKG.TOGGEL(:p_id); end;");
         $stmt->bindValue(':P_ID', $id, PDO::PARAM_NULL);
         $stmt->execute();
+    }
+
+
+    public static function ALL_DATA($P_STRAT,$P_LENGTH){
+        $cursor =null;
+        $data = array();
+        // dd($P_ACTIVE);
+        $P_recordsTotal = 0;
+        //dd($P_NAME);
+        $stmt = DB::getPdo()->prepare("begin SYSTEM_PKG.ALL_DATA(:P_STRAT, :P_LENGTH, :P_recordsTotal,:out_cursor); end;");
+        $stmt->bindValue(':P_STRAT', $P_STRAT, PDO::PARAM_NULL);
+        $stmt->bindValue(':P_LENGTH', $P_LENGTH, PDO::PARAM_NULL);
+        $stmt->bindParam(':P_recordsTotal', $P_recordsTotal, PDO::PARAM_INT);
+        $stmt->bindParam(':out_cursor', $cursor, PDO::PARAM_STMT, 0, \OCI_B_CURSOR);
+        $stmt->execute();
+        oci_execute($cursor, OCI_DEFAULT);
+        while($row = oci_fetch_object($cursor, OCI_ASSOC | OCI_RETURN_NULLS)){
+            $data[] = $row;
+        }
+        oci_free_cursor($cursor);
+       // dd($data);
+        return ['data'=>$data,'recordsFiltered'=>$P_recordsTotal,'recordsTotal'=>$P_recordsTotal];
     }
 
 

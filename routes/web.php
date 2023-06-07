@@ -50,6 +50,7 @@ Route::get('systems/members/{id}', 'SystemController@members')->name('systems.me
 Route::delete('systems/members/{id}', 'SystemController@delete_member')->name('systems.members');
 Route::get('systems/get_by_user_id/{user_id}', 'SystemController@get_by_user_id')->name('systems.get_by_user_id');
 Route::get('systems/exportSystems', 'SystemController@exportSystems')->name('systems.exportSystems');
+Route::get('systems/exportAll', 'SystemController@exportAll')->name('systems.exportAll');
 Route::resource('systems', 'SystemController');
 
 
