@@ -13,7 +13,7 @@ use App\Http\Middleware\CheckLogin;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('login', 'LoginController@index');
+Route::get('login', 'LoginController@index')->name('login');
 Route::post('login', 'LoginController@login');
 Route::get('logout', 'LoginController@logout')->name('login.logout');
 
