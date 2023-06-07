@@ -319,5 +319,20 @@ class TasksController extends Controller
 
     }
 
+    public function update_notes ($id,Request $request)
+    {
+        $tasks = new Tasks();
+        $tasks = $tasks->find_by_id($id);
+        if (!$tasks) {
+            abort(404);
+        }
+
+        $request->request->add(['ID'=>$id]);
+        $res= Tasks::change_status($id,$request->status,NULL);
+
+        $result = Tasks::update_notes(change_key($request->only((new Tasks())->getFillable())));
+        return [];
+
+    }
 
 }
