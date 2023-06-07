@@ -15,6 +15,9 @@ use App\Http\Middleware\CheckLogin;
 */
 Route::get('login', 'LoginController@index');
 Route::post('login', 'LoginController@login');
+Route::get('logout', 'LoginController@logout')->name('login.logout');
+
+
 Route::middleware([CheckLogin::class])->group(function () {
 
 /*Route::get('/', function () {

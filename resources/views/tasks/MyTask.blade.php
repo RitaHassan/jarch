@@ -258,7 +258,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                     </div>
                 </th>
                 <th class="text-center fw-bolder">اسم الفريق</th>
-                <th class="text-center fw-bolder">اسم الموظف</th>
+                {{-- <th class="text-center fw-bolder">اسم الموظف</th> --}}
                 <th class="text-center fw-bolder">اسم النظام</th>
                 <th class="text-center fw-bolder">عنوان المهمة</th>
                 <th class="text-center fw-bolder">نوع المهمة</th>
@@ -325,7 +325,7 @@ $get_all_members= $tasks->get_all_members()['data'];
 
                     { data: 'ID',"searchable": false },
                     { data: 'TEAM',"searchable": false },
-                    { data: 'MEM_NAME',"searchable": false },
+                    // { data: 'MEM_NAME',"searchable": false },
                     { data: 'SYSTEM',"searchable": false },
                     { data: 'TITLE',"searchable": false },
                     { data: 'TASK_TYPE',"searchable": false ,render: function (data) {
@@ -673,7 +673,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                     const parent = e.target.closest('tr');
 
                     // Get customer name
-                    const customerName = parent.querySelectorAll('td')[1].innerText;
+                    const customerName = parent.querySelectorAll('td')[3].innerText;
                     const id = $(this).attr('val_id');
                     // SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
                     Swal.fire({
