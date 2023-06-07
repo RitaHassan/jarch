@@ -335,7 +335,8 @@
                     var str = $("#TEAM_ID").val(id);
                     // SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
                     Swal.fire({
-                        text: "هل أنت متأكد من حذف الفريق مع كافة أعضاءه" + customerName + " ؟",
+                       // text: "هل أنت متأكد من حذف الفريق مع كافة أعضاءه" + customerName + " ؟",
+                        text:"يرجى الانتباه سوف يتم حذف الفريق مع أعضاءه",
                         icon: "warning",
                         showCancelButton: true,
                         buttonsStyling: false,

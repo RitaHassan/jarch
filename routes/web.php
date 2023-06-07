@@ -17,9 +17,17 @@ Route::get('login', 'LoginController@index');
 Route::post('login', 'LoginController@login');
 Route::middleware([CheckLogin::class])->group(function () {
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
-})->name('home');
+})->name('home');*/
+
+Route::get('/', 'StatisticsController@index')->name('index');
+// Route::get('statistics/index', 'StatisticsController@index');
+// Route::resource('statistics', 'StatisticsController');
+
+
+
+
 Route::get('teams/create_by_id/{ID}', 'TeamController@create_by_id')->name('teams.create_by_id');
 Route::post('teams/save_by_id/{ID}', 'TeamController@save_by_id')->name('teams.save_by_id');
 Route::get('teams/giveMembers/{TEAM_ID}', 'TeamController@giveMembers')->name('teams.giveMembers');
@@ -49,12 +57,16 @@ Route::resource('systems', 'SystemController');
 Route::get('tasks/change_status/{id}', 'TasksController@change_status')->name('tasks.change_status');
 Route::get('tasks/change_status_2/{id}', 'TasksController@change_status_2')->name('tasks.change_status_2');
 Route::post('tasks/update_reason/{ID}', 'TasksController@update_reason')->name('tasks.update_reason');
+Route::post('tasks/update_notes/{ID}', 'TasksController@update_notes')->name('tasks.update_notes');
 Route::get('tasks/giveMembers/{TEAM_ID}', 'TasksController@giveMembers')->name('tasks.giveMembers');
 Route::get('tasks/sysName_mem/{ID_NUM}', 'TasksController@sysName_mem')->name('tasks.sysName_mem');
 Route::get('tasks/MyTasks', 'TasksController@MyTasks')->name('tasks.MyTasks');
 Route::get('tasks/GetMyTask', 'TasksController@GetMyTask')->name('tasks.GetMyTask');
 Route::get('tasks/datatable', 'TasksController@datatable')->name('tasks.datatable');
+Route::get('tasks/datatable_all', 'TasksController@datatable_all')->name('tasks.datatable_all');
 Route::get('tasks/export', 'TasksController@export')->name('tasks.export');
+Route::get('tasks/all', 'TasksController@index_all')->name('tasks.index_all');
+Route::get('tasks/export_all', 'TasksController@export')->name('tasks.export_all');
 Route::resource('tasks', 'TasksController');
 
 

@@ -72,7 +72,32 @@ class Tasks extends MYModel
         return ['data'=>$data,'recordsFiltered'=>$P_recordsTotal,'recordsTotal'=>$P_recordsTotal];
     }
 
+    public static function LOAD_DATA_ALL($P_TITLE,$P_ACTUAL_FINISH_MONTH,$P_ACTUAL_FINISH_YEAR,$P_MEM_ID,$P_COMPLETION_STATUS,$P_SYATEM_ID,$P_STRAT,$P_LENGTH){
+        $cursor =null;
+        $data = array();
+        $P_recordsTotal = 0;
+        $stmt = DB::getPdo()->prepare("begin TASKS_PKG.LOAD_DATA_ALL(:P_TITLE,:P_ACTUAL_FINISH_MONTH,:P_ACTUAL_FINISH_YEAR,:P_MEM_ID,:P_COMPLETION_STATUS,:P_USER_ID,:P_SYATEM_ID,:P_STRAT,:P_LENGTH,:P_recordsTotal,:out_cursor); end;");
+        $stmt->bindValue(':P_TITLE', $P_TITLE, PDO::PARAM_NULL);
+        $stmt->bindValue(':P_ACTUAL_FINISH_MONTH', $P_ACTUAL_FINISH_MONTH, PDO::PARAM_NULL);
+        $stmt->bindValue(':P_ACTUAL_FINISH_YEAR', $P_ACTUAL_FINISH_YEAR, PDO::PARAM_NULL);
+        $stmt->bindValue(':P_MEM_ID', $P_MEM_ID, PDO::PARAM_NULL);
+        $stmt->bindValue(':P_COMPLETION_STATUS', $P_COMPLETION_STATUS, PDO::PARAM_NULL);
+        $stmt->bindValue(':P_USER_ID', session('user')['user_id'], PDO::PARAM_NULL);  
+        $stmt->bindValue(':P_SYATEM_ID', $P_SYATEM_ID, PDO::PARAM_NULL);
+        $stmt->bindValue(':P_STRAT', $P_STRAT, PDO::PARAM_NULL);
+        $stmt->bindValue(':P_LENGTH', $P_LENGTH, PDO::PARAM_NULL);
+        $stmt->bindParam(':P_recordsTotal', $P_recordsTotal, PDO::PARAM_INT);
+        $stmt->bindParam(':out_cursor', $cursor, PDO::PARAM_STMT, 0, \OCI_B_CURSOR);
+        $stmt->execute();
+        oci_execute($cursor, OCI_DEFAULT);
+        while($row = oci_fetch_object($cursor, OCI_ASSOC | OCI_RETURN_NULLS)){
+            $data[] = $row;
+        }
+        oci_free_cursor($cursor);
+        return ['data'=>$data,'recordsFiltered'=>$P_recordsTotal,'recordsTotal'=>$P_recordsTotal];
+    }
 
+ 
     public static function Save_($array_in){
         $stmt = DB::getPdo()->prepare("begin TASKS_PKG.SAVE(:P_SYSTEM_ID,:P_DESCRIPTION,:P_PRIORITY,:P_TASK_TYPE,:P_PLANNED_START_DT,:P_PLANNED_FINISH_DT,:P_ACTUAL_START_DT,:P_ACTUAL_FINISH_DT,:P_COMPLETION_PERIOD,:P_COMPLETION_STATUS,:P_NOTES,:P_IN_PLAN,:p_created_by,:P_TITLE,:P_DURATION_TYPE,:P_MEM_ID,:P_STATUS,:P_MSG); end;");
       /*  foreach ($array_in as $key => $value) {
@@ -215,25 +240,26 @@ class Tasks extends MYModel
         oci_free_cursor($cursor);
         return ['data'=>$data];
     }
+
     public static function update_reason($array_in){
 
-         $stmt = DB::getPdo()->prepare("begin TASKS_PKG.update_reason(:P_ID,:P_ISCANCEL,:P_ISDELAY,:P_CANCELED_REASON,:P_DELAIED_REASON,:p_UPDATED_BY,:P_STATUS,:P_MSG); end;");
-         $stmt->bindValue(':P_ID', $array_in['P_ID'], PDO::PARAM_NULL);
-         $stmt->bindValue(':P_ISCANCEL', $array_in['P_ISCANCEL'], PDO::PARAM_NULL);
-         $stmt->bindValue(':P_ISDELAY', $array_in['P_ISDELAY'], PDO::PARAM_NULL);
-         $stmt->bindValue(':P_CANCELED_REASON', $array_in['P_CANCELED_REASON'], PDO::PARAM_NULL);
-         $stmt->bindValue(':P_DELAIED_REASON', $array_in['P_DELAIED_REASON'], PDO::PARAM_NULL);
-         $stmt->bindValue(':p_UPDATED_BY', $array_in['P_UPDATED_BY'], PDO::PARAM_NULL);
-         $stmt->bindParam(':P_STATUS', $P_STATUS,PDO::PARAM_INT|PDO::PARAM_INPUT_OUTPUT, -1);
-         $stmt->bindParam(':P_MSG', $P_MSG, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
-         $stmt->execute();
+            $stmt = DB::getPdo()->prepare("begin TASKS_PKG.update_reason(:P_ID,:P_ISCANCEL,:P_ISDELAY,:P_CANCELED_REASON,:P_DELAIED_REASON,:p_UPDATED_BY,:P_STATUS,:P_MSG); end;");
+            $stmt->bindValue(':P_ID', $array_in['P_ID'], PDO::PARAM_NULL);
+            $stmt->bindValue(':P_ISCANCEL', $array_in['P_ISCANCEL'], PDO::PARAM_NULL);
+            $stmt->bindValue(':P_ISDELAY', $array_in['P_ISDELAY'], PDO::PARAM_NULL);
+            $stmt->bindValue(':P_CANCELED_REASON', $array_in['P_CANCELED_REASON'], PDO::PARAM_NULL);
+            $stmt->bindValue(':P_DELAIED_REASON', $array_in['P_DELAIED_REASON'], PDO::PARAM_NULL);
+            $stmt->bindValue(':p_UPDATED_BY', $array_in['P_UPDATED_BY'], PDO::PARAM_NULL);
+            $stmt->bindParam(':P_STATUS', $P_STATUS,PDO::PARAM_INT|PDO::PARAM_INPUT_OUTPUT, -1);
+            $stmt->bindParam(':P_MSG', $P_MSG, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
+            $stmt->execute();
 
-         $res=[
-             'MSG' => $P_MSG,
-             'STATUS' => $P_STATUS,
-         ];
-         return $res;
-         }
+            $res=[
+                'MSG' => $P_MSG,
+                'STATUS' => $P_STATUS,
+            ];
+            return $res;
+    }
 
 
 
@@ -325,4 +351,65 @@ class Tasks extends MYModel
         }
 
 
+        public static function ALL_DATA_MANAGMENT($P_TITLE,$P_ACTUAL_FINISH_MONTH,$P_ACTUAL_FINISH_YEAR,$P_MEM_ID,$P_COMPLETION_STATUS,$P_SYATEM_ID){
+            $cursor =null;
+            $data = array();
+            $P_recordsTotal = 0;
+            $stmt = DB::getPdo()->prepare("begin TASKS_PKG.ALL_DATA_MANAGMENT(:P_TITLE,:P_ACTUAL_FINISH_MONTH,:P_ACTUAL_FINISH_YEAR,:P_MEM_ID,:P_COMPLETION_STATUS,:P_USER_ID,:P_SYATEM_ID,:out_cursor); end;");
+            $stmt->bindValue(':P_TITLE', $P_TITLE, PDO::PARAM_NULL);
+            $stmt->bindValue(':P_ACTUAL_FINISH_MONTH', $P_ACTUAL_FINISH_MONTH, PDO::PARAM_NULL);
+            $stmt->bindValue(':P_ACTUAL_FINISH_YEAR', $P_ACTUAL_FINISH_YEAR, PDO::PARAM_NULL);
+            $stmt->bindValue(':P_MEM_ID', $P_MEM_ID, PDO::PARAM_NULL);
+            $stmt->bindValue(':P_COMPLETION_STATUS', $P_COMPLETION_STATUS, PDO::PARAM_NULL);
+            $stmt->bindValue(':P_USER_ID', session('user')['user_id'], PDO::PARAM_NULL);  
+            $stmt->bindValue(':P_SYATEM_ID', $P_SYATEM_ID, PDO::PARAM_NULL);
+            $stmt->bindParam(':out_cursor', $cursor, PDO::PARAM_STMT, 0, \OCI_B_CURSOR);
+            $stmt->execute();
+            oci_execute($cursor, OCI_DEFAULT);
+            while($row = oci_fetch_object($cursor, OCI_ASSOC | OCI_RETURN_NULLS)){
+                $data[] = $row;
+            }
+            oci_free_cursor($cursor);
+            return ['data'=>$data,'recordsFiltered'=>$P_recordsTotal,'recordsTotal'=>$P_recordsTotal];
+        }
+
+        
+        public static function ALL_DATA($P_TITLE,$P_ACTUAL_FINISH_MONTH,$P_ACTUAL_FINISH_YEAR,$P_MEM_ID,$P_COMPLETION_STATUS,$P_SYATEM_ID){
+            $cursor =null;
+            $data = array();
+            $P_recordsTotal = 0;
+            $stmt = DB::getPdo()->prepare("begin TASKS_PKG.ALL_DATA(:P_TITLE,:P_ACTUAL_FINISH_MONTH,:P_ACTUAL_FINISH_YEAR,:P_MEM_ID,:P_COMPLETION_STATUS,:P_USER_ID,:P_SYATEM_ID,:out_cursor); end;");
+            $stmt->bindValue(':P_TITLE', $P_TITLE, PDO::PARAM_NULL);
+            $stmt->bindValue(':P_ACTUAL_FINISH_MONTH', $P_ACTUAL_FINISH_MONTH, PDO::PARAM_NULL);
+            $stmt->bindValue(':P_ACTUAL_FINISH_YEAR', $P_ACTUAL_FINISH_YEAR, PDO::PARAM_NULL);
+            $stmt->bindValue(':P_MEM_ID', $P_MEM_ID, PDO::PARAM_NULL);
+            $stmt->bindValue(':P_COMPLETION_STATUS', $P_COMPLETION_STATUS, PDO::PARAM_NULL);
+            $stmt->bindValue(':P_USER_ID', session('user')['user_id'], PDO::PARAM_NULL);  
+            $stmt->bindValue(':P_SYATEM_ID', $P_SYATEM_ID, PDO::PARAM_NULL);
+            $stmt->bindParam(':out_cursor', $cursor, PDO::PARAM_STMT, 0, \OCI_B_CURSOR);
+            $stmt->execute();
+            oci_execute($cursor, OCI_DEFAULT);
+            while($row = oci_fetch_object($cursor, OCI_ASSOC | OCI_RETURN_NULLS)){
+                $data[] = $row;
+            }
+            oci_free_cursor($cursor);
+            return ['data'=>$data,'recordsFiltered'=>$P_recordsTotal,'recordsTotal'=>$P_recordsTotal];
+        }
+
+    
+        public static function UPDATE_NOTES($array_in){
+            $stmt = DB::getPdo()->prepare("begin TASKS_PKG.UPDATE_NOTES(:P_ID,:P_NOTES,:P_STATUS,:P_MSG); end;");
+            $stmt->bindValue(':P_ID', $array_in['P_ID'], PDO::PARAM_NULL);
+            $stmt->bindValue(':P_NOTES', $array_in['P_NOTES'], PDO::PARAM_NULL);
+            $stmt->bindParam(':P_STATUS', $P_STATUS,PDO::PARAM_INT|PDO::PARAM_INPUT_OUTPUT, -1);
+            $stmt->bindParam(':P_MSG', $P_MSG, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
+            $stmt->execute();
+
+            $res=[
+                'MSG' => $P_MSG,
+                'STATUS' => $P_STATUS,
+            ];
+            return $res;
+    }
+       
 }

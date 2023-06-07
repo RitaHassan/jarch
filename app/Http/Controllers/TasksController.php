@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Tasks;
 use App\Models\SystemMembers;
+use App\Models\System;
 use App\Exports\ExportTask;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -16,11 +17,15 @@ class TasksController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-
-
+    {  
         $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
         return view('tasks.index',compact('systems'));
+    }
+
+    public function index_all()
+    {  
+        $systems= System::LOAD_DATA(null,0,100,1)['data'];
+        return view('tasks.index_all',compact('systems'));
     }
 
     /**
@@ -39,6 +44,24 @@ class TasksController extends Controller
     }
 
     public function datatable(Request $request)
+    {
+        $search = null;
+        $search2 = null;
+        $search3 = null;
+        $search4 = null;
+        $search5 = null;
+        $tasks = new Tasks();
+        $get_all_members= $tasks->get_all_members()['data'];
+
+        if($request->search['value'] != ""){
+            $search = $request->search['value'];
+        }
+       return json_encode(Tasks::LOAD_DATA($search,$request->ACTUAL_FINISH_MONTH,$request->ACTUAL_FINISH_YEAR,$request->MEM_ID,$request->COMPLETION_STATUS,$request->SYSTEM_ID,$request->start,$request->length));
+
+    }
+
+
+    public function datatable_all(Request $request)
     {
         $search = null;
         $search2 = null;
@@ -260,7 +283,12 @@ class TasksController extends Controller
 
     public function export(Request $request)
     {
-        return Excel::download(new ExportTask(null,$request->ACTUAL_FINISH_MONTH,$request->ACTUAL_FINISH_YEAR,$request->MEM_ID,$request->COMPLETION_STATUS,$request->SYSTEM_ID), 'teams.xlsx');
+        return Excel::download(new ExportTask(null,null,null,null,null,null,0), 'teams.xlsx');
+    }
+
+    public function export_ll(Request $request)
+    {
+        return Excel::download(new ExportTask(null,null,null,null,null,null,1), 'teams.xlsx');
     }
 
 
@@ -291,5 +319,20 @@ class TasksController extends Controller
 
     }
 
+    public function update_notes ($id,Request $request)
+    {
+        $tasks = new Tasks();
+        $tasks = $tasks->find_by_id($id);
+        if (!$tasks) {
+            abort(404);
+        }
+
+        $request->request->add(['ID'=>$id]);
+        $res= Tasks::change_status($id,$request->status,NULL);
+
+        $result = Tasks::update_notes(change_key($request->only((new Tasks())->getFillable())));
+        return [];
+
+    }
 
 }

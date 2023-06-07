@@ -312,7 +312,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                     className: 'row-selected'
                 },
                 ajax: {
-                url: '{{ route('tasks.datatable') }}',
+                url: '{{ route('tasks.datatable_all') }}',
                 "data": function ( d ) {
                     d.ACTUAL_FINISH_MONTH = $('#ACTUAL_FINISH_MONTH').val();
                     d.ACTUAL_FINISH_YEAR= $('#ACTUAL_FINISH_YEAR').val();
@@ -542,7 +542,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                 <!--end::Menu item--> 
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}" val_val="2" class="menu-link px-3 wait" > <i class="fa fa-times me-2"></i>
+                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}"  val_val="2" class="menu-link px-3 wait" > <i class="fa fa-times me-2"></i>
                                             غير منجز 
                                         </a>
                                     </div>
@@ -576,7 +576,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                 <!--end::Menu item--> 
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}" val_val="2" class="menu-link px-3 wait" > <i class="fa fa-tasks me-2"></i>
+                                        <a href="#" val_id="${data.ID}"  val_notes="${data.NOTES}" val_val="2" class="menu-link px-3 wait" > <i class="fa fa-tasks me-2"></i>
                                             غير منجز 
                                         </a>
                                     </div>
@@ -823,7 +823,7 @@ $get_all_members= $tasks->get_all_members()['data'];
             var status = 4;
             jQuery.ajax({
                 type: "get",
-                url: 'tasks/change_status/'+id,
+                url: '/tasks/change_status/'+id,
                 data:{
                     "COMPLETION_STATUS": status,
                     "ACTUAL_START_DT" : $("#ACTUAL_START_DT").val(),
@@ -867,7 +867,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                         var id = $("#wait_id").val(); 
                         jQuery.ajax({
                             type: "post",
-                            url: 'tasks/update_notes/'+id,
+                            url: '/tasks/update_notes/'+id,
                             data:{
                                 "_token": "{{ csrf_token() }}",       
                                 "id": id,
@@ -931,7 +931,7 @@ $(document).on('click', '.cancel', function (data, callbak) {
                                         //  alert(id);
                                         jQuery.ajax({
                                                 type: "post",
-                                                url: 'tasks/update_reason/'+id,
+                                                url: '/tasks/update_reason/'+id,
                                                 data:{
                                                     "_token": "{{ csrf_token() }}",       
                                                     "id": id,
@@ -992,7 +992,7 @@ $(document).on('click', '.cancel', function (data, callbak) {
             e.preventDefault();
                 jQuery.ajax({
                     type: "get",
-                    url: 'tasks/export',
+                    url: '/tasks/export_all',
                     data:{
                         "ACTUAL_FINISH_MONTH": $('#ACTUAL_FINISH_MONTH').val(),
                         "ACTUAL_FINISH_YEAR":$('#ACTUAL_FINISH_YEAR').val(),
