@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Tasks;
 use App\Models\SystemMembers;
+use App\Models\System;
+use App\Exports\ExportTask;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TasksController extends Controller
 {
@@ -14,9 +17,15 @@ class TasksController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
+    {  
         $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
         return view('tasks.index',compact('systems'));
+    }
+
+    public function index_all()
+    {  
+        $systems= System::LOAD_DATA(null,0,100,1)['data'];
+        return view('tasks.index_all',compact('systems'));
     }
 
     /**
@@ -27,7 +36,6 @@ class TasksController extends Controller
     public function create()
     {
           $tasks = new Tasks();
-
           $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
           $GET_MEMBERS= $tasks->GET_MEMBERS()['data'];
 
@@ -36,6 +44,24 @@ class TasksController extends Controller
     }
 
     public function datatable(Request $request)
+    {
+        $search = null;
+        $search2 = null;
+        $search3 = null;
+        $search4 = null;
+        $search5 = null;
+        $tasks = new Tasks();
+        $get_all_members= $tasks->get_all_members()['data'];
+
+        if($request->search['value'] != ""){
+            $search = $request->search['value'];
+        }
+       return json_encode(Tasks::LOAD_DATA($search,$request->ACTUAL_FINISH_MONTH,$request->ACTUAL_FINISH_YEAR,$request->MEM_ID,$request->COMPLETION_STATUS,$request->SYSTEM_ID,$request->start,$request->length));
+
+    }
+
+
+    public function datatable_all(Request $request)
     {
         $search = null;
         $search2 = null;
@@ -232,31 +258,81 @@ class TasksController extends Controller
     }
 
     public function change_status($P_ID,Request $request)
-    { 
+    {
         $tasks = new Tasks();
         if($request->ACTUAL_START_DT){
             $res= $tasks->change_status($P_ID,$request->COMPLETION_STATUS,$request->ACTUAL_START_DT);
         }else{
             $res= $tasks->change_status($P_ID,$request->COMPLETION_STATUS,NULL);
         }
-        
+
         return ['status'=>1];
-    
-    } 
+
+    }
 
     public function change_status_2($P_ID,Request $request)
-    { 
+    {
 
         $tasks = new Tasks();
         $res= $tasks->change_status_2($P_ID,$request->COMPLETION_STATUS,$request->ACTUAL_START_DT,$request->ACTUAL_FINISH_DT,$request->COMPLETION_PERIOD,$request->DURATION_TYPE);
 
-        
+
         return [];
 
+    }
+
+    public function export(Request $request)
+    {
+        return Excel::download(new ExportTask(null,null,null,null,null,null,0), 'teams.xlsx');
+    }
+
+    public function export_ll(Request $request)
+    {
+        return Excel::download(new ExportTask(null,null,null,null,null,null,1), 'teams.xlsx');
     }
 
 
 
 
+    public function MyTasks()
+    {
+
+        $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
+        return view('tasks.MyTask',compact('systems'));
+    }
+
+
+    public function GetMyTask(Request $request)
+    {
+        $search = null;
+        $search2 = null;
+        $search3 = null;
+        $search4 = null;
+        $search5 = null;
+        $tasks = new Tasks();
+        $get_all_members= $tasks->get_all_members()['data'];
+
+        if($request->search['value'] != ""){
+            $search = $request->search['value'];
+        }
+       return json_encode(Tasks::MyTasks($search,$request->ACTUAL_FINISH_MONTH,$request->ACTUAL_FINISH_YEAR,session('user')['user_id'],$request->COMPLETION_STATUS,$request->SYSTEM_ID,$request->start,$request->length));
+
+    }
+
+    public function update_notes ($id,Request $request)
+    {
+        $tasks = new Tasks();
+        $tasks = $tasks->find_by_id($id);
+        if (!$tasks) {
+            abort(404);
+        }
+
+        $request->request->add(['ID'=>$id]);
+        $res= Tasks::change_status($id,$request->status,NULL);
+
+        $result = Tasks::update_notes(change_key($request->only((new Tasks())->getFillable())));
+        return [];
+
+    }
 
 }

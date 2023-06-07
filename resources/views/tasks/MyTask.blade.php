@@ -13,19 +13,19 @@ $get_all_members= $tasks->get_all_members()['data'];
     <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 id="modalTitle">اضافة سبب </h3>
-                    <input type="hidden" id="status_wait">
+                    <h3 id="modalTitle">اضافة سبب التأجيل</h3>
+
                 </div>
                 <div class="modal-body">
                         <input type="hidden" id="wait_id"/>
-                        <div class="col-xl-12 form-group mb-12">
-                            <label class="required form-label fw-bolder">سبب</label>
+                        <div class="col-xl-6 form-group mb-6">
+                            <label class="required form-label fw-bolder">سبب التأجيل</label>
                             <textarea id="DELAIED_REASON" name="DELAIED_REASON" class="form-control form-control-solid mb-8 f-family tinymce-editor"
                                 rows="4" cols="4"></textarea>
                             </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="save_wait" data-dismiss="modal">حفظ</button>
+                    <button type="button" class="btn btn-primary save" data-dismiss="modal">حفظ</button>
                 </div>
             </div>
         </div>
@@ -41,15 +41,15 @@ $get_all_members= $tasks->get_all_members()['data'];
 
                 </div>
                 <div class="modal-body">
-                    <form class="row" method="POST" >    
-                        
+                    <form class="row" method="POST" >
+
                         <input type="hidden" id="cancel_id"/>
 
                         <div class="col-xl-6 form-group mb-6">
                             <label class="required form-label fw-bolder">سبب الالغاء</label>
                             <textarea id="CANCELED_REASON" name="CANCELED_REASON" class="form-control form-control-solid mb-8 f-family tinymce-editor"
                             rows="4" cols="4"></textarea>
-                            </div>    
+                            </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary save_cancel" data-dismiss="modal">حفظ</button>
@@ -66,12 +66,12 @@ $get_all_members= $tasks->get_all_members()['data'];
 
                 </div>
                 <div class="modal-body">
-                        
+
                         <input type="hidden" id="val_id"/>
 
                         <div class="col-xl-12 form-group mb-12">
                             <input type="text" name="ACTUAL_START_DT" id="ACTUAL_START_DT" class="date2 form-control">
-                            </div>    
+                            </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="toggel_4_save" data-dismiss="modal">حفظ</button>
@@ -88,39 +88,39 @@ $get_all_members= $tasks->get_all_members()['data'];
 
                 </div>
                 <div class="modal-body">
-                        
-                        <input type="hidden" id="val_id_1"/>   
+
+                        <input type="hidden" id="val_id_1"/>
                         <input type="hidden" id="val_dat"/>
-                        <div class="row">  
+                        <div class="row">
                             <div class="col-xl-4 form-group mb-4">
-                                <label class="required form-label fw-bolder">تاريخ البدء الفعلي</label>
+                                <label class="form-label fw-bolder">تاريخ البدء الفعلي</label>
                                 <input type="text" name="ACTUAL_START_DT_1" id="ACTUAL_START_DT_1" class="date3 form-control">
-                                </div>    
+                                </div>
                             <div class="col-xl-4 form-group mb-4">
-                                <label class="required form-label fw-bolder">تاريخ الانتهاء الفعلي</label>
+                                <label class="form-label fw-bolder">تاريخ الانتهاء الفعلي</label>
                                 <input type="text" name="ACTUAL_FINISH_DT" id="ACTUAL_FINISH_DT" class="date2 form-control">
                             </div>
                             <div class="col-xl-4 form-group mb-4">
-                                <label class="required form-label fw-bolder">مدة الانجاز</label>
-                                  <input type="text"  id="COMPLETION_PERIOD"  name="COMPLETION_PERIOD" value="{{old('COMPLETION_PERIOD',$tasks->COMPLETION_PERIOD)}}"  class="form-control form-control-solid" 
+                                <label class="form-label fw-bolder">مدة الانجاز</label>
+                                  <input type="text"  id="COMPLETION_PERIOD" name="COMPLETION_PERIOD" value="{{old('COMPLETION_PERIOD',$tasks->COMPLETION_PERIOD)}}"  class="form-control form-control-solid"
                                   placeholder="مدة الانجاز">
-                            </div>  
+                            </div>
                             <div class="col-xl-4 form-group mb-4">
-                                <label class="required form-label fw-bolder">نوع مدة الانجاز</label>
-                                <select name="DURATION_TYPE" id="DURATION_TYPE" required class="form-control form-control-solid" >
+                                <label class="form-label fw-bolder">نوع مدة الانجاز</label>
+                                <select name="DURATION_TYPE" id="DURATION_TYPE" class="form-control form-control-solid" >
                                     <option value=""  >--اختر--</option>
                                     <option value="1" >يوم</option>
                                     <option value="2">ساعة</option>
                                     <option value="3">ساعتين</option>
                                     <option value="4" >شهر</option>
-                                
-                                  </select>
-                            </div>   
-                        </div>
-                          
-                        
 
-                        
+                                  </select>
+                            </div>
+                        </div>
+
+
+
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="toggel_1_save" data-dismiss="modal">حفظ</button>
@@ -149,10 +149,10 @@ $get_all_members= $tasks->get_all_members()['data'];
             <!--begin::Toolbar-->
             <div class="d-flex justify-content-end" data-kt-docs-table-toolbar="base">
                 <!--begin::Filter-->
-                <button  id="export" class="btn btn-light-primary me-3" data-bs-toggle="tooltip" title="">
-                    <span class="svg-icon svg-icon-2"></span>
-                    تصدير
-                </button>
+                {{-- <button type="button" class="btn btn-light-primary me-3" data-bs-toggle="tooltip" title="Coming Soon">
+                    <span class="svg-icon svg-icon-2">...</span>
+                    Filter
+                </button> --}}
                 <!--end::Filter-->
 
 
@@ -183,7 +183,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                     @foreach($systems as $system)
                                         <option value="{{ $system->ID }}" {{$system->ID}}>{{ $system->SYSTEM_NAME}}</option>
                                     @endforeach
-                                </select> 
+                                </select>
 
                             </div>
                         </div>
@@ -194,7 +194,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                     @foreach($get_all_members as $member)
                                         <option value="{{ $member->ID }}" {{$member->ID}}>{{ $member->MEM_NAME}}</option>
                                     @endforeach
-                                </select> 
+                                </select>
 
                             </div>
                         </div>
@@ -231,7 +231,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                     <option value="2023">2023</option>
                                 </select>
                             </div>
-                        </div>   
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-3">
@@ -245,7 +245,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                     <option value="4">قيد العمل</option>
                                 </select>
                             </div>
-                        </div>  
+                        </div>
                     </div>
                 </form>
             </div>
@@ -286,14 +286,14 @@ $get_all_members= $tasks->get_all_members()['data'];
 <script>
 
     "use strict";
-    
+
     // Class definition
     var KTDatatablesServerSide = function () {
         // Shared variables
         var table;
         var dt;
         var filterPayment;
-    
+
         // Private functions
         var initDatatable = function () {
             dt = $("#kt_datatable_example_1").DataTable({
@@ -312,24 +312,24 @@ $get_all_members= $tasks->get_all_members()['data'];
                     className: 'row-selected'
                 },
                 ajax: {
-                url: '{{ route('tasks.datatable') }}',
+                url: '{{ route('tasks.GetMyTask') }}',
                 "data": function ( d ) {
                     d.ACTUAL_FINISH_MONTH = $('#ACTUAL_FINISH_MONTH').val();
                     d.ACTUAL_FINISH_YEAR= $('#ACTUAL_FINISH_YEAR').val();
-                    d.MEM_ID= $('#MEM_ID').val(); 
+                    d.MEM_ID= $('#MEM_ID').val();
                     d.SYSTEM_ID= $('#SYSTEM_ID').val();
                     d.COMPLETION_STATUS = $('#COMPLETION_STATUS').val();
                 }
                 },
                 columns: [
-        
+
                     { data: 'ID',"searchable": false },
                     { data: 'TEAM',"searchable": false },
                     { data: 'MEM_NAME',"searchable": false },
                     { data: 'SYSTEM',"searchable": false },
                     { data: 'TITLE',"searchable": false },
                     { data: 'TASK_TYPE',"searchable": false ,render: function (data) {
-                    
+
                         if(data == 1){
                             return "تحليل";
                         }else if(data== 2){
@@ -352,7 +352,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                     { data: 'YEAR',"searchable": false },
                     { data: 'COMPLETION_PERIOD',"searchable": false },
                     { data: 'DURATION_TYPE',"searchable": false,render: function (data) {
-                
+
                     if(data == '1'){
                             return "يوم";
                         }else if(data=='2'){
@@ -361,7 +361,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                           return "شهر";
                         }
                     }},
-      
+
                         {
                             data: null,
                             'bSort': true,
@@ -377,14 +377,14 @@ $get_all_members= $tasks->get_all_members()['data'];
                                 }
                                 if (data.COMPLETION_STATUS== 3) {
                                     return '<span class="badge badge-primary val ">مؤجل</span>';
-                                }   
+                                }
                                   if (data.COMPLETION_STATUS== 4) {
                                     return '<span class="badge badge-success val">قيد العمل</span>';
                                 }
                                 if (data.COMPLETION_STATUS== 5) {
                                     return '<span class="badge badge-danger val">الغاء</span>';
                                 }
-                                
+
                                 return '-';
                             },"searchable": false
 
@@ -431,10 +431,10 @@ $get_all_members= $tasks->get_all_members()['data'];
                                             غير محدد
                                         </a>
                                     </div>
-                                <!--end::Menu item--> 
+                                <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}"  val_val="2" class="menu-link px-3 wait" > <i class="fa fa-tasks me-2"></i>
+                                        <a href="#" val_id="${data.ID}" val_val="2" class="menu-link px-3 toggel" > <i class="fa fa-tasks me-2"></i>
                                             غير منجز
                                         </a>
                                     </div>
@@ -445,7 +445,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                             قيد العمل
                                         </a>
                                     </div>
-                                <!--end::Menu item--> 
+                                <!--end::Menu item-->
                         `;
                         // toggel_text="منجز";
                         // toggel_icon="check";
@@ -458,7 +458,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                             غير محدد
                                         </a>
                                     </div>
-                                <!--end::Menu item--> 
+                                <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
                                         <a href="#" val_id="${data.ID}" val_dat="${data.ACTUAL_START_DT}" val_val="1" class="menu-link px-3 toggel_1" > <i class="fa fa-tasks me-2"></i>
@@ -472,18 +472,18 @@ $get_all_members= $tasks->get_all_members()['data'];
                                             قيد العمل
                                         </a>
                                     </div>
-                                <!--end::Menu item--> 
+                                <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}" val_val="3" class="menu-link px-3 wait" > <i class="fa fa-times me-2"></i>
-                                            مؤجل 
+                                        <a href="#" val_id="${data.ID}" val_val="3" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                            مؤجل
                                         </a>
                                     </div>
-                                <!--end::Menu item--> 
+                                <!--end::Menu item-->
                         `;
                         // toggel_text="غير منجز";
                         // toggel_icon="cancel";
-                       
+
                        }else if(data.COMPLETION_STATUS == 3){
                         action = `\
                                  <!--begin::Menu item-->
@@ -492,7 +492,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                             غير محدد
                                         </a>
                                     </div>
-                                <!--end::Menu item--> 
+                                <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
                                         <a href="#" val_dat="${data.ACTUAL_START_DT}" val_id="${data.ID}" val_val="1" class="menu-link px-3 toggel_1" > <i class="fa fa-tasks me-2"></i>
@@ -506,14 +506,14 @@ $get_all_members= $tasks->get_all_members()['data'];
                                             قيد العمل
                                         </a>
                                     </div>
-                                <!--end::Menu item--> 
+                                <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}" val_val="2" class="menu-link px-3 wait" > <i class="fa fa-times me-2"></i>
-                                            غير منجز 
+                                        <a href="#" val_id="${data.ID}" val_val="2" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                            غير منجز
                                         </a>
                                     </div>
-                                <!--end::Menu item--> 
+                                <!--end::Menu item-->
                         `;
                         // toggel_text="مؤجل";
                         // toggel_icon="check";
@@ -525,7 +525,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                             غير محدد
                                         </a>
                                     </div>
-                                <!--end::Menu item--> 
+                                <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
                                         <a href="#" val_dat="${data.ACTUAL_START_DT}" val_id="${data.ID}" val_val="1" class="menu-link px-3 toggel_1" > <i class="fa fa-tasks me-2"></i>
@@ -535,18 +535,18 @@ $get_all_members= $tasks->get_all_members()['data'];
                                 <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}" val_val="3" class="menu-link px-3 wait" > <i class="fa fa-times me-2"></i>
+                                        <a href="#" val_id="${data.ID}" val_val="3" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
                                             مؤجل
                                         </a>
                                     </div>
-                                <!--end::Menu item--> 
+                                <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}" val_val="2" class="menu-link px-3 wait" > <i class="fa fa-times me-2"></i>
-                                            غير منجز 
+                                        <a href="#" val_id="${data.ID}" val_val="2" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                            غير منجز
                                         </a>
                                     </div>
-                                <!--end::Menu item--> 
+                                <!--end::Menu item-->
                         `;
 
                         // toggel_text="قيد العمل";
@@ -559,7 +559,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                             قيد العمل
                                         </a>
                                     </div>
-                                <!--end::Menu item--> 
+                                <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
                                         <a href="#" val_dat="${data.ACTUAL_START_DT}" val_id="${data.ID}" val_val="1" class="menu-link px-3 toggel_1" > <i class="fa fa-tasks me-2"></i>
@@ -569,26 +569,26 @@ $get_all_members= $tasks->get_all_members()['data'];
                                 <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}" val_val="3" class="menu-link px-3 wait" > <i class="fa fa-tasks me-2"></i>
+                                        <a href="#" val_id="${data.ID}" val_val="3" class="menu-link px-3 toggel" > <i class="fa fa-tasks me-2"></i>
                                             مؤجل
                                         </a>
                                     </div>
-                                <!--end::Menu item--> 
+                                <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}" val_val="2" class="menu-link px-3 wait" > <i class="fa fa-tasks me-2"></i>
-                                            غير منجز 
+                                        <a href="#" val_id="${data.ID}" val_val="2" class="menu-link px-3 toggel" > <i class="fa fa-tasks me-2"></i>
+                                            غير منجز
                                         </a>
                                     </div>
-                                <!--end::Menu item--> 
+                                <!--end::Menu item-->
                         `;
 
                        }
-                    
+
                         return `\
                             <a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start" data-kt-menu-flip="top-end">
                                 ...
-                              
+
                             </a>
                             <!--begin::Menu-->
                             <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
@@ -605,17 +605,17 @@ $get_all_members= $tasks->get_all_members()['data'];
                                         حذف
                                     </a>
                                 </div>
-                                <!--end::Menu item--> 
+                                <!--end::Menu item-->
                                 `+action+
-                                `/                         
+                                `/
                                  <!--begin::Menu item-->
                                 <div class="menu-item px-3">
-                                    <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}" val_val="5" class="menu-link px-3 wait"  data-kt-docs-table-filter="add_reason2"> <i class="fa fa-times me-2"></i>
-                                  الغاء                              
+                                    <a href="#" val_id="${data.ID}" class="menu-link px-3 cancel"  data-kt-docs-table-filter="add_reason2"> <i class="fa fa-times me-2"></i>
+                                  الغاء
                                   </a>
                                 </div>
                                 <!--end::Menu item-->
-                                
+
                             </div>
                             <!--end::Menu-->
                         `;
@@ -627,9 +627,9 @@ $get_all_members= $tasks->get_all_members()['data'];
                     $(row).find('td:eq(4)').attr('data-filter', data.CreditCardType);
                 }
             });
-    
+
             table = dt.$;
-    
+
             // Re-init functions on every table re-draw -- more info: https://datatables.net/reference/event/draw
             dt.on('draw', function () {
                 handleDeleteRows();
@@ -638,8 +638,8 @@ $get_all_members= $tasks->get_all_members()['data'];
                 KTMenu.createInstances();
             });
         }
-    
-        
+
+
         var handleSearchDatatable = function () {
             const filterSearch = document.querySelector('[data-kt-docs-table-filter="search"]');
             filterSearch.addEventListener('keyup', function (e) {
@@ -651,30 +651,30 @@ $get_all_members= $tasks->get_all_members()['data'];
             filterSearch2.addEventListener('keyup', function (x) {
                 dt.draw();
             });
-        }  
-        
+        }
+
         var handleSearchDatatable3 = function () {
             const filterSearch3 = document.querySelector('[data-kt-docs-table-filter="search3"]');
             filterSearch3.addEventListener('keyup', function (x) {
                  dt.draw();
              });
-        }  
+        }
 
         // Delete user
         var handleDeleteRows = () => {
             // Select all delete buttons
             const deleteButtons = document.querySelectorAll('[data-kt-docs-table-filter="delete_row"]');
-    
+
             deleteButtons.forEach(d => {
                 // Delete button on click
                 d.addEventListener('click', function (e) {
                     e.preventDefault();
                     // Select parent row
                     const parent = e.target.closest('tr');
-    
+
                     // Get customer name
                     const customerName = parent.querySelectorAll('td')[1].innerText;
-                    const id = $(this).attr('val_id'); 
+                    const id = $(this).attr('val_id');
                     // SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
                     Swal.fire({
                         text: "هل أنت متأكد من حذف  " + customerName + " ؟",
@@ -712,8 +712,8 @@ $get_all_members= $tasks->get_all_members()['data'];
                                 });
                                 }
                             });
-                               
-                     
+
+
                         } else if (result.dismiss === 'cancel') {
                             Swal.fire({
                                 text: customerName + " تم الغاء عملية الحذف.",
@@ -733,7 +733,7 @@ $get_all_members= $tasks->get_all_members()['data'];
          var handleupdateRows = () => {
             // Select all delete buttons
             const update_reason = document.querySelectorAll('[data-kt-docs-table-filter="add_reason"]');
-    
+
             update_reason.forEach(d => {
                 // Delete button on click
                 d.addEventListener('click', function (e) {
@@ -746,20 +746,20 @@ $get_all_members= $tasks->get_all_members()['data'];
 
                     // Get customer name
                     // const customerName = parent.querySelectorAll('td')[3].innerText;
-                    // const id = $(this).attr('val_id'); 
-                   
+                    // const id = $(this).attr('val_id');
 
 
-                });  
+
+                });
             });
-                
+
         }
 
 
         var handleupdatecancel = () => {
             // Select all delete buttons
             const update_reason = document.querySelectorAll('[data-kt-docs-table-filter="add_reason2"]');
-    
+
             update_reason.forEach(d => {
                 // Delete button on click
                 d.addEventListener('click', function (e) {
@@ -772,13 +772,13 @@ $get_all_members= $tasks->get_all_members()['data'];
 
                     // Get customer name
                     // const customerName = parent.querySelectorAll('td')[3].innerText;
-                    // const id = $(this).attr('val_id'); 
-                   
+                    // const id = $(this).attr('val_id');
 
 
-                });  
+
+                });
             });
-                
+
         }
 
         $('#MEM_ID' ).on('change', function (data, callbak) {
@@ -805,7 +805,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                     toastr.success("تم تعديل حالة المهمة");
 
                 }
-            }); 
+            });
         });
         $(document).on('click', '.toggel_4', function (data, callbak) {
             $("#val_id").val($(this).attr('val_id'));
@@ -817,7 +817,7 @@ $get_all_members= $tasks->get_all_members()['data'];
             $("#ACTUAL_START_DT_1").val($(this).attr('val_dat'));
             $("#toggel_1_Modal").modal("show");
         });
-        
+
         $("#toggel_4_save").click(function(){
             var id = $("#val_id").val();
             var status = 4;
@@ -834,13 +834,9 @@ $get_all_members= $tasks->get_all_members()['data'];
                     toastr.success("تم تعديل حالة المهمة");
 
                 }
-            }); 
+            });
         });
         $("#toggel_1_save").click(function(){
-            if($("#ACTUAL_START_DT_1").val()== "" ||$("#ACTUAL_FINISH_DT").val()== "" ||$("#COMPLETION_PERIOD").val()== "" ||$("#DURATION_TYPE").val()== "" ){
-                toastr.error("يرجى ادخال الخانات المطلوبة");
-                return;
-            }
             var id = $("#val_id_1").val();
             var status = 1;
             jQuery.ajax({
@@ -859,34 +855,8 @@ $get_all_members= $tasks->get_all_members()['data'];
                     toastr.success("تم تعديل حالة المهمة");
 
                 }
-            }); 
+            });
         });
-
-        
-        $("#save_wait").click(function(){
-                        var id = $("#wait_id").val(); 
-                        jQuery.ajax({
-                            type: "post",
-                            url: 'tasks/update_notes/'+id,
-                            data:{
-                                "_token": "{{ csrf_token() }}",       
-                                "id": id,
-                                "NOTES":tinyMCE.editors[$('#DELAIED_REASON').attr('id')].getContent(), 
-                                "status" :$("#status_wait").val(),
-                                "UPDATED_BY":1
-                            },
-                            dataType: 'json',
-                            success :function (data) {
-                                dt.draw();
-                                toastr.success("تمت عملية الحفظ بنجاح");
-
-                                   }
-                        }); 
-
-
-                    });
-
-
         // Public methods
         return {
             init: function () {
@@ -900,74 +870,100 @@ $get_all_members= $tasks->get_all_members()['data'];
             }
         }
     }();
-    
+
     // On document ready
     KTUtil.onDOMContentLoaded(function () {
         KTDatatablesServerSide.init();
     });
- 
+
     $(document).on('click', '.wait', function (data, callbak) {
-        $("#wait_id").val($(this).attr('val_id')); 
-        $("#status_wait").val($(this).attr('val_val'));
-        tinyMCE.editors[$('#DELAIED_REASON').attr('id')].setContent($(this).attr('val_notes'));
-        $('#waitModal').modal('show');
-       
+                    $('#waitModal').modal('show');
+
                 });
 $("button[data-dismiss=modal]").click(function()
 {
   $(".modal").modal('hide');
-}); 
+});
 
 
 $(document).on('click', '.cancel', function (data, callbak) {
                     $('#cancelModal').modal('show');
-       
+
                 });
+$("button[data-dismiss=modal]").click(function()
+{
+  $(".modal").modal('hide');
+});
+
+                    $(".save").click(function(){
+                        var id = $("#wait_id").val();
+                      //  alert(id);
+                    jQuery.ajax({
+                            type: "post",
+                            url: 'tasks/update_reason/'+id,
+                            data:{
+                                "_token": "{{ csrf_token() }}",
+                                "id": id,
+                                "ISDELAY":1,
+                                "ISCANCEL":0,
+                                "DELAIED_REASON":$( "#DELAIED_REASON" ).val(),
+                                "CANCELED_REASON":null,
+                                "UPDATED_BY":1
+                            },
+                            dataType: 'json',
+                            success :function (data) {
+
+                                toastr.success();
+
+                                   }
+                        });
 
 
-                    
+                    });
+
+
                     $(".save_cancel").click(function(){
-                                            var id = $("#cancel_id").val(); 
+                                            var id = $("#cancel_id").val();
                                         //  alert(id);
                                         jQuery.ajax({
                                                 type: "post",
                                                 url: 'tasks/update_reason/'+id,
                                                 data:{
-                                                    "_token": "{{ csrf_token() }}",       
+                                                    "_token": "{{ csrf_token() }}",
                                                     "id": id,
                                                     "ISDELAY":0,
                                                     "ISCANCEL":1,
-                                                    "DELAIED_REASON":null, 
+                                                    "DELAIED_REASON":null,
                                                     "CANCELED_REASON":$( "#CANCELED_REASON" ).val(),
                                                     "UPDATED_BY":1
                                                 },
                                                 dataType: 'json',
                                                 success :function (data) {
-                                                
+
                                                     toastr.success();
 
                                                     }
-                                            }); 
+                                            });
 
-                     }); 
+                     });
 
 
   $( '#MEM_ID' ).select2( {
            enableFiltering: true,
            maxHeight: 350
-           
-         } ) ; 
-        
-        
+
+         } ) ;
+
+
     $( '#COMPLETION_STATUS' ).select2( {
            enableFiltering: true,
             maxHeight: 350
-           
+
        } ) ;
 
     $( '#SYSTEM_ID' ).select2( {
            enableFiltering: true,
-           
+
        } ) ;
 
        $(function() {
@@ -981,43 +977,5 @@ $(document).on('click', '.cancel', function (data, callbak) {
                 dateFormat: 'd/m/Y',
             });
         });
-
-        /*
-                    d.= ;
-                    d.= ; 
-                    d.= ;
-                    d. = ;*/
-
-        $("#export").click(function(e){
-            e.preventDefault();
-                jQuery.ajax({
-                    type: "get",
-                    url: 'tasks/export',
-                    data:{
-                        "ACTUAL_FINISH_MONTH": $('#ACTUAL_FINISH_MONTH').val(),
-                        "ACTUAL_FINISH_YEAR":$('#ACTUAL_FINISH_YEAR').val(),
-                        "MEM_ID":$('#MEM_ID').val(),
-                        "SYSTEM_ID":$('#SYSTEM_ID').val(), 
-                        "COMPLETION_STATUS":$('#COMPLETION_STATUS').val()
-                                     },
-                                     xhrFields: {
-                            responseType: 'blob'
-                        },
-                    success :function (data) {
-                        var a = document.createElement('a');
-                        var url = window.URL.createObjectURL(data);
-                        a.href = url;
-                        a.download = Date.now()+'tasks.xlsx';
-                        document.body.append(a);
-                        a.click();
-                        a.remove();
-                        window.URL.revokeObjectURL(url);
-                        
-                    }
-                }); 
-
-
-            });
-
     </script>
 @endpush

@@ -49,6 +49,7 @@ Route::post('systems/members', 'SystemController@add_members')->name('systems.me
 Route::get('systems/members/{id}', 'SystemController@members')->name('systems.members.delete');
 Route::delete('systems/members/{id}', 'SystemController@delete_member')->name('systems.members');
 Route::get('systems/get_by_user_id/{user_id}', 'SystemController@get_by_user_id')->name('systems.get_by_user_id');
+Route::get('systems/exportSystems', 'SystemController@exportSystems')->name('systems.exportSystems');
 Route::resource('systems', 'SystemController');
 
 
@@ -56,9 +57,16 @@ Route::resource('systems', 'SystemController');
 Route::get('tasks/change_status/{id}', 'TasksController@change_status')->name('tasks.change_status');
 Route::get('tasks/change_status_2/{id}', 'TasksController@change_status_2')->name('tasks.change_status_2');
 Route::post('tasks/update_reason/{ID}', 'TasksController@update_reason')->name('tasks.update_reason');
+Route::post('tasks/update_notes/{ID}', 'TasksController@update_notes')->name('tasks.update_notes');
 Route::get('tasks/giveMembers/{TEAM_ID}', 'TasksController@giveMembers')->name('tasks.giveMembers');
 Route::get('tasks/sysName_mem/{ID_NUM}', 'TasksController@sysName_mem')->name('tasks.sysName_mem');
+Route::get('tasks/MyTasks', 'TasksController@MyTasks')->name('tasks.MyTasks');
+Route::get('tasks/GetMyTask', 'TasksController@GetMyTask')->name('tasks.GetMyTask');
 Route::get('tasks/datatable', 'TasksController@datatable')->name('tasks.datatable');
+Route::get('tasks/datatable_all', 'TasksController@datatable_all')->name('tasks.datatable_all');
+Route::get('tasks/export', 'TasksController@export')->name('tasks.export');
+Route::get('tasks/all', 'TasksController@index_all')->name('tasks.index_all');
+Route::get('tasks/export_all', 'TasksController@export')->name('tasks.export_all');
 Route::resource('tasks', 'TasksController');
 
 

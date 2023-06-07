@@ -4,7 +4,7 @@
 
 <div class="card shadow-sm">
 
-   
+
     <div class="card-body">
         <!--begin::Wrapper-->
         <div class="d-flex flex-stack mb-5">
@@ -31,9 +31,9 @@
                 تصدير اكسل</a> --}}
 
                 <div class="d-flex justify-content-end" data-kt-docs-table-toolbar="base">
-                    
+
               <button type="button" id="print" class='btn btn-primary'><i class='fa fa-print'></i>تصدير اكسل</button>
-        
+
             </div>
             <!--begin::Toolbar-->
                 <!--begin::Filter-->
@@ -72,7 +72,7 @@
                             <br>
 
                             <div class="form-group" id="">
-                               
+
                             </div>
                             </form>
                         </div>
@@ -108,7 +108,7 @@
 
                             <div class="col-xl-12 form-group mb-12">
                                 <label class="required form-label fw-bolder">اسم الفريق</label>
-                                <input type="text"  id="NAME" name="NAME"  class="form-control form-control-solid" 
+                                <input type="text"  id="NAME" name="NAME"  class="form-control form-control-solid"
                                 placeholder="الفريق">
                             </div>
 
@@ -134,7 +134,7 @@
                     <input type="hidden" id="ID" value=""/>
                         <div class="col-xl-12 form-group mb-12">
                             <label class="required form-label fw-bolder">اسم الفريق</label>
-                            <input type="text"  id="NAME_UPDATE" name="NAME"  value=""  class="form-control form-control-solid" 
+                            <input type="text"  id="NAME_UPDATE" name="NAME"  value=""  class="form-control form-control-solid"
                             placeholder="الفريق">
                         </div>
                         <div class="card-footer">
@@ -163,17 +163,17 @@
                              <option value="-1" >--اختر--</option>
                             @foreach($member2 as $m)
                                 <option value="{{$m->ID}}" {{$team->ID==$m->ID? 'selected' :''}}>{{$m->NAME}}</option>
-                            @endforeach 
-                        </select>  
+                            @endforeach
+                        </select>
                     </div> --}}
                     <div class="col-sm-4 form-group mb-4">
                         <label class="required form-label fw-bolder">رقم هوية الموظف</label>
-                        <input type="text"  id="ID_NUM" name="ID_NUM"  class="form-control form-control-solid" 
+                        <input type="text"  id="ID_NUM" name="ID_NUM"  class="form-control form-control-solid"
                         placeholder="رقم الهوية">
                     </div>
                     <div class="col-sm-6 form-group mb-6">
                         <label class="required form-label fw-bolder">اسم الموظف</label>
-                        <input type="text"  id="MEM_NAME" name="MEM_NAME"   class="form-control form-control-solid" 
+                        <input type="text"  id="MEM_NAME" name="MEM_NAME"   class="form-control form-control-solid"
                         placeholder="اسم الموظف" readonly>
                     </div>
                     <div class="col-xl-2 form-group mb-2">
@@ -183,19 +183,19 @@
 
                 </div>
                 <table class="table table-bordered table-hover table-striped dataTable" id="members_table">
-  
+
                     <thead>
                         <tr>
                         <th>#</th>
                         <th>الاسم</th>
                         <th></th>
                         </tr>
-                      </thead>   
+                      </thead>
                       <tbody >
-                      </tbody> 
+                      </tbody>
                 </table>
                 </div>
-               
+
             </div>
         </div>
     </div>
@@ -207,14 +207,14 @@
 
 
     "use strict";
-    
+
     // Class definition
     var KTDatatablesServerSide = function () {
         // Shared variables
         var table;
         var dt;
         var filterPayment;
-    
+
         // Private functions
         var initDatatable = function () {
             dt = $("#kt_datatable_example_1").DataTable({
@@ -262,7 +262,7 @@
                     className: 'text-end',
                     render: function (data, type, row) {
                         var add_link = '/teams/create_by_id/'+data.ID;
-                       
+
                         return `\
                             <a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start" data-kt-menu-flip="top-end">
                                 ...
@@ -288,7 +288,7 @@
                                 <div class="menu-item px-3">
                                     <a href="#" val_id="${data.ID}" val_name="${data.NAME}" class=" x menu-link px-3 view" data-kt-docs-table-filter="view_row"> <i class="fa fa-users me-1"></i>الأعضاء</a>
                                 </div>
-                
+
                         `;
                     },
                 },
@@ -298,17 +298,17 @@
                     $(row).find('td:eq(4)').attr('data-filter', data.CreditCardType);
                 }
             });
-    
+
             table = dt.$;
-    
+
             // Re-init functions on every table re-draw -- more info: https://datatables.net/reference/event/draw
             dt.on('draw', function () {
                 handleDeleteRows();
                 KTMenu.createInstances();
             });
         }
-    
-        
+
+
         var handleSearchDatatable = function () {
             const filterSearch = document.querySelector('[data-kt-docs-table-filter="search"]');
             filterSearch.addEventListener('keyup', function (e) {
@@ -316,7 +316,7 @@
             });
 
         }
-    
+
         // Delete user
         var handleDeleteRows = () => {
             // Select all delete buttons
@@ -331,7 +331,7 @@
 
                     // Get customer name
                     const customerName = parent.querySelectorAll('td')[0].innerText;
-                    const id = $(this).attr('val_id'); 
+                    const id = $(this).attr('val_id');
                     var str = $("#TEAM_ID").val(id);
                     // SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
                     Swal.fire({
@@ -402,8 +402,8 @@
                                 }
 
                             });
-                                
-                        
+
+
                         } else if (result.dismiss === 'cancel') {
                             Swal.fire({
                                 text: customerName + " تم الغاء عملية الحذف.",
@@ -424,7 +424,7 @@
         $(document).on('click', '.add', function (data, callbak) {
             $("#ID_NUM").val("");
             $("#MEM_NAME").val("");
-            $('#addModal').modal('show');  
+            $('#addModal').modal('show');
         });
 
         $("#save_btn").click(function(e){
@@ -451,7 +451,7 @@
                     }
 
                     }
-                }); 
+                });
         });
         // end add team
 
@@ -461,7 +461,7 @@
             $("#NAME_UPDATE").val($(this).attr('val_name'));
             $('#updateModal').modal('show');
         });
-        
+
         $("#btn_update").click(function(e){
             e.preventDefault();
             jQuery.ajax({
@@ -480,7 +480,7 @@
                         toastr.success("تمت عملية الحفظ بنجاح");
 
                     }
-                }); 
+                });
         });
         //end edit team
 
@@ -500,7 +500,7 @@
                     data:{
                         "_token": "{{ csrf_token() }}",
                         "TEAM_ID":team_id,
-                        "ID_NUM": $("#ID_NUM").val(), 
+                        "ID_NUM": $("#ID_NUM").val(),
                         "MEM_NAME": $("#MEM_NAME").val(),
                         "ROLE":0,
                         "ACTIVE":1
@@ -508,14 +508,14 @@
                     dataType: 'json',
                     success :function (data) {
                         if(data.status ==1){
-                            $("#ID_NUM").val(""); 
+                            $("#ID_NUM").val("");
                             $("#MEM_NAME").val("");
                             toastr.success("تمت عملية الحفظ بنجاح");
                             draw_members(team_id);
 
                         }else if(data.status ==-1){
 
-                            $("#ID_NUM").val(""); 
+                            $("#ID_NUM").val("");
                             $("#MEM_NAME").val("");
                             toastr.info(data.msg);
                             draw_members(team_id);
@@ -527,7 +527,7 @@
                         dt.draw();
 
                     }
-                }); 
+                });
         });
 
         $("#ID_NUM").change(function(){
@@ -543,7 +543,7 @@
                 $("#MEM_NAME").val("");
             }
             }
-    
+
         });
         }
         });
@@ -556,16 +556,16 @@
                         $("#members_table").find('tbody').empty();
                         data.forEach((d, index)  => {
                             $("#members_table").find('tbody').append("<tr><td>"+(index+1)+"</td><td>"+d.MEM_NAME+"</td><td><a val-id='"+d.MEM_ID+"' val_name='"+d.MEM_NAME+"' val_team_id='"+team_id+"' class='btn btn-icon btn-xs btn-sm btn-danger btn-member-delete'><i class='fa fa-trash'></i></a></td><td></td></tr>");
-                    
+
                         });
                     }
-                }); 
+                });
 
             $('#viewModal').modal('show');
         }
         $(document).on('click', '.btn-member-delete', function (data, callbak) {
             const id =  $(this).attr('val-id');
-            const customerName = $(this).attr('val_name'); 
+            const customerName = $(this).attr('val_name');
             const team_id = $(this).attr('val_team_id');
             Swal.fire({
                 text: "هل أنت متأكد من عملية الحذف",
@@ -606,8 +606,8 @@
                         }
 
                     });
-                        
-                
+
+
                 } else if (result.dismiss === 'cancel') {
                     Swal.fire({
                         text: customerName + " تم الغاء عملية الحذف.",
@@ -626,7 +626,7 @@
 
 
 
-    
+
 
 
         //end show members
@@ -639,7 +639,7 @@
             }
         }
     }();
-    
+
     // On document ready
     KTUtil.onDOMContentLoaded(function () {
         KTDatatablesServerSide.init();
