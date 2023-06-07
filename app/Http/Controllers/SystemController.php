@@ -7,6 +7,7 @@ use App\Models\System;
 use App\Models\Member;
 use App\Models\SystemMembers;
 use App\Exports\ExportSystem;
+use App\Exports\ExportAll;
 use Maatwebsite\Excel\Facades\Excel;
 
 class SystemController extends Controller
@@ -201,15 +202,13 @@ class SystemController extends Controller
 
     public function exportSystems(Request $request)
     {
-
         return Excel::download(new ExportSystem($request->ACTIVE), 'Systems.xlsx');
+    }
 
 
-           // $x = $request->isactive;
-          //  return Excel::download(new ExportStudy($request->final_active,$request->title), 'studies.xlsx');
 
-        // dd($request->isactive);
-        //dd($request->all());
-
+    public function exportAll(Request $request)
+    {
+        return Excel::download(new ExportAll(), 'Systems.xlsx');
     }
 }

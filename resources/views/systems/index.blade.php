@@ -25,6 +25,13 @@
                         اكسل</button>
 
                 </div>
+
+                <div class="d-flex justify-content-end" data-kt-docs-table-toolbar="base">
+
+                    <button type="button" id="REPORT" class='btn btn-primary'><i class='fa fa-print'></i>تقرير تفصيلي
+                        </button>
+
+                </div>
                 <!--end::Search-->
 
                 <!--begin::Toolbar-->
@@ -699,6 +706,30 @@
                         responseType: 'blob'
                     },
                     success: function (data) {
+                            var a = document.createElement('a');
+                            var url = window.URL.createObjectURL(data);
+                            a.href = url;
+                            a.download = Date.now()+'system.xlsx';
+                            document.body.append(a);
+                            a.click();
+                            a.remove();
+                            window.URL.revokeObjectURL(url);
+                    }
+                });
+            });
+        });
+
+
+        $(document).ready(function() {
+            $('#REPORT').click(function() {
+                $.ajax({
+                    url: 'systems/exportAll',
+                    method: 'GET',
+                    xhrFields: {
+                        responseType: 'blob'
+                    },
+                    success: function (data) {
+                        alert();
                             var a = document.createElement('a');
                             var url = window.URL.createObjectURL(data);
                             a.href = url;

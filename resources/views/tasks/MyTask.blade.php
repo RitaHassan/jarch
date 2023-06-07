@@ -258,7 +258,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                     </div>
                 </th>
                 <th class="text-center fw-bolder">اسم الفريق</th>
-                <th class="text-center fw-bolder">اسم الموظف</th>
+                {{-- <th class="text-center fw-bolder">اسم الموظف</th> --}}
                 <th class="text-center fw-bolder">اسم النظام</th>
                 <th class="text-center fw-bolder">عنوان المهمة</th>
                 <th class="text-center fw-bolder">نوع المهمة</th>
@@ -326,7 +326,7 @@ $get_all_members= $tasks->get_all_members()['data'];
 
                     { data: 'ID',"searchable": false },
                     { data: 'TEAM',"searchable": false },
-                    { data: 'MEM_NAME',"searchable": false },
+                    // { data: 'MEM_NAME',"searchable": false },
                     { data: 'SYSTEM',"searchable": false },
                     { data: 'TITLE',"searchable": false },
                     { data: 'TASK_TYPE',"searchable": false ,render: function (data) {

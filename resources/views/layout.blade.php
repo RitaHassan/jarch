@@ -267,13 +267,12 @@
 {{--                                                         src="{{ asset('assets/media/icons/user.jpg') }}">--}}
 {{--                                                </div>--}}
                                                 <div class="col-12">
-                                                    {{-- <div><b></b></div>
-                                                    <div></div> --}}
+                                                   {{session('user')['MEM_NAME']}}
                                                 </div>
                                             </div>
                                             <div class="separator w-100 my-3"></div>
                                             <div class="row font-family-heavy">
-                                                <a href="#" onclick="" class="col">تسجيل
+                                                <a href="{{route('login.logout')}}" onclick="" class="col">تسجيل
                                                     الخروج</a>
                                                 <span id="logout-progress"
                                                       class="indicator-progress position-relative translate-middle col"
