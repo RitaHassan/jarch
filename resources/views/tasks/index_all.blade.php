@@ -434,7 +434,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                 <!--end::Menu item--> 
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}"  val_val="2" class="menu-link px-3 toggel" > <i class="fa fa-tasks me-2"></i>
+                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}"  val_val="2" class="menu-link px-3 wait" > <i class="fa fa-tasks me-2"></i>
                                             غير منجز
                                         </a>
                                     </div>
@@ -509,7 +509,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                 <!--end::Menu item--> 
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_val="2" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}" val_val="2" class="menu-link px-3 wait" > <i class="fa fa-times me-2"></i>
                                             غير منجز 
                                         </a>
                                     </div>
@@ -542,7 +542,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                 <!--end::Menu item--> 
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}"  val_val="2" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}"  val_val="2" class="menu-link px-3 wait" > <i class="fa fa-times me-2"></i>
                                             غير منجز 
                                         </a>
                                     </div>
@@ -576,7 +576,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                 <!--end::Menu item--> 
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}" val_val="2" class="menu-link px-3 toggel" > <i class="fa fa-tasks me-2"></i>
+                                        <a href="#" val_id="${data.ID}"  val_notes="${data.NOTES}" val_val="2" class="menu-link px-3 wait" > <i class="fa fa-tasks me-2"></i>
                                             غير منجز 
                                         </a>
                                     </div>
