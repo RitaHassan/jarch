@@ -691,9 +691,9 @@
 
         $(document).ready(function() {
             $('#print').click(function() {
-                //  var final_active = $('#final_active').val();
+                  var ACTIVE = $('#ACTIVE').val();
                 $.ajax({
-                    url: 'systems/exportSystems',
+                    url: 'systems/exportSystems?ACTIVE='+ACTIVE,
                     method: 'GET',
                     xhrFields: {
                         responseType: 'blob'

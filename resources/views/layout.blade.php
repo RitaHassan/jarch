@@ -89,7 +89,7 @@
 
                     <div class="font-family-medium menu menu-column menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500" id="#kt_aside_menu" data-kt-menu="true" data-kt-menu-expand="false">
                         <div class="menu-item">
-                            <a class="menu-link active" href="https://study.moi.gov.ps">
+                            <a class="menu-link active" href="http://127.0.0.1:8000/">
                                     <span class="menu-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                             <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">

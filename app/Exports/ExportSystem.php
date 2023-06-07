@@ -19,8 +19,11 @@ class ExportSystem implements FromView ,ShouldAutoSize,WithEvents
 
     use Exportable;
 
-    public function __construct()
+    protected $ACTIVE ;
+
+    public function __construct($ACTIVE)
     {
+        $this->ACTIVE = $ACTIVE;
 
     }
 
@@ -31,7 +34,7 @@ class ExportSystem implements FromView ,ShouldAutoSize,WithEvents
         ini_set('memory_limit', '-1');
         set_time_limit(0);
 
-        $systems = System::LOAD_DATA(null,0,10,null)['data'];
+        $systems = System::LOAD_DATA(null,0,10,$this->ACTIVE)['data'];
         return view('systems.export', [
             'systems' => $systems,
         ]);

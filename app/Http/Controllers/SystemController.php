@@ -202,7 +202,7 @@ class SystemController extends Controller
     public function exportSystems(Request $request)
     {
 
-        return Excel::download(new ExportSystem(), 'Systems.xlsx');
+        return Excel::download(new ExportSystem($request->ACTIVE), 'Systems.xlsx');
 
 
            // $x = $request->isactive;

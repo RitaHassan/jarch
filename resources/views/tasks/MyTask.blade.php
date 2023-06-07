@@ -795,7 +795,7 @@ $get_all_members= $tasks->get_all_members()['data'];
             var status = $(this).attr('val_val');
             jQuery.ajax({
                 type: "get",
-                url: 'tasks/change_status/'+id,
+                url: 'change_status/'+id,
                 data:{
                     "COMPLETION_STATUS": status,
                 },
@@ -813,6 +813,7 @@ $get_all_members= $tasks->get_all_members()['data'];
         });
 
         $(document).on('click', '.toggel_1', function (data, callbak) {
+            alert();
             $("#val_id_1").val($(this).attr('val_id'));
             $("#ACTUAL_START_DT_1").val($(this).attr('val_dat'));
             $("#toggel_1_Modal").modal("show");
@@ -823,7 +824,7 @@ $get_all_members= $tasks->get_all_members()['data'];
             var status = 4;
             jQuery.ajax({
                 type: "get",
-                url: 'tasks/change_status/'+id,
+                url: 'change_status/'+id,
                 data:{
                     "COMPLETION_STATUS": status,
                     "ACTUAL_START_DT" : $("#ACTUAL_START_DT").val(),
@@ -841,7 +842,7 @@ $get_all_members= $tasks->get_all_members()['data'];
             var status = 1;
             jQuery.ajax({
                 type: "get",
-                url: 'tasks/change_status_2/'+id,
+                url: 'change_status_2/'+id,
                 data:{
                     "COMPLETION_STATUS": status,
                     "ACTUAL_START_DT" : $("#ACTUAL_START_DT_1").val(),
@@ -900,7 +901,7 @@ $("button[data-dismiss=modal]").click(function()
                       //  alert(id);
                     jQuery.ajax({
                             type: "post",
-                            url: 'tasks/update_reason/'+id,
+                            url: 'update_reason/'+id,
                             data:{
                                 "_token": "{{ csrf_token() }}",
                                 "id": id,
@@ -927,7 +928,7 @@ $("button[data-dismiss=modal]").click(function()
                                         //  alert(id);
                                         jQuery.ajax({
                                                 type: "post",
-                                                url: 'tasks/update_reason/'+id,
+                                                url: 'update_reason/'+id,
                                                 data:{
                                                     "_token": "{{ csrf_token() }}",
                                                     "id": id,

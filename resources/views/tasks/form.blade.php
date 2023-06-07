@@ -6,7 +6,7 @@
                 <div class="card-header collapsible cursor-pointer rotate active" data-bs-toggle="collapse"
                     data-bs-target="#kt_docs_card_collapsible" aria-expanded="true">
                     <h3 class="card-title fw-bolder">
-   
+
 إضافة مهام الفريق                    </h3>
                     <div class="card-toolbar rotate-180">
                         <span class="svg-icon svg-icon-1">
@@ -47,33 +47,33 @@
                     </div>
                             <div class="col-xl-6 form-group mb-6">
                                 <label class="required form-label fw-bolder">اسم النظام</label>
-                
+
 
                                 <select name="SYSTEM_ID" id="SYSTEM_ID" class="form-control form-control-solid" >
                                     <option value="option_select" disabled selected>--اختر--</option>
                                     @foreach($systems as $m)
                                         <option value="{{ $m->ID }}" {{$tasks->SYSTEM_ID == $m->ID  ? 'selected' : ''}}>{{ $m->SYSTEM_NAME}}</option>
                                     @endforeach
-                                </select> 
+                                </select>
                             </div>
 
                             <div class="col-xl-6 form-group mb-6">
                                 <label class="required form-label fw-bolder">اسم الموظف</label>
                                 <select name="MEM_ID" id="MEM_ID" class="form-control form-control-solid" >
-                              
+
                                        <option value="option_select" disabled selected>--اختر--</option>
                                     @foreach($GET_MEMBERS as $m)
                                         <option value="{{ $m->ID }}" {{$tasks->MEM_ID == $m->ID  ? 'selected' : ''}}>{{ $m->MEM_NAME}}</option>
                                     @endforeach
-                                </select> 
+                                </select>
 
                                 </div>
 
-                          
-                              
+
+
                             <div class="col-xl-6 form-group mb-6">
                                 <label class="required form-label fw-bolder">عنوان المهمة </label>
-                                <input type="text"  id="TITLE" name="TITLE" value="{{old('TITLE',$tasks->TITLE)}}"  class="form-control form-control-solid" 
+                                <input type="text"  id="TITLE" name="TITLE" value="{{old('TITLE',$tasks->TITLE)}}"  class="form-control form-control-solid"
                                 placeholder="عنوان المهمة">
                             </div>
 
@@ -87,20 +87,14 @@
                                 <label class="form-label fw-bolder">الأولوية</label>
                                 <select name="PRIORITY" id="PRIORITY" class="form-control form-control-solid">
                                     <option value=""  selected>--اختر--</option>
-                                    <option value="1" @selected($tasks->PRIORITY == '1')>1</option>
-                                    <option value="2"  @selected($tasks->PRIORITY == '2')>2</option>
-                                    <option value="3"  @selected($tasks->PRIORITY == '3')>3</option>
-                                    <option value="4"  @selected($tasks->PRIORITY == '4')>4</option>
-                                    <option value="5"  @selected($tasks->PRIORITY == '5')>5</option>
-                                    <option value="6"  @selected($tasks->PRIORITY == '6')>6</option>
-                                    <option value="7"  @selected($tasks->PRIORITY == '7')>7</option>
-                                    <option value="8"  @selected($tasks->PRIORITY == '8')>8</option>
-                                    <option value="9"  @selected($tasks->PRIORITY == '9')>9</option>
-                                    <option value="10"  @selected($tasks->PRIORITY == '10')>10</option>
-                                    </select> 
+                                    <option value="1" @selected($tasks->PRIORITY == '1')>هام وعاجل</option>
+                                    <option value="2"  @selected($tasks->PRIORITY == '2')>متوسط</option>
+                                    <option selected value="3"  @selected($tasks->PRIORITY == '3') >عادي</option>
+
+                                    </select>
                                 </div>
 
-                                   
+
                                 <div class="col-xl-6 form-group mb-6">
                                     <label class="required form-label fw-bolder">مصدر المهمة</label>
                                     <select name="TASK_TYPE" id="TASK_TYPE" class="form-control form-control-solid" >
@@ -113,12 +107,12 @@
                                     <option value="6" @selected($tasks->TASK_TYPE == '6')>اختبار</option>
                                     <option value="7" @selected($tasks->TASK_TYPE == '7')>مراسلة</option>
                                     <option value="8" @selected($tasks->TASK_TYPE == '8')>أمن معلومات</option>
-                                    </select>  
+                                    </select>
                                 </div>
 
                                 <div class="col-xl-6 form-group mb-6">
                                     <label class="required form-label fw-bolder">تاريخ البدء المخطط له</label>
-                                    <input class="date2 form-control" type="text" name="PLANNED_START_DT" minlength="5" maxlength="200" 
+                                    <input class="date2 form-control" type="text" name="PLANNED_START_DT" minlength="5" maxlength="200"
                                     value="{{ old('PLANNED_START_DT', $tasks->PLANNED_START_DT) }}" autocomplete="off">
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
@@ -126,28 +120,28 @@
                                 </div>
                                 <div class="col-xl-6 form-group mb-6">
                                     <label class="required form-label fw-bolder">تاريخ الانتهاء المخطط له</label>
-                                    <input class="date2 form-control" type="text" name="PLANNED_FINISH_DT" minlength="5" maxlength="200" 
+                                    <input class="date2 form-control" type="text" name="PLANNED_FINISH_DT" minlength="5" maxlength="200"
                                     value="{{ old('PLANNED_FINISH_DT', $tasks->PLANNED_FINISH_DT) }}" autocomplete="off">
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </div>
                                 <div class="col-xl-6 form-group mb-6">
                                     <label class="form-label fw-bolder">تاريخ البدء الفعلي</label>
-                                    <input class="date2 form-control" type="text" name="ACTUAL_START_DT" minlength="5" maxlength="200" 
+                                    <input class="date2 form-control" type="text" name="ACTUAL_START_DT" minlength="5" maxlength="200"
                                     value="{{ old('ACTUAL_START_DT', $tasks->ACTUAL_START_DT) }}" autocomplete="off">
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </div>
                                 <div class="col-xl-6 form-group mb-6">
                                     <label class="form-label fw-bolder">تاريخ الانتهاء الفعلي</label>
-                                    <input class="date2 form-control" type="text" name="ACTUAL_FINISH_DT" minlength="5" maxlength="200" 
+                                    <input class="date2 form-control" type="text" name="ACTUAL_FINISH_DT" minlength="5" maxlength="200"
                                     value="{{ old('ACTUAL_FINISH_DT', $tasks->ACTUAL_FINISH_DT) }}" autocomplete="off">
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </div>
                                 <div class="col-xl-6 form-group mb-6">
                                     <label class="form-label fw-bolder">مدة الانجاز</label>
-                                      <input type="text"  id="COMPLETION_PERIOD" name="COMPLETION_PERIOD" value="{{old('COMPLETION_PERIOD',$tasks->COMPLETION_PERIOD)}}"  class="form-control form-control-solid" 
+                                      <input type="text"  id="COMPLETION_PERIOD" name="COMPLETION_PERIOD" value="{{old('COMPLETION_PERIOD',$tasks->COMPLETION_PERIOD)}}"  class="form-control form-control-solid"
                                       placeholder="مدة الانجاز">
                                 </div>
 
@@ -159,7 +153,7 @@
                                         <option value="2" @selected($tasks->DURATION_TYPE == '2')>ساعة</option>
                                         <option value="3" @selected($tasks->DURATION_TYPE == '3')>ساعتين</option>
                                         <option value="4" @selected($tasks->DURATION_TYPE == '4')>شهر</option>
-                                    
+
                                       </select>
                                 </div>
 
@@ -172,7 +166,7 @@
                                         <option value="2" @selected($tasks->COMPLETION_STATUS == '2')>غير منجز</option>
                                         <option value="3" @selected($tasks->COMPLETION_STATUS == '3')>مؤجل</option>
                                         <option value="4" @selected($tasks->COMPLETION_STATUS == '4')>قيد العمل</option>
-                                    
+
                                       </select>
                                 </div>
 
@@ -189,7 +183,7 @@
                                             <span></span>
                                            لا
                                         </label>
-                                       
+
                                     </div>
                                 </div>
 
@@ -200,7 +194,7 @@
                                 rows="3">{{ old('NOTES',$tasks->NOTES)}}</textarea>
                                 </div>
 
-                                                                                                                                                                                                   
+
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fa fa-check me-2"></i> حفظ
@@ -256,4 +250,3 @@
 
 @push('css')
 @endpush
-        
