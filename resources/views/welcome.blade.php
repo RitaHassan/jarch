@@ -1,9 +1,9 @@
 @extends('layout')
 @section('contents')
 @php
-use App\Models\statistics;
+use App\Models\Statistics;
 
-$statistics = new statistics();
+$statistics = new Statistics();
 @endphp
 
 

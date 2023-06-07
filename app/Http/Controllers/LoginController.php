@@ -23,7 +23,7 @@ class LoginController extends Controller
             'MEM_NAME' => $user->MEM_NAME,
             'TEAM_ID' => $user->TEAM_ID
         ]);
-        return redirect(route('welcome'));
+        return redirect(route('index'));
        }else{
         throw ValidationException::withMessages([
             'id_no' => 'بيانات خاطئة',

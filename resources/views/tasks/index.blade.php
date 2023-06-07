@@ -253,10 +253,7 @@ $get_all_members= $tasks->get_all_members()['data'];
         <!--begin::Datatable-->
         <table id="kt_datatable_example_1" class="table align-middle table-row-bordered fs-6 gy-5">
             <thead>
-                <th class="w-10px pe-2 text-center fw-bolder">
-                    <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
-                    </div>
-                </th>
+                
                 <th class="text-center fw-bolder">اسم الفريق</th>
                 <th class="text-center fw-bolder">اسم الموظف</th>
                 <th class="text-center fw-bolder">اسم النظام</th>
@@ -272,6 +269,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                 <th class="text-center fw-bolder">نوع مدة الانجاز</th>
                 <th class="text-center fw-bolder">حالة الانجاز</th>
                 <th class="text-center fw-bolder">داخل الخطة</th>
+                <th class="text-center fw-bolder">الأولوية</th>
                 <th class="text-center fw-bolder">الاجراءات</th>
             </thead>
 
@@ -323,7 +321,6 @@ $get_all_members= $tasks->get_all_members()['data'];
                 },
                 columns: [
         
-                    { data: 'ID',"searchable": false },
                     { data: 'TEAM',"searchable": false },
                     { data: 'MEM_NAME',"searchable": false },
                     { data: 'SYSTEM',"searchable": false },
@@ -352,64 +349,75 @@ $get_all_members= $tasks->get_all_members()['data'];
                     { data: 'YEAR',"searchable": false },
                     { data: 'COMPLETION_PERIOD',"searchable": false },
                     { data: 'DURATION_TYPE',"searchable": false,render: function (data) {
-                
-                    if(data == '1'){
+                        if(data == '1'){
                             return "يوم";
                         }else if(data=='2'){
                             return "ساعة";
                         }else{
                           return "شهر";
                         }
-                    }},
+                        }
+                    },
       
-                        {
-                            data: null,
-                            'bSort': true,
+                    {
+                        data: null,
+                        'bSort': true,
+                        render: function(data) {
+                            if (data.COMPLETION_STATUS == 0) {
+                                return '<span class="badge badge-secondary val">غير محدد</span>';
+                            }
+                            if (data.COMPLETION_STATUS == 1) {
+                                return '<span class="badge badge-info val">منجز</span>';
+                            }
+                            if (data.COMPLETION_STATUS == 2) {
+                                return '<span class="badge badge-danger val ">غير منجز</span>';
+                            }
+                            if (data.COMPLETION_STATUS== 3) {
+                                return '<span class="badge badge-primary val ">مؤجل</span>';
+                            }   
+                                if (data.COMPLETION_STATUS== 4) {
+                                return '<span class="badge badge-success val">قيد العمل</span>';
+                            }
+                            if (data.COMPLETION_STATUS== 5) {
+                                return '<span class="badge badge-danger val">الغاء</span>';
+                            }
+                            
+                            return '-';
+                        },"searchable": false
+
+
+                    },
+                    { data: 'IN_PLAN',"searchable": false,render: function (data) {
+                            if(data == '1'){
+                                return "نعم";
+                            }else{
+                                return "لا";
+                            }
+                        } 
+                    },
+                    {
+                            data: "PRIORITY",
+                            'bSort': false,
                             render: function(data) {
-                                if (data.COMPLETION_STATUS == 0) {
-                                    return '<span class="badge badge-secondary val">غير محدد</span>';
+                                if (data == 1) {
+                                    return '<span class="badge badge-danger">هام وعاجل</span>';
                                 }
-                                if (data.COMPLETION_STATUS == 1) {
-                                    return '<span class="badge badge-info val">منجز</span>';
+                                if (data == 2) {
+                                    return '<span class="badge badge-warninng">متوسط</span>';
                                 }
-                                if (data.COMPLETION_STATUS == 2) {
-                                    return '<span class="badge badge-danger val ">غير منجز</span>';
+                                if (data == 3) {
+                                    return '<span class="badge badge-info">عادي</span>';
                                 }
-                                if (data.COMPLETION_STATUS== 3) {
-                                    return '<span class="badge badge-primary val ">مؤجل</span>';
-                                }   
-                                  if (data.COMPLETION_STATUS== 4) {
-                                    return '<span class="badge badge-success val">قيد العمل</span>';
-                                }
-                                if (data.COMPLETION_STATUS== 5) {
-                                    return '<span class="badge badge-danger val">الغاء</span>';
-                                }
-                                
+                               
                                 return '-';
                             },"searchable": false
 
 
-                        },
-                    { data: 'IN_PLAN',"searchable": false,render: function (data) {
-                        if(data == '1'){
-                            return "نعم";
-                        }else{
-                            return "لا";
-                        }
-                    } },
+                    },
                     { data: null,"searchable": false }
                 ],
                 columnDefs: [
-                    {
-                        targets: 0,
-                        orderable: false,
-                        render: function (data) {
-                            return `
-                                <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                    <input class="form-check-input" type="checkbox" value="${data}" />
-                                </div>`;
-                        }
-                    },
+                   
                     {
                     targets: -1,
                     data: null,
@@ -673,7 +681,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                     const parent = e.target.closest('tr');
     
                     // Get customer name
-                    const customerName = parent.querySelectorAll('td')[1].innerText;
+                    const customerName = parent.querySelectorAll('td')[4].innerText;
                     const id = $(this).attr('val_id'); 
                     // SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
                     Swal.fire({

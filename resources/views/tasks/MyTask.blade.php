@@ -272,6 +272,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                 <th class="text-center fw-bolder">نوع مدة الانجاز</th>
                 <th class="text-center fw-bolder">حالة الانجاز</th>
                 <th class="text-center fw-bolder">داخل الخطة</th>
+                <th class="text-center fw-bolder">الأولوية</th>
                 <th class="text-center fw-bolder">الاجراءات</th>
             </thead>
 
@@ -397,19 +398,29 @@ $get_all_members= $tasks->get_all_members()['data'];
                             return "لا";
                         }
                     } },
+                    {
+                            data: "PRIORITY",
+                            'bSort': false,
+                            render: function(data) {
+                                if (data == 1) {
+                                    return '<span class="badge badge-danger">هام وعاجل</span>';
+                                }
+                                if (data == 2) {
+                                    return '<span class="badge badge-warninng">متوسط</span>';
+                                }
+                                if (data == 3) {
+                                    return '<span class="badge badge-info">عادي</span>';
+                                }
+                               
+                                return '-';
+                            },"searchable": false
+
+
+                    },
                     { data: null,"searchable": false }
                 ],
                 columnDefs: [
-                    {
-                        targets: 0,
-                        orderable: false,
-                        render: function (data) {
-                            return `
-                                <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                    <input class="form-check-input" type="checkbox" value="${data}" />
-                                </div>`;
-                        }
-                    },
+                   
                     {
                     targets: -1,
                     data: null,
@@ -673,7 +684,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                     const parent = e.target.closest('tr');
 
                     // Get customer name
-                    const customerName = parent.querySelectorAll('td')[1].innerText;
+                    const customerName = parent.querySelectorAll('td')[4].innerText;
                     const id = $(this).attr('val_id');
                     // SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
                     Swal.fire({
