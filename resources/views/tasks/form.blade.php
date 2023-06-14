@@ -148,9 +148,9 @@
                                 <div class="col-xl-6 form-group mb-6">
                                     <label class="form-label fw-bolder">نوع مدة الانجاز</label>
                                     <select name="DURATION_TYPE" id="DURATION_TYPE" class="form-control form-control-solid" >
-                                        <option value="-1" disabled selected>--اختر--</option>
+                                        <option value="-1" disabled >--اختر--</option>
                                         <option value="1" @selected($tasks->DURATION_TYPE == '1')>يوم</option>
-                                        <option value="2" @selected($tasks->DURATION_TYPE == '2')>ساعة</option>
+                                        <option value="2" selected @selected($tasks->DURATION_TYPE == '2')>ساعة</option>
                                         <option value="3" @selected($tasks->DURATION_TYPE == '3')>ساعتين</option>
                                         <option value="4" @selected($tasks->DURATION_TYPE == '4')>شهر</option>
 
