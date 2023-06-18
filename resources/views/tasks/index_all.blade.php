@@ -178,10 +178,21 @@ $get_all_members= $tasks->get_all_members()['data'];
                     <div class="row">
                         <div class="col-sm-3">
                             <div class="form-group">
+                                <select name="TEAM_ID" id="TEAM_ID" class="form-control form-control-solid w-250px ps-15" >
+                                    <option value=""  selected>--اختر--</option>
+                                    @foreach($teams as $team)
+                                        <option value="{{ $team->ID }}">{{ $team->NAME}}</option>
+                                    @endforeach
+                                </select> 
+
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
                                 <select name="SYSTEM_ID" id="SYSTEM_ID" class="form-control form-control-solid w-250px ps-15" >
                                     <option value=""  selected>--اختر--</option>
                                     @foreach($systems as $system)
-                                        <option value="{{ $system->ID }}" {{$system->ID}}>{{ $system->SYSTEM_NAME}}</option>
+                                        <option value="{{ $system->ID }}">{{ $system->SYSTEM_NAME}}</option>
                                     @endforeach
                                 </select> 
 
@@ -316,11 +327,11 @@ $get_all_members= $tasks->get_all_members()['data'];
                     d.MEM_ID= $('#MEM_ID').val(); 
                     d.SYSTEM_ID= $('#SYSTEM_ID').val();
                     d.COMPLETION_STATUS = $('#COMPLETION_STATUS').val();
+                    d.TEAM_ID = $('#TEAM_ID').val();
                 }
                 },
                 columns: [
         
-                    { data: 'ID',"searchable": false },
                     { data: 'TEAM',"searchable": false },
                     { data: 'MEM_NAME',"searchable": false },
                     { data: 'SYSTEM',"searchable": false },
@@ -791,6 +802,9 @@ $get_all_members= $tasks->get_all_members()['data'];
             dt.draw();
         });
         $('#SYSTEM_ID').on('change', function (data, callbak) {
+            dt.draw();
+        });
+        $('#TEAM_ID').on('change', function (data, callbak) {
             dt.draw();
         });
         $('#COMPLETION_STATUS' ).on('change', function (data, callbak) {

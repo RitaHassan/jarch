@@ -72,11 +72,11 @@ class Tasks extends MYModel
         return ['data'=>$data,'recordsFiltered'=>$P_recordsTotal,'recordsTotal'=>$P_recordsTotal];
     }
 
-    public static function LOAD_DATA_ALL($P_TITLE,$P_ACTUAL_FINISH_MONTH,$P_ACTUAL_FINISH_YEAR,$P_MEM_ID,$P_COMPLETION_STATUS,$P_SYATEM_ID,$P_STRAT,$P_LENGTH){
+    public static function LOAD_DATA_ALL($P_TITLE,$P_ACTUAL_FINISH_MONTH,$P_ACTUAL_FINISH_YEAR,$P_MEM_ID,$P_COMPLETION_STATUS,$P_SYATEM_ID,$P_TEAM_ID,$P_STRAT,$P_LENGTH){
         $cursor =null;
         $data = array();
         $P_recordsTotal = 0;
-        $stmt = DB::getPdo()->prepare("begin TASKS_PKG.LOAD_DATA_ALL(:P_TITLE,:P_ACTUAL_FINISH_MONTH,:P_ACTUAL_FINISH_YEAR,:P_MEM_ID,:P_COMPLETION_STATUS,:P_USER_ID,:P_SYATEM_ID,:P_STRAT,:P_LENGTH,:P_recordsTotal,:out_cursor); end;");
+        $stmt = DB::getPdo()->prepare("begin TASKS_PKG.LOAD_DATA_ALL(:P_TITLE,:P_ACTUAL_FINISH_MONTH,:P_ACTUAL_FINISH_YEAR,:P_MEM_ID,:P_COMPLETION_STATUS,:P_USER_ID,:P_SYATEM_ID,:P_TEAM_ID,:P_STRAT,:P_LENGTH,:P_recordsTotal,:out_cursor); end;");
         $stmt->bindValue(':P_TITLE', $P_TITLE, PDO::PARAM_NULL);
         $stmt->bindValue(':P_ACTUAL_FINISH_MONTH', $P_ACTUAL_FINISH_MONTH, PDO::PARAM_NULL);
         $stmt->bindValue(':P_ACTUAL_FINISH_YEAR', $P_ACTUAL_FINISH_YEAR, PDO::PARAM_NULL);
@@ -84,6 +84,7 @@ class Tasks extends MYModel
         $stmt->bindValue(':P_COMPLETION_STATUS', $P_COMPLETION_STATUS, PDO::PARAM_NULL);
         $stmt->bindValue(':P_USER_ID', session('user')['user_id'], PDO::PARAM_NULL);  
         $stmt->bindValue(':P_SYATEM_ID', $P_SYATEM_ID, PDO::PARAM_NULL);
+        $stmt->bindValue(':P_TEAM_ID', $P_TEAM_ID, PDO::PARAM_NULL);
         $stmt->bindValue(':P_STRAT', $P_STRAT, PDO::PARAM_NULL);
         $stmt->bindValue(':P_LENGTH', $P_LENGTH, PDO::PARAM_NULL);
         $stmt->bindParam(':P_recordsTotal', $P_recordsTotal, PDO::PARAM_INT);

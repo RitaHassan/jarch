@@ -8,6 +8,7 @@ use App\Models\SystemMembers;
 use App\Models\System;
 use App\Exports\ExportTask;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Team;
 
 class TasksController extends Controller
 {
@@ -25,7 +26,8 @@ class TasksController extends Controller
     public function index_all()
     {  
         $systems= System::LOAD_DATA(null,0,100,1)['data'];
-        return view('tasks.index_all',compact('systems'));
+        $teams = Team::LOAD_DATA(null,0,100,1)['data'];
+        return view('tasks.index_all',compact('systems','teams'));
     }
 
     /**
@@ -74,7 +76,7 @@ class TasksController extends Controller
         if($request->search['value'] != ""){
             $search = $request->search['value'];
         }
-       return json_encode(Tasks::LOAD_DATA($search,$request->ACTUAL_FINISH_MONTH,$request->ACTUAL_FINISH_YEAR,$request->MEM_ID,$request->COMPLETION_STATUS,$request->SYSTEM_ID,$request->start,$request->length));
+       return json_encode(Tasks::LOAD_DATA_ALL($search,$request->ACTUAL_FINISH_MONTH,$request->ACTUAL_FINISH_YEAR,$request->MEM_ID,$request->COMPLETION_STATUS,$request->SYSTEM_ID,$request->TEAM_ID,$request->start,$request->length));
 
     }
     /**
