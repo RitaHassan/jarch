@@ -200,6 +200,12 @@ class SystemController extends Controller
     }
 
 
+    public function systems($member_id)
+    {
+       $data = System::systems($member_id);
+       return $data['data'];
+    }
+
     public function exportSystems(Request $request)
     {
         return Excel::download(new ExportSystem($request->ACTIVE), 'Systems.xlsx');
