@@ -56,7 +56,7 @@
                             <br>
 
                             <div class="form-group" id="">
-                               
+
                             </div>
                             </form>
                         </div>
@@ -71,11 +71,11 @@
                     <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
                     </div>
                 </th>
-                <th class="text-center fw-bolder">#</th>
-                  <th class="text-center fw-bolder">رقم هوية الموظف</th> 
+
+                  <th class="text-center fw-bolder">رقم هوية الموظف</th>
                 <th class="text-center fw-bolder">اسم الموظف</th>
-                <th class="text-center fw-bolder">الفرق التابع لها الموظف</th>
-                 <th class="text-center fw-bolder">الصفة</th>
+                <th class="text-center fw-bolder">اسم الفريق</th>
+                <th class="text-center fw-bolder">تاريخ اضافة الموظف</th>
                 <th class="text-center fw-bolder">الاجراءات</th>
             </thead>
 
@@ -90,14 +90,14 @@
 <script>
 
     "use strict";
-    
+
     // Class definition
     var KTDatatablesServerSide = function () {
         // Shared variables
         var table;
         var dt;
         var filterPayment;
-    
+
         // Private functions
         var initDatatable = function () {
             dt = $("#kt_datatable_example_1").DataTable({
@@ -120,9 +120,9 @@
                 url: '{{ route('members.datatable') }}',
                 "data": function ( d ) {
                     // d.ID_NO = $('#ID_NO').val();
-                    // d.CARD_ID = $('#CARD_ID').val(); 
+                    // d.CARD_ID = $('#CARD_ID').val();
                     // d.LICENSE_NUMBER = $('#LICENSE_NUMBER').val();
-                    // d.LICENSE_EXPIRATION_DATE = $('#LICENSE_EXPIRATION_DATE').val(); 
+                    // d.LICENSE_EXPIRATION_DATE = $('#LICENSE_EXPIRATION_DATE').val();
                     // d.NAME = $('#NAME').val();
                 }
                 },
@@ -131,19 +131,20 @@
                     { data: 'ID_NUM',"searchable": false },
                     { data: 'MEM_NAME',"searchable": false },
                     { data: 'NAME',"searchable": false },
-                    { data: 'ROLE',"searchable": false ,render: function (data) {
-                        if(data == '1'){
-                            return "مشرف";
-                        }else{
-                            return "عضو";
-                        }
-                    }},
+                    { data: 'CREATED_AT_MEM',"searchable": false },
+                    // { data: 'ROLE',"searchable": false ,render: function (data) {
+                    //     if(data == '1'){
+                    //         return "مشرف";
+                    //     }else{
+                    //         return "عضو";
+                    //     }
+                    // }},
 
                     { data: null,"searchable": false }
                 ],
                 columnDefs: [
                     {
-                    
+
                     },
                     {
                     targets: -1,
@@ -156,11 +157,11 @@
 
                         return `\
                         <!--begin::Menu item-->
-                              
+
                             <!--end::Menu-->
                             <a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start" data-kt-menu-flip="top-end">
                                 ...
-                              
+
                             </a>
                             <!--begin::Menu-->
                             <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
@@ -178,7 +179,7 @@
                                     </a>
                                 </div>
                                 <!--end::Menu item-->
-                
+
                             </div>
                             <!--end::Menu-->
                         `;
@@ -190,17 +191,17 @@
                     $(row).find('td:eq(4)').attr('data-filter', data.CreditCardType);
                 }
             });
-    
+
             table = dt.$;
-    
+
             // Re-init functions on every table re-draw -- more info: https://datatables.net/reference/event/draw
             dt.on('draw', function () {
                 handleDeleteRows();
                 KTMenu.createInstances();
             });
         }
-    
-        
+
+
         var handleSearchDatatable = function () {
             const filterSearch = document.querySelector('[data-kt-docs-table-filter="search"]');
             filterSearch.addEventListener('keyup', function (e) {
@@ -213,22 +214,22 @@
         //     dt.search('').draw();
         // });
     }
-    
+
         // Delete user
         var handleDeleteRows = () => {
             // Select all delete buttons
             const deleteButtons = document.querySelectorAll('[data-kt-docs-table-filter="delete_row"]');
-    
+
             deleteButtons.forEach(d => {
                 // Delete button on click
                 d.addEventListener('click', function (e) {
                     e.preventDefault();
                     // Select parent row
                     const parent = e.target.closest('tr');
-    
+
                     // Get customer name
                     const customerName = parent.querySelectorAll('td')[1].innerText;
-                    const id = $(this).attr('val_id'); 
+                    const id = $(this).attr('val_id');
                  //   alert(id);
                     // SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
                     Swal.fire({
@@ -267,8 +268,8 @@
                                 });
                                 }
                             });
-                               
-                     
+
+
                         } else if (result.dismiss === 'cancel') {
                             Swal.fire({
                                 text: customerName + " تم الغاء عملية الحذف.",
@@ -285,8 +286,8 @@
             });
         }
 
-       
-    
+
+
         // Public methods
         return {
             init: function () {
@@ -296,13 +297,13 @@
             }
         }
     }();
-    
+
     // On document ready
     KTUtil.onDOMContentLoaded(function () {
         KTDatatablesServerSide.init();
     });
-    
-    
-    
+
+
+
     </script>
 @endpush

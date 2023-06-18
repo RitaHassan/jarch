@@ -82,7 +82,7 @@ class Tasks extends MYModel
         $stmt->bindValue(':P_ACTUAL_FINISH_YEAR', $P_ACTUAL_FINISH_YEAR, PDO::PARAM_NULL);
         $stmt->bindValue(':P_MEM_ID', $P_MEM_ID, PDO::PARAM_NULL);
         $stmt->bindValue(':P_COMPLETION_STATUS', $P_COMPLETION_STATUS, PDO::PARAM_NULL);
-        $stmt->bindValue(':P_USER_ID', session('user')['user_id'], PDO::PARAM_NULL);  
+        $stmt->bindValue(':P_USER_ID', session('user')['user_id'], PDO::PARAM_NULL);
         $stmt->bindValue(':P_SYATEM_ID', $P_SYATEM_ID, PDO::PARAM_NULL);
         $stmt->bindValue(':P_TEAM_ID', $P_TEAM_ID, PDO::PARAM_NULL);
         $stmt->bindValue(':P_STRAT', $P_STRAT, PDO::PARAM_NULL);
@@ -98,12 +98,14 @@ class Tasks extends MYModel
         return ['data'=>$data,'recordsFiltered'=>$P_recordsTotal,'recordsTotal'=>$P_recordsTotal];
     }
 
- 
+
     public static function Save_($array_in){
         $stmt = DB::getPdo()->prepare("begin TASKS_PKG.SAVE(:P_SYSTEM_ID,:P_DESCRIPTION,:P_PRIORITY,:P_TASK_TYPE,:P_PLANNED_START_DT,:P_PLANNED_FINISH_DT,:P_ACTUAL_START_DT,:P_ACTUAL_FINISH_DT,:P_COMPLETION_PERIOD,:P_COMPLETION_STATUS,:P_NOTES,:P_IN_PLAN,:p_created_by,:P_TITLE,:P_DURATION_TYPE,:P_MEM_ID,:P_STATUS,:P_MSG); end;");
       /*  foreach ($array_in as $key => $value) {
             $stmt->bindValue(":$key",$value , PDO::PARAM_NULL);
-        }*/
+        // }*/
+        // dd($array_in);
+
         $stmt->bindValue(':P_SYSTEM_ID', $array_in['P_SYSTEM_ID'], PDO::PARAM_NULL);
         $stmt->bindValue(':P_DESCRIPTION', $array_in['P_DESCRIPTION'], PDO::PARAM_NULL);
         $stmt->bindValue(':P_PRIORITY', $array_in['P_PRIORITY'], PDO::PARAM_NULL);
@@ -119,6 +121,7 @@ class Tasks extends MYModel
         $stmt->bindValue(':P_CREATED_BY', $array_in['P_CREATED_BY'], PDO::PARAM_NULL);
         $stmt->bindValue(':P_TITLE', $array_in['P_TITLE'], PDO::PARAM_NULL);
         $stmt->bindValue(':P_DURATION_TYPE', $array_in['P_DURATION_TYPE'], PDO::PARAM_NULL);
+       // dd($P_DURATION_TYPE);
         $stmt->bindValue(':P_MEM_ID', $array_in['P_MEM_ID'], PDO::PARAM_NULL);
         $stmt->bindParam(':P_STATUS', $P_STATUS,PDO::PARAM_INT|PDO::PARAM_INPUT_OUTPUT, -1);
         $stmt->bindParam(':P_MSG', $P_MSG, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
@@ -302,8 +305,10 @@ class Tasks extends MYModel
         }
 
         public static function change_status_2($P_ID,$P_COMPLETION_STATUS,$P_ACTUAL_START_DT,$P_ACTUAL_FINISH_DT,$P_COMPLETION_PERIOD,$P_DURATION_TYPE){
+
             $cursor =null;
             $data = array();
+
             $stmt = DB::getPdo()->prepare("begin TASKS_PKG.change_status_v2(:P_ID,:P_COMPLETION_STATUS,:P_ACTUAL_START_DT,:P_ACTUAL_FINISH_DT,:P_COMPLETION_PERIOD,:P_DURATION_TYPE,:P_STATUS,:P_MSG); end;");
             $stmt->bindValue(':P_ID', $P_ID, PDO::PARAM_NULL);
             $stmt->bindValue(':P_COMPLETION_STATUS', $P_COMPLETION_STATUS, PDO::PARAM_NULL);
@@ -311,6 +316,7 @@ class Tasks extends MYModel
             $stmt->bindValue(':P_ACTUAL_FINISH_DT', $P_ACTUAL_FINISH_DT, PDO::PARAM_NULL);
             $stmt->bindValue(':P_COMPLETION_PERIOD', $P_COMPLETION_PERIOD, PDO::PARAM_NULL);
             $stmt->bindValue(':P_DURATION_TYPE', $P_DURATION_TYPE, PDO::PARAM_NULL);
+
             $stmt->bindParam(':P_STATUS', $P_STATUS,PDO::PARAM_INT|PDO::PARAM_INPUT_OUTPUT, -1);
             $stmt->bindParam(':P_MSG', $P_MSG, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
 
@@ -362,7 +368,7 @@ class Tasks extends MYModel
             $stmt->bindValue(':P_ACTUAL_FINISH_YEAR', $P_ACTUAL_FINISH_YEAR, PDO::PARAM_NULL);
             $stmt->bindValue(':P_MEM_ID', $P_MEM_ID, PDO::PARAM_NULL);
             $stmt->bindValue(':P_COMPLETION_STATUS', $P_COMPLETION_STATUS, PDO::PARAM_NULL);
-            $stmt->bindValue(':P_USER_ID', session('user')['user_id'], PDO::PARAM_NULL);  
+            $stmt->bindValue(':P_USER_ID', session('user')['user_id'], PDO::PARAM_NULL);
             $stmt->bindValue(':P_SYATEM_ID', $P_SYATEM_ID, PDO::PARAM_NULL);
             $stmt->bindParam(':out_cursor', $cursor, PDO::PARAM_STMT, 0, \OCI_B_CURSOR);
             $stmt->execute();
@@ -374,7 +380,7 @@ class Tasks extends MYModel
             return ['data'=>$data,'recordsFiltered'=>$P_recordsTotal,'recordsTotal'=>$P_recordsTotal];
         }
 
-        
+
         public static function ALL_DATA($P_TITLE,$P_ACTUAL_FINISH_MONTH,$P_ACTUAL_FINISH_YEAR,$P_MEM_ID,$P_COMPLETION_STATUS,$P_SYATEM_ID){
             $cursor =null;
             $data = array();
@@ -385,7 +391,7 @@ class Tasks extends MYModel
             $stmt->bindValue(':P_ACTUAL_FINISH_YEAR', $P_ACTUAL_FINISH_YEAR, PDO::PARAM_NULL);
             $stmt->bindValue(':P_MEM_ID', $P_MEM_ID, PDO::PARAM_NULL);
             $stmt->bindValue(':P_COMPLETION_STATUS', $P_COMPLETION_STATUS, PDO::PARAM_NULL);
-            $stmt->bindValue(':P_USER_ID', session('user')['user_id'], PDO::PARAM_NULL);  
+            $stmt->bindValue(':P_USER_ID', session('user')['user_id'], PDO::PARAM_NULL);
             $stmt->bindValue(':P_SYATEM_ID', $P_SYATEM_ID, PDO::PARAM_NULL);
             $stmt->bindParam(':out_cursor', $cursor, PDO::PARAM_STMT, 0, \OCI_B_CURSOR);
             $stmt->execute();
@@ -397,7 +403,7 @@ class Tasks extends MYModel
             return ['data'=>$data,'recordsFiltered'=>$P_recordsTotal,'recordsTotal'=>$P_recordsTotal];
         }
 
-    
+
         public static function UPDATE_NOTES($array_in){
             $stmt = DB::getPdo()->prepare("begin TASKS_PKG.UPDATE_NOTES(:P_ID,:P_NOTES,:P_STATUS,:P_MSG); end;");
             $stmt->bindValue(':P_ID', $array_in['P_ID'], PDO::PARAM_NULL);
@@ -412,5 +418,5 @@ class Tasks extends MYModel
             ];
             return $res;
     }
-       
+
 }

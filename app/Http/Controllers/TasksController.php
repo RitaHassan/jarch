@@ -18,13 +18,13 @@ class TasksController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {  
+    {
         $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
         return view('tasks.index',compact('systems'));
     }
 
     public function index_all()
-    {  
+    {
         $systems= System::LOAD_DATA(null,0,100,1)['data'];
         $teams = Team::LOAD_DATA(null,0,100,1)['data'];
         return view('tasks.index_all',compact('systems','teams'));
@@ -96,7 +96,7 @@ class TasksController extends Controller
            'TASK_TYPE'=>'required',
            'PLANNED_START_DT'=>'sometimes',
            'PLANNED_FINISH_DT'=>'sometimes',
-           'ACTUAL_START_DT'=>'sometimes|date_format:d/m/Y',
+           'ACTUAL_START_DT'=>'sometimes',
            'ACTUAL_FINISH_DT'=>'nullable|date_format:d/m/Y|after_or_equal:PLANNED_START_DT',
            'COMPLETION_PERIOD'=>'sometimes',
            'COMPLETION_STATUS'=>'sometimes',
@@ -109,7 +109,11 @@ class TasksController extends Controller
 
         ]);
 
+
+
      $tasks = new Tasks();
+
+
      $request->request->add(['CREATED_BY' => 1]);
      $result = Tasks::Save_(change_key($request->only($tasks->getFillable())));
        // return back()->with('success', 'تمت عملية الحفظ بنجاح');

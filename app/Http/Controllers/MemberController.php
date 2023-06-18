@@ -30,11 +30,12 @@ class MemberController extends Controller
           $member2= $member->teamSelect()['data'];
 
           return view('members.form',compact('member','member2'));
-        
+
     }
 
     public function datatable(Request $request)
     {
+
         $search = null;
         if($request->search['value'] != ""){
             $search = $request->search['value'];
@@ -49,7 +50,7 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-     
+
       $request->validate([
             'ID_NUM' => 'required|numeric|digits:9',
             'MEM_NAME' => 'required',
@@ -72,7 +73,7 @@ class MemberController extends Controller
         }
      /*   header('Content-Type: application/json');
         echo json_encode($result);*/
-        
+
 
     }
 
@@ -105,10 +106,10 @@ class MemberController extends Controller
     //  //  dd('request');
 
     //     $member = new Member();
-    //     //dd((int)$id); 
+    //     //dd((int)$id);
     //     $id1 = (int)$id;
     //     $request->request->add([ 'CREATED_BY' => 1 , 'TEAM_ID'=>$id1]);
-       
+
     //     $result = Member::Save_by_id(change_key($request->only($member->getFillable())));
     //    // dd($request->only($member->getFillable()));
     //     if($result['STATUS']==1){
@@ -154,17 +155,17 @@ class MemberController extends Controller
             'ROLE' => 'sometimes',
             'TEAM_ID' => 'sometimes'
         ]);
-       
+
 
         $member = new Member();
         $member = $member->find_by_id($id);
         if (!$member) {
             abort(404);
         }
-      
+
         $request->request->add(['UPDATED_BY' => 1,'ID'=>$id]);
         $result = Member::Update_(change_key($request->only((new Member())->getFillable())));
-      
+
        // return back()->with('success', 'تمت عملية الحفظ بنجاح');
 
        if($result['STATUS']==1){
@@ -195,7 +196,7 @@ class MemberController extends Controller
 
     public function teamSelect()
     {
-       
+
        $member = new Member();
        $X= $member->teamSelect();
         echo json_decode($X);
@@ -220,12 +221,12 @@ class MemberController extends Controller
 
     public function memberTeamSelect($P_member_id)
     {
-       
+
        $member = new Member();
        $X= $member->memberTeamSelect($P_member_id);
         echo json_decode($X);
 
-    
-    }  
-    
+
+    }
+
 }

@@ -729,7 +729,7 @@
                         responseType: 'blob'
                     },
                     success: function (data) {
-                        alert();
+                       // alert();
                             var a = document.createElement('a');
                             var url = window.URL.createObjectURL(data);
                             a.href = url;
