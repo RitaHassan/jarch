@@ -58,7 +58,7 @@ class TasksController extends Controller
         if($request->search['value'] != ""){
             $search = $request->search['value'];
         }
-        $PLANNED_START_DT = explode('-',$request->PLANNED_START_DT);  
+        $PLANNED_START_DT = explode('-',$request->PLANNED_START_DT);
         $PLANNED_START_DT_FIRST = isset($PLANNED_START_DT[0]) ? trim($PLANNED_START_DT[0]):null;
         $PLANNED_START_DT_LAST = isset($PLANNED_START_DT[1]) ? trim($PLANNED_START_DT[1]):null;
 
@@ -66,6 +66,32 @@ class TasksController extends Controller
         $ACTUAL_START_DT_FIRST = isset($ACTUAL_START_DT[0]) ? trim($ACTUAL_START_DT[0]):null;
         $ACTUAL_START_DT_LAST = isset($ACTUAL_START_DT[1]) ? trim($ACTUAL_START_DT[1]):null;
        return json_encode(Tasks::LOAD_DATA($search,$request->MEM_ID,$request->COMPLETION_STATUS,$request->SYSTEM_ID,
+       $PLANNED_START_DT_FIRST,$PLANNED_START_DT_LAST,$ACTUAL_START_DT_FIRST,$ACTUAL_START_DT_LAST,$request->start,$request->length));
+
+    }
+
+
+    public function mydatatable(Request $request)
+    {
+        $search = null;
+        $search2 = null;
+        $search3 = null;
+        $search4 = null;
+        $search5 = null;
+        $tasks = new Tasks();
+        $get_all_members= $tasks->get_all_members()['data'];
+
+        if($request->search['value'] != ""){
+            $search = $request->search['value'];
+        }
+        $PLANNED_START_DT = explode('-',$request->PLANNED_START_DT);
+        $PLANNED_START_DT_FIRST = isset($PLANNED_START_DT[0]) ? trim($PLANNED_START_DT[0]):null;
+        $PLANNED_START_DT_LAST = isset($PLANNED_START_DT[1]) ? trim($PLANNED_START_DT[1]):null;
+
+        $ACTUAL_START_DT = explode('-',$request->ACTUAL_START_DT);
+        $ACTUAL_START_DT_FIRST = isset($ACTUAL_START_DT[0]) ? trim($ACTUAL_START_DT[0]):null;
+        $ACTUAL_START_DT_LAST = isset($ACTUAL_START_DT[1]) ? trim($ACTUAL_START_DT[1]):null;
+       return json_encode(Tasks::LOAD_DATA($search,session('user')['user_id'],$request->COMPLETION_STATUS,$request->SYSTEM_ID,
        $PLANNED_START_DT_FIRST,$PLANNED_START_DT_LAST,$ACTUAL_START_DT_FIRST,$ACTUAL_START_DT_LAST,$request->start,$request->length));
 
     }
@@ -163,7 +189,7 @@ class TasksController extends Controller
         if (!$tasks || $tasks->MEM_ID !=  session('user')['user_id']) {
             abort(404);
         }
-    
+
         $GET_MEMBERS = SystemMembers::get_systems_by_id($tasks->SYSTEM_ID)['data'];
         return view('tasks.form',compact('tasks','systems','GET_MEMBERS'));
     }
@@ -303,7 +329,7 @@ class TasksController extends Controller
 
     public function export(Request $request)
     {
-        $PLANNED_START_DT = explode('-',$request->PLANNED_START_DT);  
+        $PLANNED_START_DT = explode('-',$request->PLANNED_START_DT);
         $PLANNED_START_DT_FIRST = isset($PLANNED_START_DT[0]) ? trim($PLANNED_START_DT[0]):null;
         $PLANNED_START_DT_LAST = isset($PLANNED_START_DT[1]) ? trim($PLANNED_START_DT[1]):null;
 

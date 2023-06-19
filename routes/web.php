@@ -67,6 +67,7 @@ Route::get('tasks/giveMembers/{TEAM_ID}', 'TasksController@giveMembers')->name('
 Route::get('tasks/sysName_mem/{ID_NUM}', 'TasksController@sysName_mem')->name('tasks.sysName_mem');
 Route::get('tasks/MyTasks', 'TasksController@MyTasks')->name('tasks.MyTasks');
 Route::get('tasks/GetMyTask', 'TasksController@GetMyTask')->name('tasks.GetMyTask');
+Route::get('tasks/mydatatable', 'TasksController@mydatatable')->name('tasks.mydatatable');
 Route::get('tasks/datatable', 'TasksController@datatable')->name('tasks.datatable');
 Route::get('tasks/datatable_all', 'TasksController@datatable_all')->name('tasks.datatable_all');
 Route::get('tasks/export', 'TasksController@export')->name('tasks.export');

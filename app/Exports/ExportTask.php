@@ -31,7 +31,7 @@ class ExportTask implements FromView ,ShouldAutoSize,WithEvents
        $this->MEM_ID = $MEM_ID;
        $this->COMPLETION_STATUS = $COMPLETION_STATUS;
        $this->SYSTEM_ID = $SYSTEM_ID;
-       
+
        $this->PLANNED_START_DT_FIRST = $PLANNED_START_DT_FIRST;
        $this->PLANNED_START_DT_LAST = $PLANNED_START_DT_LAST;
        $this->ACTUAL_START_DT_FIRST = $ACTUAL_START_DT_FIRST;
