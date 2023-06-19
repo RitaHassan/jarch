@@ -95,6 +95,7 @@ class TasksController extends Controller
      */
     public function store(Request $request)
     {
+        dd(';');
 
      $request->validate([
 
@@ -124,6 +125,7 @@ class TasksController extends Controller
 
      $request->request->add(['CREATED_BY' => 1]);
      $result = Tasks::Save_(change_key($request->only($tasks->getFillable())));
+     dd('ll');
        // return back()->with('success', 'تمت عملية الحفظ بنجاح');
        if($result['STATUS']==1){
         return back()->with('success',$result['MSG'] );
@@ -318,9 +320,10 @@ class TasksController extends Controller
 
     public function MyTasks()
     {
-
+        $tasks = new Tasks();
         $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
-        return view('tasks.MyTask',compact('systems'));
+        $GET_MEMBERS= $tasks->GET_MEMBERS()['data'];
+        return view('tasks.MyTask',compact('systems','GET_MEMBERS','tasks'));
     }
 
 

@@ -121,6 +121,25 @@ class System extends MYModel
         return ['data'=>$data,'recordsFiltered'=>$P_recordsTotal,'recordsTotal'=>$P_recordsTotal];
     }
 
+    public static function systems($P_MEMBER_ID){
+        $cursor =null;
+        $data = array();
+        // dd($P_ACTIVE);
+        $P_recordsTotal = 0;
+        //dd($P_NAME);
+        $stmt = DB::getPdo()->prepare("begin SYSTEM_PKG.SYSTEMS(:P_MEMBER_ID,:out_cursor); end;");
+        $stmt->bindValue(':P_MEMBER_ID', $P_MEMBER_ID, PDO::PARAM_NULL);
+        $stmt->bindParam(':out_cursor', $cursor, PDO::PARAM_STMT, 0, \OCI_B_CURSOR);
+        $stmt->execute();
+        oci_execute($cursor, OCI_DEFAULT);
+        while($row = oci_fetch_object($cursor, OCI_ASSOC | OCI_RETURN_NULLS)){
+            $data[] = $row;
+        }
+        oci_free_cursor($cursor);
+
+        return ['data'=>$data];
+    }
+
 
 
 }

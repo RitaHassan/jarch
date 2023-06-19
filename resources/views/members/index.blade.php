@@ -83,6 +83,42 @@
         <!--end::Datatable-->
     </div>
 </div>
+
+
+<div id="toggel_1_Modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">منجز</h3>
+
+            </div>
+            <div class="modal-body">
+
+                    <input type="hidden" id="val_id_1"/>
+                    <input type="hidden" id="val_dat"/>
+                    <table class="table table-bordered table-hover table-striped dataTable" id="systems_table">
+
+                        <thead>
+                            <tr>
+                            <th>#</th>
+                            <th>النظام</th>
+                            <th></th>
+                            </tr>
+                          </thead>
+                          <tbody >
+                          </tbody>
+                    </table>
+
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="toggel_1_save" data-dismiss="modal">حفظ</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @push('javascript')
 
@@ -179,10 +215,16 @@
                                     </a>
                                 </div>
                                 <!--end::Menu item-->
+                                <!--end::Menu-->
+                            <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_dat="${data.ID}" val_val="1" class="menu-link px-3 toggel_1" > <i class="fa fa-tasks me-2"></i>
+                                             عرض الانظمة
+                                        </a>
+                                    </div>
 
                             </div>
-                            <!--end::Menu-->
-                        `;
+
+                                    `;
                     },
                 },
                 ],
@@ -302,6 +344,107 @@
     KTUtil.onDOMContentLoaded(function () {
         KTDatatablesServerSide.init();
     });
+
+
+
+    $(document).on('click', '.toggel_1', function (data, callbak) {
+            $("#val_id_1").val($(this).attr('val_id'));
+            $("#ACTUAL_START_DT_1").val($(this).attr('val_dat'));
+            var member_id = $(this).attr('val_id');
+               /// alert(member_id);
+            $("#toggel_1_Modal").modal("show");
+            jQuery.ajax({
+                    type: "get",
+                    url: 'systems/systems/'+ member_id,
+                    dataType: 'json',
+                    success :function (data) {
+                        $("#systems_table").find('tbody').empty();
+                        data.forEach((d, index)  => {
+                            $("#systems_table").find('tbody').append("<tr><td>"+(index+1)+"</td><td>"+d.SYSTEM_NAME+"</td> <td><a val-id='"+d.IDS+"' val_name='"+d.SYSTEM_NAME+"' val_member_id='"+d.ID+"' class='btn btn-icon btn-xs btn-sm btn-danger btn-member-delete'><i class='fa fa-trash'></i></a></td><td></td></tr>");
+
+                        });
+                    }
+                });
+        });
+
+
+        function draw_members (member_id){
+            jQuery.ajax({
+                    type: "get",
+                    url: 'systems/systems/'+ member_id,
+                    dataType: 'json',
+                    success :function (data) {
+                        $("#systems_table").find('tbody').empty();
+                        data.forEach((d, index)  => {
+                            $("#systems_table").find('tbody').append("<tr><td>"+(index+1)+"</td><td>"+member_id+"</td> <td><a val-id='"+d.IDS+"' val_name='"+SYSTEM_NAME+"' val_member_id='"+ID+"' class='btn btn-icon btn-xs btn-sm btn-danger btn-member-delete'><i class='fa fa-trash'></i></a></td><td></td></tr>");
+
+                            // $("#systems_table").find('tbody').append("<tr><td>"+(index+1)+"</td><td>"+d.MEM_NAME+"</td><td><a val-id='"+d.MEM_ID+"' val_name='"+d.MEM_NAME+"' val_team_id='"+team_id+"' class='btn btn-icon btn-xs btn-sm btn-danger btn-member-delete'><i class='fa fa-trash'></i></a></td><td><a val-id='"+d.MEM_ID+"' val_name='"+d.MEM_NAME+"' val_team_id='"+team_id+"' class='btn btn-icon btn-xs btn-sm btn-danger btn-member-delete'><i class='fa fa-trash'></i></a></td></tr>");
+
+                        });
+                    }
+                });
+
+            $('#viewModal').modal('show');
+        }
+
+        $(document).on('click', '.btn-member-delete', function (data, callbak) {
+            const id =  $(this).attr('val-id');
+            const customerName = $(this).attr('val_name');
+            const member_id = $(this).attr('val_member_id');
+            Swal.fire({
+                text: "هل أنت متأكد من عملية الحذف",
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: "نعم , احذف!",
+                cancelButtonText: "لا , الغاء",
+                customClass: {
+                    confirmButton: "btn fw-bold btn-danger",
+                    cancelButton: "btn fw-bold btn-active-light-primary"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    // Simulate delete request -- for demo purpose only
+                    jQuery.ajax({
+                        type: "DELETE",
+                        url: 'systems/members/'+id,
+                        data:{
+                            "_token": "{{ csrf_token() }}",
+                        },
+                        dataType: 'json',
+                        success :function (data) {
+                            Swal.fire({
+                            text: "تم حذف  " + customerName + "!.",
+                            icon: "success",
+                            buttonsStyling: false,
+                            confirmButtonText: "حسنًا ، موافق!",
+                            customClass: {
+                                confirmButton: "btn fw-bold btn-primary",
+                            }
+                        }).then(function () {
+                            // delete row data from server and re-draw datatable
+                            draw_members(member_id);
+                        });
+
+                        }
+
+                    });
+
+
+                } else if (result.dismiss === 'cancel') {
+                    Swal.fire({
+                        text: customerName + " تم الغاء عملية الحذف.",
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: "حسنًا ، موافق!",
+                        customClass: {
+                            confirmButton: "btn fw-bold btn-primary",
+                        }
+                    });
+                }
+
+            });
+        });
 
 
 
