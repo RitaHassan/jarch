@@ -58,7 +58,15 @@ class TasksController extends Controller
         if($request->search['value'] != ""){
             $search = $request->search['value'];
         }
-       return json_encode(Tasks::LOAD_DATA($search,$request->ACTUAL_FINISH_MONTH,$request->ACTUAL_FINISH_YEAR,$request->MEM_ID,$request->COMPLETION_STATUS,$request->SYSTEM_ID,$request->start,$request->length));
+        $PLANNED_START_DT = explode('-',$request->PLANNED_START_DT);  
+        $PLANNED_START_DT_FIRST = isset($PLANNED_START_DT[0]) ? trim($PLANNED_START_DT[0]):null;
+        $PLANNED_START_DT_LAST = isset($PLANNED_START_DT[1]) ? trim($PLANNED_START_DT[1]):null;
+
+        $ACTUAL_START_DT = explode('-',$request->ACTUAL_START_DT);
+        $ACTUAL_START_DT_FIRST = isset($ACTUAL_START_DT[0]) ? trim($ACTUAL_START_DT[0]):null;
+        $ACTUAL_START_DT_LAST = isset($ACTUAL_START_DT[1]) ? trim($ACTUAL_START_DT[1]):null;
+       return json_encode(Tasks::LOAD_DATA($search,$request->MEM_ID,$request->COMPLETION_STATUS,$request->SYSTEM_ID,
+       $PLANNED_START_DT_FIRST,$PLANNED_START_DT_LAST,$ACTUAL_START_DT_FIRST,$ACTUAL_START_DT_LAST,$request->start,$request->length));
 
     }
 
@@ -289,6 +297,14 @@ class TasksController extends Controller
 
     public function export(Request $request)
     {
+        $PLANNED_START_DT = explode('-',$request->PLANNED_START_DT);  
+        $PLANNED_START_DT_FIRST = isset($PLANNED_START_DT[0]) ? trim($PLANNED_START_DT[0]):null;
+        $PLANNED_START_DT_LAST = isset($PLANNED_START_DT[1]) ? trim($PLANNED_START_DT[1]):null;
+
+        $ACTUAL_START_DT = explode('-',$request->ACTUAL_START_DT);
+        $ACTUAL_START_DT_FIRST = isset($ACTUAL_START_DT[0]) ? trim($ACTUAL_START_DT[0]):null;
+        $ACTUAL_START_DT_LAST = isset($ACTUAL_START_DT[1]) ? trim($ACTUAL_START_DT[1]):null;
+        
         return Excel::download(new ExportTask(null,null,null,null,null,null,0), 'teams.xlsx');
     }
 
@@ -327,9 +343,12 @@ class TasksController extends Controller
 
     public function update_notes ($id,Request $request)
     {
-        $tasks = new Tasks();
-        $tasks = $tasks->find_by_id($id);
-        if (!$tasks) {
+        $task = new Tasks();
+        $task = $task->find_by_id($id);
+        if (!$task) {
+            abort(404);
+        }
+        if($task->MEM_ID !=  session('user')['user_id']){
             abort(404);
         }
 
