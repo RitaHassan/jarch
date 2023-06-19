@@ -95,8 +95,7 @@ class TasksController extends Controller
      */
     public function store(Request $request)
     {
-        dd(';');
-
+ 
      $request->validate([
 
            'SYSTEM_ID'=>'required',
@@ -125,7 +124,6 @@ class TasksController extends Controller
 
      $request->request->add(['CREATED_BY' => 1]);
      $result = Tasks::Save_(change_key($request->only($tasks->getFillable())));
-     dd('ll');
        // return back()->with('success', 'تمت عملية الحفظ بنجاح');
        if($result['STATUS']==1){
         return back()->with('success',$result['MSG'] );
@@ -156,11 +154,11 @@ class TasksController extends Controller
     {
         $tasks = new Tasks();
         $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
-        // $member2= $tasks->teamSelect()['data'];
         $tasks  = $tasks->find_by_id($id);
-        if (!$tasks) {
+        if (!$tasks || $tasks->MEM_ID !=  session('user')['user_id']) {
             abort(404);
         }
+    
         $GET_MEMBERS = SystemMembers::get_systems_by_id($tasks->SYSTEM_ID)['data'];
         return view('tasks.form',compact('tasks','systems','GET_MEMBERS'));
     }
@@ -197,7 +195,7 @@ class TasksController extends Controller
 
         $tasks = new Tasks();
         $tasks = $tasks->find_by_id($id);
-        if (!$tasks) {
+        if (!$tasks || $tasks->MEM_ID !=  session('user')['user_id']) {
             abort(404);
         }
 
@@ -221,6 +219,7 @@ class TasksController extends Controller
      */
     public function destroy($id)
     {
+        dd('تم ايقاف الفنكشن ');
         $tasks = new Tasks();
         if ($tasks->find_by_id($id)) {
             $tasks->delete_by_id($id);
@@ -306,13 +305,12 @@ class TasksController extends Controller
         $ACTUAL_START_DT = explode('-',$request->ACTUAL_START_DT);
         $ACTUAL_START_DT_FIRST = isset($ACTUAL_START_DT[0]) ? trim($ACTUAL_START_DT[0]):null;
         $ACTUAL_START_DT_LAST = isset($ACTUAL_START_DT[1]) ? trim($ACTUAL_START_DT[1]):null;
-        
-        return Excel::download(new ExportTask(null,null,null,null,null,null,0), 'teams.xlsx');
+        return Excel::download(new ExportTask($request->title,$request->MEM_ID,$request->COMPLETION_STATUS,$request->SYSTEM_ID,$PLANNED_START_DT_FIRST,$PLANNED_START_DT_LAST,$ACTUAL_START_DT_FIRST,$ACTUAL_START_DT_LAST,0), 'teams.xlsx');
     }
 
     public function export_ll(Request $request)
     {
-        return Excel::download(new ExportTask(null,null,null,null,null,null,1), 'teams.xlsx');
+        // return Excel::download(new ExportTask(null,null,null,null,null,null,1), 'teams.xlsx');
     }
 
 
