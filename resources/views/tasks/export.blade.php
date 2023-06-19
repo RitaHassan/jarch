@@ -10,8 +10,6 @@
             <th>تاريخ الانتهاء المخطط له</th>
             <th>تاريخ البدء الفعلي</th>
             <th>تاريخ الانتهاء الفعلي</th>
-            <td>الشهر</td>
-            <td>السنة</td>
             <td>مدة الانجاز	</td>
             <td>نوع مدة الانجاز	</td>
             <td>حالة الانجاز</td>
@@ -42,8 +40,6 @@
             <th>{{$task->PLANNED_FINISH_DT}}</th>
             <th>{{$task->ACTUAL_START_DT}}</th>
             <th>{{$task->ACTUAL_FINISH_DT}}</th>
-            <td>{{$task->MONTH}}</td>
-            <td>{{$task->YEAR}}</td>
             <td>{{$task->COMPLETION_PERIOD}}</td>
             <td>@if ($task->DURATION_TYPE == 1)
                 يوم    

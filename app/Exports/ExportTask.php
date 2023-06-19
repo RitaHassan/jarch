@@ -17,20 +17,26 @@ class ExportTask implements FromView ,ShouldAutoSize,WithEvents
     use Exportable;
 
     public $search;
-    public $ACTUAL_FINISH_MONTH;
-    public $ACTUAL_FINISH_YEAR;
     public $MEM_ID;
     public $COMPLETION_STATUS;
     public $SYSTEM_ID;
+    public $PLANNED_START_DT_FIRST;
+    public $PLANNED_START_DT_LAST;
+    public $ACTUAL_START_DT_FIRST;
+    public $ACTUAL_START_DT_LAST;
     public $all;
-    public function __construct($search,$ACTUAL_FINISH_MONTH,$ACTUAL_FINISH_YEAR,$MEM_ID,$COMPLETION_STATUS,$SYSTEM_ID,$all=0)
+    public function __construct($search,$MEM_ID,$COMPLETION_STATUS,$SYSTEM_ID,$PLANNED_START_DT_FIRST,$PLANNED_START_DT_LAST,$ACTUAL_START_DT_FIRST,$ACTUAL_START_DT_LAST,$all=0)
     {
        $this->search = $search;
-       $this->ACTUAL_FINISH_MONTH = $ACTUAL_FINISH_MONTH;
-       $this->ACTUAL_FINISH_YEAR = $ACTUAL_FINISH_YEAR;
        $this->MEM_ID = $MEM_ID;
        $this->COMPLETION_STATUS = $COMPLETION_STATUS;
        $this->SYSTEM_ID = $SYSTEM_ID;
+       
+       $this->PLANNED_START_DT_FIRST = $PLANNED_START_DT_FIRST;
+       $this->PLANNED_START_DT_LAST = $PLANNED_START_DT_LAST;
+       $this->ACTUAL_START_DT_FIRST = $ACTUAL_START_DT_FIRST;
+       $this->ACTUAL_START_DT_LAST = $ACTUAL_START_DT_LAST;
+
        $this->all = $all;
     }
 
@@ -44,11 +50,10 @@ class ExportTask implements FromView ,ShouldAutoSize,WithEvents
         ini_set('memory_limit', '-1');
         set_time_limit(0);
         if($this->all ==0){
-            $tasks = Tasks::ALL_DATA($this->search,$this->ACTUAL_FINISH_MONTH,$this->ACTUAL_FINISH_YEAR,$this->MEM_ID,$this->COMPLETION_STATUS,$this->SYSTEM_ID)['data'];
+            $tasks = Tasks::ALL_DATA($this->search,$this->MEM_ID,$this->COMPLETION_STATUS,$this->SYSTEM_ID,$this->PLANNED_START_DT_FIRST,$this->PLANNED_START_DT_LAST,$this->ACTUAL_START_DT_FIRST,$this->ACTUAL_START_DT_LAST)['data'];
         }else{
-            $tasks = Tasks::ALL_DATA($this->search,$this->ACTUAL_FINISH_MONTH,$this->ACTUAL_FINISH_YEAR,$this->MEM_ID,$this->COMPLETION_STATUS,$this->SYSTEM_ID)['data'];
+            $tasks = Tasks::ALL_DATA($this->search,$this->MEM_ID,$this->COMPLETION_STATUS,$this->SYSTEM_ID,$this->PLANNED_START_DT_FIRST,$this->PLANNED_START_DT_LAST,$this->ACTUAL_START_DT_FIRST,$this->ACTUAL_START_DT_LAST)['data'];
         }
-       
         return view('tasks.export', [
             'tasks' => $tasks,
         ]);

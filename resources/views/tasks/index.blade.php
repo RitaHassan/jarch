@@ -178,6 +178,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                     <div class="row">
                         <div class="col-sm-3">
                             <div class="form-group">
+                                <label for="">المبادرة</label>
                                 <select name="SYSTEM_ID" id="SYSTEM_ID" class="form-control form-control-solid w-250px ps-15" >
                                     <option value=""  selected>--اختر--</option>
                                     @foreach($systems as $system)
@@ -189,6 +190,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
+                                <label for="">الأعضاء</label>
                                 <select name="MEM_ID" id="MEM_ID" class="form-control form-control-solid w-250px ps-15"  data-kt-docs-table-filter="search5">
                                     <option value=""  selected>--اختر--</option>
                                     @foreach($get_all_members as $member)
@@ -200,42 +202,37 @@ $get_all_members= $tasks->get_all_members()['data'];
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                <input type="text" data-kt-docs-table-filter="search" class="form-control form-control-solid w-250px ps-15" placeholder="عنوان المهمة" >
+                                <label for="">العنوان</label>
+                                <input type="text" data-kt-docs-table-filter="search" id="task_titel" class="form-control form-control-solid w-250px ps-15" placeholder="عنوان المهمة" >
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                {{-- <input type="text"     placeholder="شهر" > --}}
-                                <select name="" id="ACTUAL_FINISH_MONTH" class="form-control form-control-solid w-250px ps-15" data-kt-docs-table-filter="search2">
-                                    <option value="">-- شهر --</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
-                                    <option value="10">10</option>
-                                    <option value="11">11</option>
-                                    <option value="12">12</option>
-                                </select>
+                                <label for="">تاريخ المخطط له</label>
+                                <div class="controls">
+                                    <div class="input-prepend input-group">
+                                        <span class="add-on input-group-addon" id="remove_PLANNED_START_DT"><i class="fa fa-trash"></i></span>
+                                        <input class="form-control form-control-solid" placeholder="تاريخ المخطط له" id="PLANNED_START_DT"/> 
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                         <div class="col-sm-3">
                             <div class="form-group">
-                                {{-- <input type="text"  placeholder="سنة" > --}}
-                                <select data-kt-docs-table-filter="search3"  id="ACTUAL_FINISH_YEAR" class="form-control form-control-solid w-250px ps-15">
-                                    <option value="">-- سنة --</option>
-                                    <option value="2023">2023</option>
-                                </select>
+                                <label for="">تاريخ الانجاز</label>
+                     
+                                <div class="controls">
+                                    <div class="input-prepend input-group">
+                                        <span class="add-on input-group-addon" id="remove_ACTUAL_START_DT"><i class="fa fa-trash"></i></span>
+                                        <input class="form-control form-control-solid" placeholder="تاريخ  الانجاز" id="ACTUAL_START_DT_"/>                                </div>
+                                    </div>
+
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-sm-3">
                             <div class="form-group">
+                                <label for="">الحالة</label>
                                 <select name="COMPLETION_STATUS" id="COMPLETION_STATUS" class="form-control form-control-solid w-250px ps-15" data-kt-docs-table-filter="search4" >
                                     <option value="-1" disabled selected>--اختر--</option>
                                     <option value="">غير محدد</option>
@@ -247,9 +244,11 @@ $get_all_members= $tasks->get_all_members()['data'];
                             </div>
                         </div>
                     </div>
+                    
                 </form>
             </div>
         </div>
+        
         <!--begin::Datatable-->
         <table id="kt_datatable_example_1" class="table align-middle table-row-bordered fs-6 gy-5">
             <thead>
@@ -263,8 +262,6 @@ $get_all_members= $tasks->get_all_members()['data'];
                 <th class="text-center fw-bolder">تاريخ الانتهاء المخطط له</th>
                 <th class="text-center fw-bolder">تاريخ البدء الفعلي</th>
                 <th class="text-center fw-bolder">تاريخ الانتهاء الفعلي</th>
-                <th class="text-center fw-bolder">الشهر</th>
-                <th class="text-center fw-bolder">السنة</th>
                 <th class="text-center fw-bolder">مدة الانجاز</th>
                 <th class="text-center fw-bolder">نوع مدة الانجاز</th>
                 <th class="text-center fw-bolder">حالة الانجاز</th>
@@ -312,11 +309,12 @@ $get_all_members= $tasks->get_all_members()['data'];
                 ajax: {
                 url: '{{ route('tasks.datatable') }}',
                 "data": function ( d ) {
-                    d.ACTUAL_FINISH_MONTH = $('#ACTUAL_FINISH_MONTH').val();
-                    d.ACTUAL_FINISH_YEAR= $('#ACTUAL_FINISH_YEAR').val();
                     d.MEM_ID= $('#MEM_ID').val();
                     d.SYSTEM_ID= $('#SYSTEM_ID').val();
                     d.COMPLETION_STATUS = $('#COMPLETION_STATUS').val();
+                    d.PLANNED_START_DT = $("#PLANNED_START_DT").val();
+                    d.ACTUAL_START_DT = $("#ACTUAL_START_DT_").val();
+
                 }
                 },
                 columns: [
@@ -345,8 +343,6 @@ $get_all_members= $tasks->get_all_members()['data'];
                     { data: 'PLANNED_FINISH_DT',"searchable": false },
                     { data: 'ACTUAL_START_DT',"searchable": false },
                     { data: 'ACTUAL_FINISH_DT',"searchable": false },
-                    { data: 'MONTH',"searchable": false },
-                    { data: 'YEAR',"searchable": false },
                     { data: 'COMPLETION_PERIOD',"searchable": false },
                     { data: 'DURATION_TYPE',"searchable": false,render: function (data) {
                         if(data == '1'){
@@ -431,6 +427,9 @@ $get_all_members= $tasks->get_all_members()['data'];
                         var toggel_text="";
                         var toggel_icon="check";
                         var action ="";
+                        if(data.ID_NUM !=  {{ session('user')['ID_NUM'] }}){
+                            return '<i class="fa fa-eye-slash me-2"></i>';
+                        }
                        if(data.COMPLETION_STATUS == 1){
                         action = `\
                                  <!--begin::Menu item-->
@@ -607,13 +606,6 @@ $get_all_members= $tasks->get_all_members()['data'];
                                     </a>
                                 </div>
                                 <!--end::Menu item-->
-                                <!--begin::Menu item-->
-                                <div class="menu-item px-3">
-                                    <a href="#" val_id="${data.ID}" class="menu-link px-3" data-kt-docs-table-filter="delete_row"> <i class="fa fa-times me-2"></i>
-                                        حذف
-                                    </a>
-                                </div>
-                                <!--end::Menu item-->
                                 `+action+
                                 `/
                                  <!--begin::Menu item-->
@@ -656,16 +648,16 @@ $get_all_members= $tasks->get_all_members()['data'];
              }
             var handleSearchDatatable2 = function () {
             const filterSearch2 = document.querySelector('[data-kt-docs-table-filter="search2"]');
-            filterSearch2.addEventListener('keyup', function (x) {
-                dt.draw();
-            });
+            // filterSearch2.addEventListener('keyup', function (x) {
+                // dt.draw();
+            // });
         }
 
         var handleSearchDatatable3 = function () {
-            const filterSearch3 = document.querySelector('[data-kt-docs-table-filter="search3"]');
-            filterSearch3.addEventListener('keyup', function (x) {
-                 dt.draw();
-             });
+            // const filterSearch3 = document.querySelector('[data-kt-docs-table-filter="search3"]');
+            // filterSearch3.addEventListener('keyup', function (x) {
+            //      dt.draw();
+            //  });
         }
 
         // Delete user
@@ -869,31 +861,49 @@ $get_all_members= $tasks->get_all_members()['data'];
                 }
             });
         });
-
-
+     
+       
         $("#save_wait").click(function(){
-                        var id = $("#wait_id").val();
-                        jQuery.ajax({
-                            type: "post",
-                            url: 'tasks/update_notes/'+id,
-                            data:{
-                                "_token": "{{ csrf_token() }}",
-                                "id": id,
-                                "NOTES":tinyMCE.editors[$('#DELAIED_REASON').attr('id')].getContent(),
-                                "status" :$("#status_wait").val(),
-                                "UPDATED_BY":1
-                            },
-                            dataType: 'json',
-                            success :function (data) {
-                                dt.draw();
-                                toastr.success("تمت عملية الحفظ بنجاح");
+            var id = $("#wait_id").val();
+            jQuery.ajax({
+                type: "post",
+                url: 'tasks/update_notes/'+id,
+                data:{
+                    "_token": "{{ csrf_token() }}",
+                    "id": id,
+                    "NOTES":tinyMCE.editors[$('#DELAIED_REASON').attr('id')].getContent(),
+                    "status" :$("#status_wait").val(),
+                    "UPDATED_BY":1
+                },
+                dataType: 'json',
+                success :function (data) {
+                    dt.draw();
+                    toastr.success("تمت عملية الحفظ بنجاح");
 
-                                   }
-                        });
+                        }
+            });
 
 
-                    });
+        });
+        $(document).on('click', '.applyBtn', function (data, callbak) {
+            dt.draw();
+        });
+        $("#remove_PLANNED_START_DT").click(function(){
+            $("#PLANNED_START_DT").val("");
+            dt.draw();
+          
+        });
+        $("#remove_ACTUAL_START_DT").click(function(){
+            $("#ACTUAL_START_DT_").val("");
+            dt.draw();
+        });
+      
 
+        // $("#ACTUAL_START_DT_").change(function(){
+        //     dt.draw();
+        // });
+
+   
 
         // Public methods
         return {
@@ -990,11 +1000,6 @@ $(document).on('click', '.cancel', function (data, callbak) {
             });
         });
 
-        /*
-                    d.= ;
-                    d.= ;
-                    d.= ;
-                    d. = ;*/
 
         $("#export").click(function(e){
             e.preventDefault();
@@ -1002,11 +1007,13 @@ $(document).on('click', '.cancel', function (data, callbak) {
                     type: "get",
                     url: 'tasks/export',
                     data:{
-                        "ACTUAL_FINISH_MONTH": $('#ACTUAL_FINISH_MONTH').val(),
-                        "ACTUAL_FINISH_YEAR":$('#ACTUAL_FINISH_YEAR').val(),
                         "MEM_ID":$('#MEM_ID').val(),
                         "SYSTEM_ID":$('#SYSTEM_ID').val(),
-                        "COMPLETION_STATUS":$('#COMPLETION_STATUS').val()
+                        "COMPLETION_STATUS":$('#COMPLETION_STATUS').val(),
+                        "PLANNED_START_DT" : $("#PLANNED_START_DT").val(),
+                        "ACTUAL_START_DT" : $("#ACTUAL_START_DT_").val(),
+                        "COMPLETION_STATUS" : $("#COMPLETION_STATUS").val(),
+                        "title" : $("#task_titel").val()
                                      },
                                      xhrFields: {
                             responseType: 'blob'
@@ -1026,6 +1033,28 @@ $(document).on('click', '.cancel', function (data, callbak) {
 
 
             });
+
+    </script>
+    <script>
+        var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+        var start = new Date(y, m, 1);
+        var end  = new Date(y, m + 1, 0);
+        function cb(start, end) {
+            $("#PLANNED_START_DT").html(start.format("MMMM D, YYYY") + " - " + end.format("MMMM D, YYYY"));
+        }
+        $("#PLANNED_START_DT").daterangepicker({
+            startDate: start,
+            endDate: end,
+        
+        }, cb);
+
+      
+
+        $("#ACTUAL_START_DT_").daterangepicker();
+        $("#ACTUAL_START_DT_").val("");
+  
+
+         
 
     </script>
 @endpush

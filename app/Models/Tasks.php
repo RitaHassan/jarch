@@ -47,18 +47,23 @@ class Tasks extends MYModel
         $this->table_name = $this->table_names['tasks'];
     }
 
-    public static function LOAD_DATA($P_TITLE,$P_ACTUAL_FINISH_MONTH,$P_ACTUAL_FINISH_YEAR,$P_MEM_ID,$P_COMPLETION_STATUS,$P_SYATEM_ID,$P_STRAT,$P_LENGTH){
+    //used
+    public static function LOAD_DATA($P_TITLE,$P_MEM_ID,$P_COMPLETION_STATUS,$P_SYATEM_ID,$P_PLANNED_START_DT_FIRST,$P_PLANNED_START_DT_LAST,$P_ACTUAL_START_DT_FIRST,$P_ACTUAL_START_DT_LAST,$P_STRAT,$P_LENGTH){
         $cursor =null;
         $data = array();
         $P_recordsTotal = 0;
-        $stmt = DB::getPdo()->prepare("begin TASKS_PKG.LOAD_DATA(:P_TITLE,:P_ACTUAL_FINISH_MONTH,:P_ACTUAL_FINISH_YEAR,:P_MEM_ID,:P_COMPLETION_STATUS,:P_USER_ID,:P_SYATEM_ID,:P_STRAT,:P_LENGTH,:P_recordsTotal,:out_cursor); end;");
+        $stmt = DB::getPdo()->prepare("begin TASKS_PKG.LOAD_DATA(:P_TITLE,:P_MEM_ID,:P_COMPLETION_STATUS,:P_USER_ID,:P_SYATEM_ID,
+        :P_PLANNED_START_DT_FIRST,:P_PLANNED_START_DT_LAST,:P_ACTUAL_START_DT_FIRST,:P_ACTUAL_START_DT_LAST,
+        :P_STRAT,:P_LENGTH,:P_recordsTotal,:out_cursor); end;");
         $stmt->bindValue(':P_TITLE', $P_TITLE, PDO::PARAM_NULL);
-        $stmt->bindValue(':P_ACTUAL_FINISH_MONTH', $P_ACTUAL_FINISH_MONTH, PDO::PARAM_NULL);
-        $stmt->bindValue(':P_ACTUAL_FINISH_YEAR', $P_ACTUAL_FINISH_YEAR, PDO::PARAM_NULL);
         $stmt->bindValue(':P_MEM_ID', $P_MEM_ID, PDO::PARAM_NULL);
         $stmt->bindValue(':P_COMPLETION_STATUS', $P_COMPLETION_STATUS, PDO::PARAM_NULL);
         $stmt->bindValue(':P_USER_ID', session('user')['user_id'], PDO::PARAM_NULL);
         $stmt->bindValue(':P_SYATEM_ID', $P_SYATEM_ID, PDO::PARAM_NULL);
+        $stmt->bindValue(':P_PLANNED_START_DT_FIRST', $P_PLANNED_START_DT_FIRST, PDO::PARAM_NULL);
+        $stmt->bindValue(':P_PLANNED_START_DT_LAST', $P_PLANNED_START_DT_LAST, PDO::PARAM_NULL);
+        $stmt->bindValue(':P_ACTUAL_START_DT_FIRST', $P_ACTUAL_START_DT_FIRST, PDO::PARAM_NULL);
+        $stmt->bindValue(':P_ACTUAL_START_DT_LAST', $P_ACTUAL_START_DT_LAST, PDO::PARAM_NULL);
         $stmt->bindValue(':P_STRAT', $P_STRAT, PDO::PARAM_NULL);
         $stmt->bindValue(':P_LENGTH', $P_LENGTH, PDO::PARAM_NULL);
         $stmt->bindParam(':P_recordsTotal', $P_recordsTotal, PDO::PARAM_INT);
@@ -267,20 +272,21 @@ class Tasks extends MYModel
 
 
 
-         public static function get_all_members(){
-            $cursor =null;
-            $data = array();
-            $stmt = DB::getPdo()->prepare("begin TASKS_PKG.get_all_members(:out_cursor); end;");
-            $stmt->bindParam(':out_cursor', $cursor, PDO::PARAM_STMT, 0, \OCI_B_CURSOR);
-            $stmt->execute();
-            oci_execute($cursor, OCI_DEFAULT);
-            while($row = oci_fetch_object($cursor, OCI_ASSOC | OCI_RETURN_NULLS)){
-                $data[] = $row;
-            }
-
-            oci_free_cursor($cursor);
-            return ['data'=>$data];
+    // used 
+    public static function get_all_members(){
+        $cursor =null;
+        $data = array();
+        $stmt = DB::getPdo()->prepare("begin TASKS_PKG.get_all_members(:out_cursor); end;");
+        $stmt->bindParam(':out_cursor', $cursor, PDO::PARAM_STMT, 0, \OCI_B_CURSOR);
+        $stmt->execute();
+        oci_execute($cursor, OCI_DEFAULT);
+        while($row = oci_fetch_object($cursor, OCI_ASSOC | OCI_RETURN_NULLS)){
+            $data[] = $row;
         }
+
+        oci_free_cursor($cursor);
+        return ['data'=>$data];
+    }
 
 
 
@@ -381,18 +387,22 @@ class Tasks extends MYModel
         }
 
 
-        public static function ALL_DATA($P_TITLE,$P_ACTUAL_FINISH_MONTH,$P_ACTUAL_FINISH_YEAR,$P_MEM_ID,$P_COMPLETION_STATUS,$P_SYATEM_ID){
+        public static function ALL_DATA($P_TITLE,$P_MEM_ID,$P_COMPLETION_STATUS,$P_SYATEM_ID,$P_PLANNED_START_DT_FIRST,$P_PLANNED_START_DT_LAST
+        ,$P_ACTUAL_START_DT_FIRST,$P_ACTUAL_START_DT_LAST){
             $cursor =null;
             $data = array();
             $P_recordsTotal = 0;
-            $stmt = DB::getPdo()->prepare("begin TASKS_PKG.ALL_DATA(:P_TITLE,:P_ACTUAL_FINISH_MONTH,:P_ACTUAL_FINISH_YEAR,:P_MEM_ID,:P_COMPLETION_STATUS,:P_USER_ID,:P_SYATEM_ID,:out_cursor); end;");
+            $stmt = DB::getPdo()->prepare("begin TASKS_PKG.ALL_DATA(:P_TITLE,:P_MEM_ID,:P_COMPLETION_STATUS,:P_USER_ID,:P_SYATEM_ID,
+            :P_PLANNED_START_DT_FIRST,:P_PLANNED_START_DT_LAST,:P_ACTUAL_START_DT_FIRST,:P_ACTUAL_START_DT_LAST,:out_cursor); end;");
             $stmt->bindValue(':P_TITLE', $P_TITLE, PDO::PARAM_NULL);
-            $stmt->bindValue(':P_ACTUAL_FINISH_MONTH', $P_ACTUAL_FINISH_MONTH, PDO::PARAM_NULL);
-            $stmt->bindValue(':P_ACTUAL_FINISH_YEAR', $P_ACTUAL_FINISH_YEAR, PDO::PARAM_NULL);
             $stmt->bindValue(':P_MEM_ID', $P_MEM_ID, PDO::PARAM_NULL);
             $stmt->bindValue(':P_COMPLETION_STATUS', $P_COMPLETION_STATUS, PDO::PARAM_NULL);
             $stmt->bindValue(':P_USER_ID', session('user')['user_id'], PDO::PARAM_NULL);
             $stmt->bindValue(':P_SYATEM_ID', $P_SYATEM_ID, PDO::PARAM_NULL);
+            $stmt->bindValue(':P_PLANNED_START_DT_FIRST', $P_PLANNED_START_DT_FIRST, PDO::PARAM_NULL);
+            $stmt->bindValue(':P_PLANNED_START_DT_LAST', $P_PLANNED_START_DT_LAST, PDO::PARAM_NULL);
+            $stmt->bindValue(':P_ACTUAL_START_DT_FIRST', $P_ACTUAL_START_DT_FIRST, PDO::PARAM_NULL);
+            $stmt->bindValue(':P_ACTUAL_START_DT_LAST', $P_ACTUAL_START_DT_LAST, PDO::PARAM_NULL);
             $stmt->bindParam(':out_cursor', $cursor, PDO::PARAM_STMT, 0, \OCI_B_CURSOR);
             $stmt->execute();
             oci_execute($cursor, OCI_DEFAULT);
