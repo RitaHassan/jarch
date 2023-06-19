@@ -33,7 +33,7 @@ $get_all_members= $tasks->get_all_members()['data'];
 
                             <div class="col-xl-6 form-group mb-6">
                                 <label class="required form-label fw-bolder">اسم الموظف</label>
-                                <select name="MEM_ID" id="MEM_ID" class="form-control form-control-solid" >
+                                <select name="MEM_ID" id="MEM_ID1" class="form-control form-control-solid" >
 
                                        <option value="option_select" disabled selected>--اختر--</option>
                                     @foreach($GET_MEMBERS as $m)
@@ -996,21 +996,18 @@ $get_all_members= $tasks->get_all_members()['data'];
 
         var system_id = $('#SYSTEM_ID1').val();
         var task_type = $('#TASK_TYPE').val();
-        // var in_plan = $('#IN_PLAN').val();
         var in_plan = $("input[name='IN_PLAN']:checked").val();
-        var mem_id = $('#MEM_ID').val();
-
-        // Simulate delete request -- for demo purpose only
+        var mem_id = $('#MEM_ID1').val();
         jQuery.ajax({
-            type: "put",
-             url: 'store',//'{{ route('tasks.store') }}',
+            type: "post",
+             url: '/tasks',
             data:{
                 "_token": "{{ csrf_token() }}",
                 'SYSTEM_ID':system_id,
                 'DESCRIPTION' : null,
                 'PRIORITY' :null,
                 'TASK_TYPE':task_type,
-                ' PLANNED_START_DT': null,
+                'PLANNED_START_DT': null,
                 'PLANNED_FINISH_DT': null,
                 'ACTUAL_START_DT' : null,
                 'ACTUAL_FINISH_DT' : null,

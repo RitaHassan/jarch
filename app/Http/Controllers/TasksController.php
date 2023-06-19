@@ -85,8 +85,6 @@ class TasksController extends Controller
      */
     public function store(Request $request)
     {
-        dd(';');
-
      $request->validate([
 
            'SYSTEM_ID'=>'required',
@@ -115,14 +113,19 @@ class TasksController extends Controller
 
      $request->request->add(['CREATED_BY' => 1]);
      $result = Tasks::Save_(change_key($request->only($tasks->getFillable())));
-     dd('ll');
-       // return back()->with('success', 'تمت عملية الحفظ بنجاح');
-       if($result['STATUS']==1){
-        return back()->with('success',$result['MSG'] );
+    if($request->ajax()){
+       return $result['STATUS'];
+
     }else {
-        return back()->with('error',$result['MSG'] );
-       // return redirect('study')->with('success', 'تم اضافة الدراسة بنجاح');
+        if($result['STATUS']==1){
+            return back()->with('success',$result['MSG'] );
+        }else {
+            return back()->with('error',$result['MSG'] );
+           // return redirect('study')->with('success', 'تم اضافة الدراسة بنجاح');
+        }
     }
+       // return back()->with('success', 'تمت عملية الحفظ بنجاح');
+
     }
 
     /**
