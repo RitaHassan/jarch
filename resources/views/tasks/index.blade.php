@@ -212,7 +212,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                 <div class="controls">
                                     <div class="input-prepend input-group">
                                         <span class="add-on input-group-addon" id="remove_PLANNED_START_DT"><i class="fa fa-trash"></i></span>
-                                        <input class="form-control form-control-solid" placeholder="تاريخ المخطط له" id="PLANNED_START_DT"/> 
+                                        <input class="form-control form-control-solid" placeholder="تاريخ المخطط له" id="PLANNED_START_DT"/>
                                     </div>
                                 </div>
 
@@ -221,7 +221,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <label for="">تاريخ الانجاز</label>
-                     
+
                                 <div class="controls">
                                     <div class="input-prepend input-group">
                                         <span class="add-on input-group-addon" id="remove_ACTUAL_START_DT"><i class="fa fa-trash"></i></span>
@@ -244,15 +244,15 @@ $get_all_members= $tasks->get_all_members()['data'];
                             </div>
                         </div>
                     </div>
-                    
+
                 </form>
             </div>
         </div>
-        
+
         <!--begin::Datatable-->
         <table id="kt_datatable_example_1" class="table align-middle table-row-bordered fs-6 gy-5">
             <thead>
-                
+
                 <th class="text-center fw-bolder">اسم الفريق</th>
                 <th class="text-center fw-bolder">اسم الموظف</th>
                 <th class="text-center fw-bolder">اسم النظام</th>
@@ -318,7 +318,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                 }
                 },
                 columns: [
-        
+
                     { data: 'TEAM',"searchable": false },
                     { data: 'MEM_NAME',"searchable": false },
                     { data: 'SYSTEM',"searchable": false },
@@ -354,30 +354,30 @@ $get_all_members= $tasks->get_all_members()['data'];
                         }
                         }
                     },
-      
+
                     {
                         data: null,
                         'bSort': true,
                         render: function(data) {
-                            if (data.COMPLETION_STATUS == 0) {
+                            if (data.COMPLETION_STATUS == 0 && data.PLANNED_START_DT == null && data.PLANNED_FINISH_DT == null) {
                                 return '<span class="badge badge-secondary val">غير محدد</span>';
                             }
                             if (data.COMPLETION_STATUS == 1) {
-                                return '<span class="badge badge-info val">منجز</span>';
+                                return '<span class="badge badge-success val">منجز</span>';
                             }
-                            if (data.COMPLETION_STATUS == 2) {
-                                return '<span class="badge badge-danger val ">غير منجز</span>';
-                            }
+                            if (data.COMPLETION_STATUS == 0 && data.PLANNED_START_DT != null && data.PLANNED_FINISH_DT != null) {
+                                  return '<span class="badge badge-danger val ">غير منجز</span>';
+                             }
                             if (data.COMPLETION_STATUS== 3) {
-                                return '<span class="badge badge-primary val ">مؤجل</span>';
-                            }   
+                                return '<span class="badge badge-warning val ">مؤجل</span>';
+                            }
                                 if (data.COMPLETION_STATUS== 4) {
-                                return '<span class="badge badge-success val">قيد العمل</span>';
+                                return '<span class="badge badge-primary val">قيد العمل</span>';
                             }
                             if (data.COMPLETION_STATUS== 5) {
-                                return '<span class="badge badge-danger val">الغاء</span>';
+                                return '<span class="badge badge-dark val">الغاء</span>';
                             }
-                            
+
                             return '-';
                         },"searchable": false
 
@@ -389,7 +389,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                             }else{
                                 return "لا";
                             }
-                        } 
+                        }
                     },
                     {
                             data: "PRIORITY",
@@ -399,12 +399,12 @@ $get_all_members= $tasks->get_all_members()['data'];
                                     return '<span class="badge badge-danger">هام وعاجل</span>';
                                 }
                                 if (data == 2) {
-                                    return '<span class="badge badge-warninng">متوسط</span>';
+                                    return '<span class="badge badge-info">متوسط</span>';
                                 }
                                 if (data == 3) {
-                                    return '<span class="badge badge-info">عادي</span>';
+                                    return '<span class="badge badge-secondary">عادي</span>';
                                 }
-                               
+
                                 return '-';
                             },"searchable": false
 
@@ -413,7 +413,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                     { data: null,"searchable": false }
                 ],
                 columnDefs: [
-                   
+
                     {
                     targets: -1,
                     data: null,
@@ -674,7 +674,7 @@ $get_all_members= $tasks->get_all_members()['data'];
 
                     // Get customer name
                     const customerName = parent.querySelectorAll('td')[4].innerText;
-                    const id = $(this).attr('val_id'); 
+                    const id = $(this).attr('val_id');
                     // SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
                     Swal.fire({
                         text: "هل أنت متأكد من حذف  " + customerName + " ؟",
@@ -861,8 +861,8 @@ $get_all_members= $tasks->get_all_members()['data'];
                 }
             });
         });
-     
-       
+
+
         $("#save_wait").click(function(){
             var id = $("#wait_id").val();
             jQuery.ajax({
@@ -891,19 +891,19 @@ $get_all_members= $tasks->get_all_members()['data'];
         $("#remove_PLANNED_START_DT").click(function(){
             $("#PLANNED_START_DT").val("");
             dt.draw();
-          
+
         });
         $("#remove_ACTUAL_START_DT").click(function(){
             $("#ACTUAL_START_DT_").val("");
             dt.draw();
         });
-      
+
 
         // $("#ACTUAL_START_DT_").change(function(){
         //     dt.draw();
         // });
 
-   
+
 
         // Public methods
         return {
@@ -1045,16 +1045,16 @@ $(document).on('click', '.cancel', function (data, callbak) {
         $("#PLANNED_START_DT").daterangepicker({
             startDate: start,
             endDate: end,
-        
+
         }, cb);
 
-      
+
 
         $("#ACTUAL_START_DT_").daterangepicker();
         $("#ACTUAL_START_DT_").val("");
-  
 
-         
+
+
 
     </script>
 @endpush

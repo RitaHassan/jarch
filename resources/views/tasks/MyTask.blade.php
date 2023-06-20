@@ -450,23 +450,23 @@ var created_user = <?php echo $created_user; ?>;
                         data: null,
                         'bSort': true,
                         render: function(data) {
-                            if (data.COMPLETION_STATUS == 0) {
+                            if (data.COMPLETION_STATUS == 0 && data.PLANNED_START_DT == null && data.PLANNED_FINISH_DT == null) {
                                 return '<span class="badge badge-secondary val">غير محدد</span>';
                             }
                             if (data.COMPLETION_STATUS == 1) {
-                                return '<span class="badge badge-info val">منجز</span>';
+                                return '<span class="badge badge-success val">منجز</span>';
                             }
-                            if (data.COMPLETION_STATUS == 2) {
-                                return '<span class="badge badge-danger val ">غير منجز</span>';
-                            }
+                             if (data.COMPLETION_STATUS == 0 && data.PLANNED_START_DT != null && data.PLANNED_FINISH_DT != null) {
+                                  return '<span class="badge badge-danger val ">غير منجز</span>';
+                             }
                             if (data.COMPLETION_STATUS== 3) {
-                                return '<span class="badge badge-primary val ">مؤجل</span>';
+                                return '<span class="badge badge-warning val ">مؤجل</span>';
                             }
                                 if (data.COMPLETION_STATUS== 4) {
-                                return '<span class="badge badge-success val">قيد العمل</span>';
+                                return '<span class="badge badge-primary val">قيد العمل</span>';
                             }
                             if (data.COMPLETION_STATUS== 5) {
-                                return '<span class="badge badge-danger val">الغاء</span>';
+                                return '<span class="badge badge-dark val">الغاء</span>';
                             }
 
                             return '-';
@@ -490,10 +490,10 @@ var created_user = <?php echo $created_user; ?>;
                                     return '<span class="badge badge-danger">هام وعاجل</span>';
                                 }
                                 if (data == 2) {
-                                    return '<span class="badge badge-warninng">متوسط</span>';
+                                    return '<span class="badge badge-info">متوسط</span>';
                                 }
                                 if (data == 3) {
-                                    return '<span class="badge badge-info">عادي</span>';
+                                    return '<span class="badge badge-secondary">عادي</span>';
                                 }
 
                                 return '-';

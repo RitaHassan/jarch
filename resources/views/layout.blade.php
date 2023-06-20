@@ -148,20 +148,11 @@
                                 </span>
                                 <div class="menu-sub menu-sub-accordion menu-active-bg">
                                     <div class="menu-item">
-                                        <a class="menu-link" href="{{ route('tasks.index_all') }}">
-                                            <span class="menu-bullet">
-                                                <span class="bullet bullet-dot"></span>
-                                            </span>
-                                            <span class="menu-title">المهام (الادارة)</span>
-                                        </a>
-                                    </div>
-
-                                    <div class="menu-item">
                                         <a class="menu-link" href="{{ route('tasks.index') }}">
                                             <span class="menu-bullet">
                                                 <span class="bullet bullet-dot"></span>
                                             </span>
-                                            <span class="menu-title">عرض المهام</span>
+                                            <span class="menu-title">مهام الفريق </span>
                                         </a>
                                     </div>
                                     <div class="menu-item">
@@ -172,6 +163,41 @@
                                             <span class="menu-title">مهامي</span>
                                         </a>
                                     </div>
+                                    <div class="menu-item">
+                                        <a class="menu-link" href="{{ route('tasks.create') }}">
+                                            <span class="menu-bullet">
+                                                <span class="bullet bullet-dot"></span>
+                                            </span>
+                                            <span class="menu-title">إضافة مهمة</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div data-kt-menu-trigger="click" class="menu-item here menu-accordion">
+                                <span class="menu-link">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img src="/assets/media/icons/research.svg">
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title">ادراة المهام</span>
+                                    <span class="menu-arrow"></span>
+                                </span>
+                                <div class="menu-sub menu-sub-accordion menu-active-bg">
+                                    <div class="menu-item">
+                                        <a class="menu-link" href="{{ route('tasks.index_all') }}">
+                                            <span class="menu-bullet">
+                                                <span class="bullet bullet-dot"></span>
+                                            </span>
+                                            <span class="menu-title">المهام (الادارة)</span>
+                                        </a>
+                                    </div>
+
                                     <div class="menu-item">
                                         <a class="menu-link" href="{{ route('tasks.create') }}">
                                             <span class="menu-bullet">
