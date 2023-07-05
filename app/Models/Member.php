@@ -31,6 +31,7 @@ class Member extends MYModel
         $P_recordsTotal = 0;
         $stmt = DB::getPdo()->prepare("begin MEMBER_PKG.LOAD_DATA(:P_MEM_NAME,:P_STRAT, :P_LENGTH, :P_recordsTotal, :out_cursor); end;");
         $stmt->bindValue(':P_MEM_NAME', $P_NAME, PDO::PARAM_NULL);
+      //  $stmt->bindValue(':p_system_id', $p_system_id , PDO::PARAM_NULL);
         $stmt->bindValue(':P_STRAT', $P_STRAT, PDO::PARAM_NULL);
         $stmt->bindValue(':P_LENGTH', $P_LENGTH, PDO::PARAM_NULL);
         $stmt->bindParam(':P_recordsTotal', $P_recordsTotal, PDO::PARAM_INT);
@@ -90,13 +91,8 @@ class Member extends MYModel
 
 
     public static function Update_($array_in){
-    $stmt = DB::getPdo()->prepare("begin MEMBER_PKG.update_member(:p_id,:p_id_num,:p_updated_by,:p_MEM_NAME,:p_active,:p_role,:P_TEAM_ID,:P_STATUS,:P_MSG); end;");
+    $stmt = DB::getPdo()->prepare("begin MEMBER_PKG.update_member(:p_id,:P_TEAM_ID,:P_STATUS,:P_MSG); end;");
     $stmt->bindValue(':P_ID', $array_in['P_ID'], PDO::PARAM_NULL);
-    $stmt->bindValue(':p_id_num', $array_in['P_ID_NUM'], PDO::PARAM_NULL);
-    $stmt->bindValue(':p_UPDATED_BY', $array_in['P_UPDATED_BY'], PDO::PARAM_NULL);
-    $stmt->bindValue(':p_MEM_NAME', $array_in['P_MEM_NAME'], PDO::PARAM_NULL);
-    $stmt->bindValue(':p_active', $array_in['P_ACTIVE'], PDO::PARAM_NULL);
-    $stmt->bindValue(':p_role', $array_in['P_ROLE'], PDO::PARAM_NULL);
     $stmt->bindValue(':P_TEAM_ID', $array_in['P_TEAM_ID'], PDO::PARAM_NULL);
     $stmt->bindParam(':P_STATUS', $P_STATUS,PDO::PARAM_INT|PDO::PARAM_INPUT_OUTPUT, -1);
     $stmt->bindParam(':P_MSG', $P_MSG, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
@@ -170,4 +166,31 @@ public static function GET_BY_ID($P_ID_NUM){
     oci_free_cursor($cursor);
     return $row;
 }
+
+public static function update_deleted($P_ID){
+    $stmt = DB::getPdo()->prepare("begin MEMBER_PKG.update_deleted(:p_id,:P_STATUS,:P_MSG); end;");
+    $stmt->bindValue(':P_ID', $P_ID, PDO::PARAM_NULL);
+    $stmt->bindParam(':P_STATUS', $P_STATUS,PDO::PARAM_INT|PDO::PARAM_INPUT_OUTPUT, -1);
+    $stmt->bindParam(':P_MSG', $P_MSG, PDO::PARAM_STR|PDO::PARAM_INPUT_OUTPUT, 4000);
+        $stmt->execute();
+        $res=[
+            'MSG' => $P_MSG,
+            'STATUS' => $P_STATUS,
+        ];
+        return $res;
+
+    }
+
+
+public static function soft_deleted($P_ID){
+    $stmt = DB::getPdo()->prepare("begin MEMBER_PKG.soft_deleted(:p_id); end;");
+    $stmt->bindValue(':P_ID', $P_ID, PDO::PARAM_NULL);
+
+        $stmt->execute();
+        $res=[
+
+        ];
+        return $res;
+
+    }
 }

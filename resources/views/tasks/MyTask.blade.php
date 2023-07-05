@@ -339,6 +339,8 @@ $get_all_members= $tasks->get_all_members()['data'];
                 </form>
             </div>
         </div>
+
+
         <!--begin::Datatable-->
         <table id="kt_datatable_example_1" class="table align-middle table-row-bordered fs-6 gy-5">
             <thead>
@@ -401,11 +403,11 @@ var created_user = <?php echo $created_user; ?>;
                 ajax: {
                 url: '{{ route('tasks.mydatatable') }}',
                 "data": function ( d ) {
-                    d.ACTUAL_FINISH_MONTH = $('#ACTUAL_FINISH_MONTH').val();
-                    d.ACTUAL_FINISH_YEAR= $('#ACTUAL_FINISH_YEAR').val();
                     d.MEM_ID= $('#MEM_ID').val();
                     d.SYSTEM_ID= $('#SYSTEM_ID').val();
                     d.COMPLETION_STATUS = $('#COMPLETION_STATUS').val();
+                    d.PLANNED_START_DT = $("#PLANNED_START_DT").val();
+                    d.ACTUAL_START_DT = $("#ACTUAL_START_DT_").val();
                 }
                 },
                 columns: [

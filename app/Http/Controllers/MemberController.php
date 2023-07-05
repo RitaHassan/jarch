@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Member;
 use App\Classes\Http;
-
+use App\Models\System;
+use App\Models\Team;
 
 class MemberController extends Controller
 {
@@ -16,7 +17,9 @@ class MemberController extends Controller
      */
     public function index()
     {
-        return view('members.index');
+        $systems= System::LOAD_DATA(null,0,100,1)['data'];
+        $teams = Team::LOAD_DATA(null,0,100,1)['data'];
+        return view('members.index',compact('systems','teams'));
     }
 
     /**
@@ -146,7 +149,7 @@ class MemberController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update1(Request $request, $id)
     {
         $request->validate([
             'ID_NUM' => 'required',
@@ -177,6 +180,36 @@ class MemberController extends Controller
     }
     }
 
+
+    public function update(Request $request, $id)
+    {
+
+        $request->validate([
+            'TEAM_ID' => 'sometimes'
+        ]);
+
+
+        $member = new Member();
+        $member = $member->find_by_id($id);
+       // dd($member);
+        // if (!$member) {
+        //     abort(404);
+        // }
+        //dd('l');
+        $request->request->add(['ID'=>$id]);
+        $result = Member::Update_(change_key($request->only((new Member())->getFillable())));
+
+       return [];
+/*
+       if($result['STATUS']==1){
+        return back()->with('success',$result['MSG'] );
+
+    }else {
+        return back()->with('error',$result['MSG'] );
+       // return redirect('study')->with('success', 'تم اضافة الدراسة بنجاح');
+    }*/
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -185,12 +218,25 @@ class MemberController extends Controller
      */
     public function destroy($id)
     {
-        $member = new Member();
-        if ($member->find_by_id($id)) {
-            $member->delete_by_id($id);
-        }
-        return [];
+        // $member = new Member();
+        // if ($member->find_by_id($id)) {
+        //     $member->delete_by_id($id);
+        // }
+        // return [];
+
+         $member = new Member();
+         if ($member->find_by_id($id)) {
+             $member->soft_deleted($id);
+         }
+         return [];
     }
+
+     public function update_deleted($id)
+     {
+         $member = new Member();
+         $result = Member::update_deleted($id);
+         return[];
+     }
 
 
 
