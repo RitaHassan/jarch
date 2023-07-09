@@ -77,8 +77,3 @@ Route::get('tasks/datatable_all', 'TasksController@datatable_all')->name('tasks.
 Route::get('tasks/export', 'TasksController@export')->name('tasks.export');
 Route::get('tasks/all', 'TasksController@index_all')->name('tasks.index_all');
 Route::get('tasks/export_all', 'TasksController@export_all')->name('tasks.export_all');
-Route::resource('tasks', 'TasksController');
-
-
-
-});
