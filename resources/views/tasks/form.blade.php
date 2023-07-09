@@ -28,7 +28,7 @@
 
 
                     @if (isset($tasks->ID))
-                    <form class="row" method="POST" action="{{route('tasks.update',$tasks->ID)}}" >
+                    <form class="row" method="POST" action="{{route('tasks.update',$tasks->ID)}}" id="form_task_save" >
                         @method('patch')
                         @else
                     <form class="row" method="POST" action="{{route('tasks.store')}}" >
@@ -112,30 +112,26 @@
 
                                 <div class="col-xl-6 form-group mb-6">
                                     <label class="required form-label fw-bolder">تاريخ البدء المخطط له</label>
-                                    <input class="date2 form-control" type="text" name="PLANNED_START_DT" minlength="5" maxlength="200"
-                                    value="{{ old('PLANNED_START_DT', $tasks->PLANNED_START_DT) }}" autocomplete="off">
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
+                                    <input class="date2 form-control" type="text" name="PLANNED_START_DT" minlength="5" maxlength="200" value="{{ old('PLANNED_START_DT', $tasks->PLANNED_START_DT !=null? \carbon\carbon::parse($tasks->PLANNED_START_DT)->format('d/m/Y') : $tasks->PLANNED_START_DT) }}" autocomplete="off">
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                                 </div>
                                 <div class="col-xl-6 form-group mb-6">
-                                    <label class="required form-label fw-bolder">تاريخ الانتهاء المخطط له</label>
+                                    <label class="required form-label fw-bolder">تاريخ الانتهاء المخطط له </label>
                                     <input class="date2 form-control" type="text" name="PLANNED_FINISH_DT" minlength="5" maxlength="200"
-                                    value="{{ old('PLANNED_FINISH_DT', $tasks->PLANNED_FINISH_DT) }}" autocomplete="off">
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
+                                    value="{{ old('PLANNED_FINISH_DT', $tasks->PLANNED_FINISH_DT !=null? \carbon\carbon::parse($tasks->PLANNED_FINISH_DT)->format('d/m/Y') : $tasks->PLANNED_FINISH_DT) }}" autocomplete="off">
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
                                 </div>
                                 <div class="col-xl-6 form-group mb-6">
                                     <label class="form-label fw-bolder">تاريخ البدء الفعلي</label>
                                     <input class="date2 form-control" type="text" name="ACTUAL_START_DT" minlength="5" maxlength="200"
-                                    value="{{ old('ACTUAL_START_DT', $tasks->ACTUAL_START_DT) }}" autocomplete="off">
+                                    value="{{ old('ACTUAL_START_DT',$tasks->ACTUAL_START_DT!= null ? \carbon\carbon::parse($tasks->ACTUAL_START_DT)->format('d/m/Y') : $tasks->ACTUAL_START_DT ) }}" autocomplete="off">
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </div>
                                 <div class="col-xl-6 form-group mb-6">
                                     <label class="form-label fw-bolder">تاريخ الانتهاء الفعلي</label>
                                     <input class="date2 form-control" type="text" name="ACTUAL_FINISH_DT" minlength="5" maxlength="200"
-                                    value="{{ old('ACTUAL_FINISH_DT', $tasks->ACTUAL_FINISH_DT) }}" autocomplete="off">
+                                    value="{{ old('ACTUAL_FINISH_DT', $tasks->ACTUAL_START_DT!= null ? \carbon\carbon::parse($tasks->ACTUAL_FINISH_DT)->format('d/m/Y') : $tasks->ACTUAL_FINISH_DT ) }}" autocomplete="off">
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </div>
@@ -160,13 +156,14 @@
                                 <div class="col-xl-6 form-group mb-6">
                                     <label class="required form-label fw-bolder">حالة الانجاز</label>
                                     <select name="COMPLETION_STATUS" id="COMPLETION_STATUS" class="form-control form-control-solid" >
-                                        <option value=""  selected>--اختر--</option>
                                         <option value="0" @selected($tasks->COMPLETION_STATUS == '0')>غير محدد</option>
                                         <option value="1" @selected($tasks->COMPLETION_STATUS == '1')>منجز</option>
-                                        <option value="2" @selected($tasks->COMPLETION_STATUS == '2')>غير منجز</option>
                                         <option value="3" @selected($tasks->COMPLETION_STATUS == '3')>مؤجل</option>
                                         <option value="4" @selected($tasks->COMPLETION_STATUS == '4')>قيد العمل</option>
-
+                                        @if (isset($tasks->ID))
+                                        <option value="5" @selected($tasks->COMPLETION_STATUS == '5')>الغاء</option>
+                                        <option value="2" @selected($tasks->COMPLETION_STATUS == '2')>غير منجز</option>
+                                        @endif
                                       </select>
                                 </div>
 

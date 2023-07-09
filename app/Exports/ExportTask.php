@@ -24,8 +24,9 @@ class ExportTask implements FromView ,ShouldAutoSize,WithEvents
     public $PLANNED_START_DT_LAST;
     public $ACTUAL_START_DT_FIRST;
     public $ACTUAL_START_DT_LAST;
+    public $TEAM_ID;
     public $all;
-    public function __construct($search,$MEM_ID,$COMPLETION_STATUS,$SYSTEM_ID,$PLANNED_START_DT_FIRST,$PLANNED_START_DT_LAST,$ACTUAL_START_DT_FIRST,$ACTUAL_START_DT_LAST,$all=0)
+    public function __construct($search,$MEM_ID,$COMPLETION_STATUS,$SYSTEM_ID,$PLANNED_START_DT_FIRST,$PLANNED_START_DT_LAST,$ACTUAL_START_DT_FIRST,$ACTUAL_START_DT_LAST,$TEAM_ID,$all=0)
     {
        $this->search = $search;
        $this->MEM_ID = $MEM_ID;
@@ -36,7 +37,7 @@ class ExportTask implements FromView ,ShouldAutoSize,WithEvents
        $this->PLANNED_START_DT_LAST = $PLANNED_START_DT_LAST;
        $this->ACTUAL_START_DT_FIRST = $ACTUAL_START_DT_FIRST;
        $this->ACTUAL_START_DT_LAST = $ACTUAL_START_DT_LAST;
-
+       $this->TEAM_ID = $TEAM_ID;
        $this->all = $all;
     }
 
@@ -50,9 +51,9 @@ class ExportTask implements FromView ,ShouldAutoSize,WithEvents
         ini_set('memory_limit', '-1');
         set_time_limit(0);
         if($this->all ==0){
-            $tasks = Tasks::ALL_DATA($this->search,$this->MEM_ID,$this->COMPLETION_STATUS,$this->SYSTEM_ID,$this->PLANNED_START_DT_FIRST,$this->PLANNED_START_DT_LAST,$this->ACTUAL_START_DT_FIRST,$this->ACTUAL_START_DT_LAST)['data'];
+            $tasks = Tasks::ALL_DATA($this->search,$this->MEM_ID,$this->COMPLETION_STATUS,$this->SYSTEM_ID,$this->PLANNED_START_DT_FIRST,$this->PLANNED_START_DT_LAST,$this->ACTUAL_START_DT_FIRST,$this->ACTUAL_START_DT_LAST,$this->TEAM_ID,1)['data'];
         }else{
-            $tasks = Tasks::ALL_DATA($this->search,$this->MEM_ID,$this->COMPLETION_STATUS,$this->SYSTEM_ID,$this->PLANNED_START_DT_FIRST,$this->PLANNED_START_DT_LAST,$this->ACTUAL_START_DT_FIRST,$this->ACTUAL_START_DT_LAST)['data'];
+            $tasks = Tasks::ALL_DATA($this->search,$this->MEM_ID,$this->COMPLETION_STATUS,$this->SYSTEM_ID,$this->PLANNED_START_DT_FIRST,$this->PLANNED_START_DT_LAST,$this->ACTUAL_START_DT_FIRST,$this->ACTUAL_START_DT_LAST,$this->TEAM_ID,0)['data'];
         }
         return view('tasks.export', [
             'tasks' => $tasks,

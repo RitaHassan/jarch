@@ -49,19 +49,7 @@
                 شهر
             @endif</td>
             <td>
-            @if ($task->COMPLETION_STATUS == 0)
-                غير محدد
-            @elseif($task->COMPLETION_STATUS == 1)
-                منجر
-            @elseif($task->COMPLETION_STATUS == 2)
-                غير منجز
-            @elseif($task->COMPLETION_STATUS == 3)
-                مؤجل
-            @elseif($task->COMPLETION_STATUS == 4)
-                قيد العمل
-            @elseif($task->COMPLETION_STATUS == 5)
-                الغاء
-            @endif
+                {{$task->COMPLETION_STATUS}}
             </td>
             <td>{{$task->IN_PLAN == 1?"نعم":"لا"}}</td>
         </tr>

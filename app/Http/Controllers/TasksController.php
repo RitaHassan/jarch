@@ -25,9 +25,22 @@ class TasksController extends Controller
 
     public function index_all()
     {
-        $systems= System::LOAD_DATA(null,0,100,1)['data'];
+        $html_breadcrumbs = [
+            'title' => 'المهام',
+            'title_url' => route('tasks.index_all'),
+            'subtitle' => 'فهرس',
+            'datatable' => true,
+        ];
+        $html_new_path = route('tasks.create');
+
+        if(session('is_managment')){
+            $systems= System::LOAD_DATA(null,0,100,1)['data'];
+        }else{
+            $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
+        }
+  
         $teams = Team::LOAD_DATA(null,0,100,1)['data'];
-        return view('tasks.index_all',compact('systems','teams'));
+        return view('tasks.index_all',compact('systems','teams','html_breadcrumbs','html_new_path'));
     }
 
     /**
@@ -38,7 +51,11 @@ class TasksController extends Controller
     public function create()
     {
           $tasks = new Tasks();
-          $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
+        if(session('is_managment')){
+            $systems= System::LOAD_DATA(null,0,100,1)['data'];
+        }else{
+            $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
+        }
           $GET_MEMBERS= $tasks->GET_MEMBERS()['data'];
 
           return view('tasks.form',compact('tasks','systems','GET_MEMBERS'));
@@ -110,7 +127,16 @@ class TasksController extends Controller
         if($request->search['value'] != ""){
             $search = $request->search['value'];
         }
-       return json_encode(Tasks::LOAD_DATA_ALL($search,$request->ACTUAL_FINISH_MONTH,$request->ACTUAL_FINISH_YEAR,$request->MEM_ID,$request->COMPLETION_STATUS,$request->SYSTEM_ID,$request->TEAM_ID,$request->start,$request->length));
+        $PLANNED_START_DT = explode('-',$request->PLANNED_START_DT);
+        $PLANNED_START_DT_FIRST = isset($PLANNED_START_DT[0]) ? trim($PLANNED_START_DT[0]):null;
+        $PLANNED_START_DT_LAST = isset($PLANNED_START_DT[1]) ? trim($PLANNED_START_DT[1]):null;
+
+        $ACTUAL_START_DT = explode('-',$request->ACTUAL_START_DT);
+        $ACTUAL_START_DT_FIRST = isset($ACTUAL_START_DT[0]) ? trim($ACTUAL_START_DT[0]):null;
+        $ACTUAL_START_DT_LAST = isset($ACTUAL_START_DT[1]) ? trim($ACTUAL_START_DT[1]):null;
+
+       return json_encode(Tasks::LOAD_DATA_ALL($search,$request->MEM_ID,$request->COMPLETION_STATUS,$request->SYSTEM_ID,$request->TEAM_ID,
+       $PLANNED_START_DT_FIRST,$PLANNED_START_DT_LAST,$ACTUAL_START_DT_FIRST,$ACTUAL_START_DT_LAST,$request->start,$request->length));
 
     }
     /**
@@ -184,12 +210,16 @@ class TasksController extends Controller
     public function edit($id)
     {
         $tasks = new Tasks();
-        $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
+        if(session('is_managment')){
+            $systems= System::LOAD_DATA(null,0,100,1)['data'];
+        }else{
+            $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
+        }
+      
         $tasks  = $tasks->find_by_id($id);
-        if (!$tasks || $tasks->MEM_ID !=  session('user')['user_id']) {
+        if ((!$tasks || $tasks->MEM_ID !=  session('user')['user_id'] ) && !session('is_managment')) {
             abort(404);
         }
-
         $GET_MEMBERS = SystemMembers::get_systems_by_id($tasks->SYSTEM_ID)['data'];
         return view('tasks.form',compact('tasks','systems','GET_MEMBERS'));
     }
@@ -216,7 +246,7 @@ class TasksController extends Controller
            'COMPLETION_STATUS'=>'sometimes',
            'NOTES'=>'sometimes',
            'IN_PLAN'=>'required',
-           'TITLE'=>'sometimes',
+           'TITLE'=>'required',
            'DURATION_TYPE'=>'sometimes',
            'MEM_ID' =>'required'
 
@@ -226,7 +256,7 @@ class TasksController extends Controller
 
         $tasks = new Tasks();
         $tasks = $tasks->find_by_id($id);
-        if (!$tasks || $tasks->MEM_ID !=  session('user')['user_id']) {
+        if ((!$tasks || $tasks->MEM_ID !=  session('user')['user_id'] ) && !session('is_managment')) {
             abort(404);
         }
 
@@ -306,10 +336,14 @@ class TasksController extends Controller
     public function change_status($P_ID,Request $request)
     {
         $tasks = new Tasks();
+        $tasks = $tasks->find_by_id($P_ID);
+        if ((!$tasks || $tasks->MEM_ID !=  session('user')['user_id'] ) && !session('is_managment')) {
+            return ['status'=>-1,'msg'=>'عملية غير قانونية'];
+        }
         if($request->ACTUAL_START_DT){
-            $res= $tasks->change_status($P_ID,$request->COMPLETION_STATUS,$request->ACTUAL_START_DT);
+            $res= Tasks::change_status($P_ID,$request->COMPLETION_STATUS,$request->ACTUAL_START_DT);
         }else{
-            $res= $tasks->change_status($P_ID,$request->COMPLETION_STATUS,NULL);
+            $res= Tasks::change_status($P_ID,$request->COMPLETION_STATUS,NULL);
         }
 
         return ['status'=>1];
@@ -320,7 +354,11 @@ class TasksController extends Controller
     {
 
         $tasks = new Tasks();
-        $res= $tasks->change_status_2($P_ID,$request->COMPLETION_STATUS,$request->ACTUAL_START_DT,$request->ACTUAL_FINISH_DT,$request->COMPLETION_PERIOD,$request->DURATION_TYPE);
+        $tasks = $tasks->find_by_id($P_ID);
+        if ((!$tasks || $tasks->MEM_ID !=  session('user')['user_id'] ) && !session('is_managment')) {
+            return ['status'=>-1,'msg'=>'عملية غير قانونية'];
+        }
+        $res= Tasks::change_status_2($P_ID,$request->COMPLETION_STATUS,$request->ACTUAL_START_DT,$request->ACTUAL_FINISH_DT,$request->COMPLETION_PERIOD,$request->DURATION_TYPE);
 
 
         return [];
@@ -336,12 +374,20 @@ class TasksController extends Controller
         $ACTUAL_START_DT = explode('-',$request->ACTUAL_START_DT);
         $ACTUAL_START_DT_FIRST = isset($ACTUAL_START_DT[0]) ? trim($ACTUAL_START_DT[0]):null;
         $ACTUAL_START_DT_LAST = isset($ACTUAL_START_DT[1]) ? trim($ACTUAL_START_DT[1]):null;
-        return Excel::download(new ExportTask($request->title,$request->MEM_ID,$request->COMPLETION_STATUS,$request->SYSTEM_ID,$PLANNED_START_DT_FIRST,$PLANNED_START_DT_LAST,$ACTUAL_START_DT_FIRST,$ACTUAL_START_DT_LAST,0), 'teams.xlsx');
+        return Excel::download(new ExportTask($request->title,$request->MEM_ID,$request->COMPLETION_STATUS,$request->SYSTEM_ID,$PLANNED_START_DT_FIRST,$PLANNED_START_DT_LAST,$ACTUAL_START_DT_FIRST,$ACTUAL_START_DT_LAST,null,0), 'teams.xlsx');
     }
 
-    public function export_ll(Request $request)
+    public function export_all(Request $request)
     {
-        // return Excel::download(new ExportTask(null,null,null,null,null,null,1), 'teams.xlsx');
+        $PLANNED_START_DT = explode('-',$request->PLANNED_START_DT);
+        $PLANNED_START_DT_FIRST = isset($PLANNED_START_DT[0]) ? trim($PLANNED_START_DT[0]):null;
+        $PLANNED_START_DT_LAST = isset($PLANNED_START_DT[1]) ? trim($PLANNED_START_DT[1]):null;
+
+        $ACTUAL_START_DT = explode('-',$request->ACTUAL_START_DT);
+        $ACTUAL_START_DT_FIRST = isset($ACTUAL_START_DT[0]) ? trim($ACTUAL_START_DT[0]):null;
+        $ACTUAL_START_DT_LAST = isset($ACTUAL_START_DT[1]) ? trim($ACTUAL_START_DT[1]):null;
+
+        return Excel::download(new ExportTask($request->title,$request->MEM_ID,$request->COMPLETION_STATUS,$request->SYSTEM_ID,$PLANNED_START_DT_FIRST,$PLANNED_START_DT_LAST,$ACTUAL_START_DT_FIRST,$ACTUAL_START_DT_LAST,$request->TEAM_ID,1), 'teams.xlsx');
     }
 
 
@@ -352,7 +398,15 @@ class TasksController extends Controller
         $tasks = new Tasks();
         $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
         $GET_MEMBERS= $tasks->GET_MEMBERS()['data'];
-        return view('tasks.MyTask',compact('systems','GET_MEMBERS','tasks'));
+        $html_breadcrumbs = [
+            'title' => 'مهامي',
+            'title_url' => route('tasks.MyTasks'),
+            'subtitle' => 'فهرس',
+            'datatable' => true,
+        ];
+        $html_new_path = '#';
+
+        return view('tasks.MyTask',compact('systems','GET_MEMBERS','tasks','html_breadcrumbs','html_new_path'));
     }
 
 
@@ -377,12 +431,10 @@ class TasksController extends Controller
     {
         $task = new Tasks();
         $task = $task->find_by_id($id);
-        if (!$task) {
-            abort(404);
+        if ((!$task || $task->MEM_ID !=  session('user')['user_id'] ) && !session('is_managment')) {
+            return ['status'=>-1,'msg'=>'عملية غير قانونية'];
         }
-        if($task->MEM_ID !=  session('user')['user_id']){
-            abort(404);
-        }
+      
 
         $request->request->add(['ID'=>$id]);
         $res= Tasks::change_status($id,$request->status,NULL);

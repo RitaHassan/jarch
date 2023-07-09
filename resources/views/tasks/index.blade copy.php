@@ -1,82 +1,13 @@
 @extends('layout')
 @section('contents')
 
-<div id="add" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <form method="POST">
-                @csrf
-                <div class="modal-header">
-                    <h3 id="modalTitle">اضافة مهمة </h3>
-                    <input type="hidden" id="status_wait">
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-xl-12 form-group mb-6">
-                                <label class="required form-label fw-bolder">اسم النظام</label>
-                                <select name="SYSTEM_ID" id="SYSTEM_ID1" class="form-control form-control-solid" >
-                                    <option value="option_select" disabled selected>--اختر--</option>
-                                    @foreach($systems as $m)
-                                        <option value="{{ $m->ID }}" {{$tasks->SYSTEM_ID == $m->ID  ? 'selected' : ''}}>{{ $m->SYSTEM_NAME}}</option>
-                                    @endforeach
-                                </select>
-                        </div>
-                        <div class="col-xl-12 form-group mb-12">
-                            <label class="required form-label fw-bolder">عنوان المهمة</label>
-                            <input type="text" required  id="title_" class="form-control form-control-solid"   placeholder="عنوان المهمة">
-                        </div>
-                        <div class="col-xl-3 form-group mb-3">
-                            <label class="required form-label fw-bolder">تاريخ البدء المخطط له</label>
-                            <input class="date3 form-control" type="text" id="PLANNED_START_DT_" minlength="5" maxlength="200"  autocomplete="off">
-                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                        </div>
-                        <div class="col-xl-3 form-group mb-3"  >
-                            <label class="required form-label fw-bolder">تاريخ الانتهاء المخطط له</label>
-                            <input class="date3 form-control" type="text" id="PLANNED_FINISH_DT_" minlength="5" maxlength="200"  autocomplete="off">
-                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                        </div>
-                        <div class="row">
-                            <div class="col-xl-6 form-group mb-6">
-                                <label class="required form-label fw-bolder">مصدر المهمة</label>
-                                <select name="TASK_TYPE" id="TASK_TYPE" class="form-control form-control-solid" >
-                                <option value="-1" disabled selected>--اختر--</option>
-                                <option value="1" @selected($tasks->TASK_TYPE == '1')>تحليل</option>
-                                <option value="2"  @selected($tasks->TASK_TYPE == '2')>تطوير</option>
-                                <option value="3" @selected($tasks->TASK_TYPE == '3')>اجتماع</option>
-                                <option value="4" @selected($tasks->TASK_TYPE == '4') >دعم فني</option>
-                                <option value="5"  @selected($tasks->TASK_TYPE == '5')>تقرير</option>
-                                <option value="6" @selected($tasks->TASK_TYPE == '6')>اختبار</option>
-                                <option value="7" @selected($tasks->TASK_TYPE == '7')>مراسلة</option>
-                                <option value="8" @selected($tasks->TASK_TYPE == '8')>أمن معلومات</option>
-                                </select>
-                            </div>
-                            <div class="col-xl-6 form-group mb-6">
-                                <label>داخل الخطة</label>
-                                <div class="radio-inline">
-                                    <label class="radio radio-lg">
-                                        <input type="radio" @checked($tasks->IN_PLAN == '1') @checked($tasks->IN_PLAN == null) value="1" name="IN_PLAN">
-                                        <span></span>
-                                        نعم
-                                    </label>
-                                    <label class="radio radio-lg">
-                                        <input type="radio" @checked($tasks->IN_PLAN == '2') name="IN_PLAN" value="2">
-                                        <span></span>
-                                    لا
-                                    </label>
+@php
+use App\Models\Tasks;
+$tasks = new Tasks();
+$get_all_members= $tasks->get_all_members()['data'];
 
-                                </div>
+@endphp
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="save_task" data-dismiss="modal">حفظ</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 <div id="waitModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
@@ -156,46 +87,44 @@
                     <h3 id="modalTitle">منجز</h3>
 
                 </div>
-                <form id="kt_docs_formvalidation_text" class="form" action="#" autocomplete="off">
-                    <div class="modal-body">
+                <div class="modal-body">
 
-                            <input type="hidden" id="val_id_1"/>
-                            <input type="hidden" id="val_dat"/>
-                            <div class="row">
-                                <div class="col-xl-4 form-group mb-4">
-                                    <label class="required form-label fw-bolder">تاريخ البدء الفعلي</label>
-                                    <input type="text" name="ACTUAL_START_DT_1" id="ACTUAL_START_DT_1" class="date3 form-control">
-                                    </div>
-                                <div class="col-xl-4 form-group mb-4">
-                                    <label class="required form-label fw-bolder">تاريخ الانتهاء الفعلي</label>
-                                    <input type="text" name="ACTUAL_FINISH_DT" id="ACTUAL_FINISH_DT" class="date2 form-control">
+                        <input type="hidden" id="val_id_1"/>
+                        <input type="hidden" id="val_dat"/>
+                        <div class="row">
+                            <div class="col-xl-4 form-group mb-4">
+                                <label class="required form-label fw-bolder">تاريخ البدء الفعلي</label>
+                                <input type="text" name="ACTUAL_START_DT_1" id="ACTUAL_START_DT_1" class="date3 form-control">
                                 </div>
-                                <div class="col-xl-4 form-group mb-4">
-                                    <label class="required form-label fw-bolder">مدة الانجاز</label>
-                                    <input type="text"  id="COMPLETION_PERIOD"  name="COMPLETION_PERIOD" value="{{old('COMPLETION_PERIOD',$tasks->COMPLETION_PERIOD)}}"  class="form-control form-control-solid"
-                                    placeholder="مدة الانجاز">
-                                </div>
-                                <div class="col-xl-4 form-group mb-4">
-                                    <label class="required form-label fw-bolder">نوع مدة الانجاز</label>
-                                    <select name="DURATION_TYPE" id="DURATION_TYPE" required class="form-control form-control-solid" >
-                                        <option value=""  >--اختر--</option>
-                                        <option value="1" >يوم</option>
-                                        <option value="2">ساعة</option>
-                                        <option value="3">ساعتين</option>
-                                        <option value="4" >شهر</option>
-
-                                    </select>
-                                </div>
+                            <div class="col-xl-4 form-group mb-4">
+                                <label class="required form-label fw-bolder">تاريخ الانتهاء الفعلي</label>
+                                <input type="text" name="ACTUAL_FINISH_DT" id="ACTUAL_FINISH_DT" class="date2 form-control">
                             </div>
+                            <div class="col-xl-4 form-group mb-4">
+                                <label class="required form-label fw-bolder">مدة الانجاز</label>
+                                  <input type="text"  id="COMPLETION_PERIOD"  name="COMPLETION_PERIOD" value="{{old('COMPLETION_PERIOD',$tasks->COMPLETION_PERIOD)}}"  class="form-control form-control-solid"
+                                  placeholder="مدة الانجاز">
+                            </div>
+                            <div class="col-xl-4 form-group mb-4">
+                                <label class="required form-label fw-bolder">نوع مدة الانجاز</label>
+                                <select name="DURATION_TYPE" id="DURATION_TYPE" required class="form-control form-control-solid" >
+                                    <option value=""  >--اختر--</option>
+                                    <option value="1" >يوم</option>
+                                    <option value="2">ساعة</option>
+                                    <option value="3">ساعتين</option>
+                                    <option value="4" >شهر</option>
+
+                                  </select>
+                            </div>
+                        </div>
 
 
 
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" id="toggel_1_save">حفظ</button>
-                    </div>
-                </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="toggel_1_save" data-dismiss="modal">حفظ</button>
+                </div>
             </div>
         </div>
     </div>
@@ -253,7 +182,19 @@
                                 <select name="SYSTEM_ID" id="SYSTEM_ID" class="form-control form-control-solid w-250px ps-15" >
                                     <option value=""  selected>--اختر--</option>
                                     @foreach($systems as $system)
-                                        <option value="{{ $system->ID }}">{{ $system->SYSTEM_NAME}}</option>
+                                        <option value="{{ $system->ID }}" {{$system->ID}}>{{ $system->SYSTEM_NAME}}</option>
+                                    @endforeach
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label for="">الأعضاء</label>
+                                <select name="MEM_ID" id="MEM_ID" class="form-control form-control-solid w-250px ps-15"  data-kt-docs-table-filter="search5">
+                                    <option value=""  selected>--اختر--</option>
+                                    @foreach($get_all_members as $member)
+                                        <option value="{{ $member->ID }}" {{$member->ID}}>{{ $member->MEM_NAME}}</option>
                                     @endforeach
                                 </select>
 
@@ -366,8 +307,9 @@
                     className: 'row-selected'
                 },
                 ajax: {
-                url: '{{ route('tasks.mydatatable') }}',
+                url: '{{ route('tasks.datatable') }}',
                 "data": function ( d ) {
+                    d.MEM_ID= $('#MEM_ID').val();
                     d.SYSTEM_ID= $('#SYSTEM_ID').val();
                     d.COMPLETION_STATUS = $('#COMPLETION_STATUS').val();
                     d.PLANNED_START_DT = $("#PLANNED_START_DT").val();
@@ -393,12 +335,8 @@
                             return "دعم فني";
                         }else if(data== 5){
                             return "تقرير";
-                        }else if(data== 6){
+                        }else{
                             return "اختبار";
-                        }else if(data== 7){
-                            return "مراسلة";
-                        }else if(data== 8){
-                            return "أمن معلومات";
                         }
                     } },
                     { data: 'PLANNED_START_DT',"searchable": false },
@@ -421,15 +359,15 @@
                         data: null,
                         'bSort': true,
                         render: function(data) {
-                            if (data.COMPLETION_STATUS == 0) {
+                            if (data.COMPLETION_STATUS == 0 && data.PLANNED_START_DT == null && data.PLANNED_FINISH_DT == null) {
                                 return '<span class="badge badge-secondary val">غير محدد</span>';
                             }
                             if (data.COMPLETION_STATUS == 1) {
                                 return '<span class="badge badge-success val">منجز</span>';
                             }
-                            if (data.COMPLETION_STATUS == 2) {
-                                return '<span class="badge badge-danger val">غير منجز</span>';
-                            }
+                            if (data.COMPLETION_STATUS == 0 && data.PLANNED_START_DT != null && data.PLANNED_FINISH_DT != null) {
+                                  return '<span class="badge badge-danger val ">غير منجز</span>';
+                             }
                             if (data.COMPLETION_STATUS== 3) {
                                 return '<span class="badge badge-warning val ">مؤجل</span>';
                             }
@@ -489,12 +427,42 @@
                         var toggel_text="";
                         var toggel_icon="check";
                         var action ="";
-                        if(data.COMPLETION_STATUS == 0 ){
-                            action = `\
+                        if(data.ID_NUM !=  {{ session('user')['ID_NUM'] }}){
+                            return '<i class="fa fa-eye-slash me-2"></i>';
+                        }
+                       if(data.COMPLETION_STATUS == 1){
+                        action = `\
+                                 <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="0" class="menu-link px-3 toggel" > <i class="fa fa-tasks me-2"></i>
+                                            غير محدد
+                                        </a>
+                                    </div>
+                                <!--end::Menu item-->
+                                <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}"  val_val="2" class="menu-link px-3 wait" > <i class="fa fa-tasks me-2"></i>
+                                            غير منجز
+                                        </a>
+                                    </div>
+                                <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
                                         <a href="#" val_id="${data.ID}" val_val="4" class="menu-link px-3 toggel_4" > <i class="fa fa-tasks me-2"></i>
                                             قيد العمل
+                                        </a>
+                                    </div>
+                                <!--end::Menu item-->
+                        `;
+                        // toggel_text="منجز";
+                        // toggel_icon="check";
+
+                       }else if(data.COMPLETION_STATUS == 2){
+                        action = `\
+                                 <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="0" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                            غير محدد
                                         </a>
                                     </div>
                                 <!--end::Menu item-->
@@ -507,15 +475,38 @@
                                 <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES == null?"":data.NOTES}" val_val="3" class="menu-link px-3 wait" > <i class="fa fa-times me-2"></i>
+                                        <a href="#" val_id="${data.ID}" val_val="4" class="menu-link px-3 toggel_4" > <i class="fa fa-tasks me-2"></i>
+                                            قيد العمل
+                                        </a>
+                                    </div>
+                                <!--end::Menu item-->
+                                <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}" val_val="3" class="menu-link px-3 wait" > <i class="fa fa-times me-2"></i>
                                             مؤجل
                                         </a>
                                     </div>
                                 <!--end::Menu item-->
                         `;
-                        }
-                       if(data.COMPLETION_STATUS == 1){
+                        // toggel_text="غير منجز";
+                        // toggel_icon="cancel";
+
+                       }else if(data.COMPLETION_STATUS == 3){
                         action = `\
+                                 <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="0" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                            غير محدد
+                                        </a>
+                                    </div>
+                                <!--end::Menu item-->
+                                <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_dat="${data.ACTUAL_START_DT}" val_id="${data.ID}" val_val="1" class="menu-link px-3 toggel_1" > <i class="fa fa-tasks me-2"></i>
+                                             منجز
+                                        </a>
+                                    </div>
+                                <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
                                         <a href="#" val_id="${data.ID}" val_val="4" class="menu-link px-3 toggel_4" > <i class="fa fa-tasks me-2"></i>
@@ -523,99 +514,84 @@
                                         </a>
                                     </div>
                                 <!--end::Menu item-->
+                                <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES == null?"":data.NOTES}" val_val="3" class="menu-link px-3 wait" > <i class="fa fa-times me-2"></i>
+                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}" val_val="2" class="menu-link px-3 wait" > <i class="fa fa-times me-2"></i>
+                                            غير منجز
+                                        </a>
+                                    </div>
+                                <!--end::Menu item-->
+                        `;
+                        // toggel_text="مؤجل";
+                        // toggel_icon="check";
+                       }else if(data.COMPLETION_STATUS == 4){
+                        action = `\
+                                 <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_val="0" class="menu-link px-3 toggel" > <i class="fa fa-times me-2"></i>
+                                            غير محدد
+                                        </a>
+                                    </div>
+                                <!--end::Menu item-->
+                                <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_dat="${data.ACTUAL_START_DT}" val_id="${data.ID}" val_val="1" class="menu-link px-3 toggel_1" > <i class="fa fa-tasks me-2"></i>
+                                             منجز
+                                        </a>
+                                    </div>
+                                <!--end::Menu item-->
+                                <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}" val_val="3" class="menu-link px-3 wait" > <i class="fa fa-times me-2"></i>
                                             مؤجل
+                                        </a>
+                                    </div>
+                                <!--end::Menu item-->
+                                <!--begin::Menu item-->
+                                    <div class="menu-item px-3">
+                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}" val_val="2" class="menu-link px-3 wait" > <i class="fa fa-times me-2"></i>
+                                            غير منجز
                                         </a>
                                     </div>
                                 <!--end::Menu item-->
                         `;
 
-                       }else if(data.COMPLETION_STATUS == 2){
+                        // toggel_text="قيد العمل";
+                        // toggel_icon="edit";
+                       }else{
                         action = `\
-                                <!--begin::Menu item-->
+                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_val="4" class="menu-link px-3 toggel_4" > <i class="fa fa-tasks me-2"></i>
+                                        <a href="#" val_id="${data.ID}" val_val="4" class="menu-link px-3 toggel" > <i class="fa fa-tasks me-2"></i>
                                             قيد العمل
                                         </a>
                                     </div>
                                 <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_dat="${data.ACTUAL_START_DT}" val_val="1" class="menu-link px-3 toggel_1" > <i class="fa fa-tasks me-2"></i>
+                                        <a href="#" val_dat="${data.ACTUAL_START_DT}" val_id="${data.ID}" val_val="1" class="menu-link px-3 toggel_1" > <i class="fa fa-tasks me-2"></i>
                                              منجز
                                         </a>
                                     </div>
                                 <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES == null?"":data.NOTES}" val_val="3" class="menu-link px-3 wait" > <i class="fa fa-times me-2"></i>
+                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}" val_val="3" class="menu-link px-3 wait" > <i class="fa fa-tasks me-2"></i>
                                             مؤجل
                                         </a>
                                     </div>
                                 <!--end::Menu item-->
-                        `;
-                       }else if(data.COMPLETION_STATUS == 3){
-                        action = `\
                                 <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_val="4" class="menu-link px-3 toggel_4" > <i class="fa fa-tasks me-2"></i>
-                                            قيد العمل
-                                        </a>
-                                    </div>
-                                <!--end::Menu item-->
-                                <!--begin::Menu item-->
-                                    <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_dat="${data.ACTUAL_START_DT}" val_val="1" class="menu-link px-3 toggel_1" > <i class="fa fa-tasks me-2"></i>
-                                             منجز
-                                        </a>
-                                    </div>
-                                <!--end::Menu item-->
-                            
-                        `;
-                       }else if(data.COMPLETION_STATUS == 4){
-                        action = `\
-                                <!--begin::Menu item-->
-                                    <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_dat="${data.ACTUAL_START_DT}" val_val="1" class="menu-link px-3 toggel_1" > <i class="fa fa-tasks me-2"></i>
-                                             منجز
-                                        </a>
-                                    </div>
-                                <!--end::Menu item-->
-                                <!--begin::Menu item-->
-                                    <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES == null?"":data.NOTES}" val_val="3" class="menu-link px-3 wait" > <i class="fa fa-times me-2"></i>
-                                            مؤجل
+                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}" val_val="2" class="menu-link px-3 wait" > <i class="fa fa-tasks me-2"></i>
+                                            غير منجز
                                         </a>
                                     </div>
                                 <!--end::Menu item-->
                         `;
+
                        }
-                       else if(data.COMPLETION_STATUS == 5 ){
-                            action = `\
-                                <!--begin::Menu item-->
-                                    <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_val="4" class="menu-link px-3 toggel_4" > <i class="fa fa-tasks me-2"></i>
-                                            قيد العمل
-                                        </a>
-                                    </div>
-                                <!--end::Menu item-->
-                                <!--begin::Menu item-->
-                                    <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_dat="${data.ACTUAL_START_DT}" val_val="1" class="menu-link px-3 toggel_1" > <i class="fa fa-tasks me-2"></i>
-                                             منجز
-                                        </a>
-                                    </div>
-                                <!--end::Menu item-->
-                                <!--begin::Menu item-->
-                                    <div class="menu-item px-3">
-                                        <a href="#" val_id="${data.ID}" val_notes="${data.NOTES == null?"":data.NOTES}" val_val="3" class="menu-link px-3 wait" > <i class="fa fa-times me-2"></i>
-                                            مؤجل
-                                        </a>
-                                    </div>
-                                <!--end::Menu item-->
-                        `;
-                        }
+
                         return `\
                             <a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start" data-kt-menu-flip="top-end">
                                 ...
@@ -716,7 +692,7 @@
                             // Simulate delete request -- for demo purpose only
                             jQuery.ajax({
                                 type: "DELETE",
-                                 url: '/tasks/'+id,
+                                 url: 'tasks/'+id,
                                 data:{
                                     "_token": "{{ csrf_token() }}",
                                 },
@@ -811,9 +787,6 @@
         $('#SYSTEM_ID').on('change', function (data, callbak) {
             dt.draw();
         });
-        $('#TEAM_ID').on('change', function (data, callbak) {
-            dt.draw();
-        });
         $('#COMPLETION_STATUS' ).on('change', function (data, callbak) {
             dt.draw();
         });
@@ -822,7 +795,7 @@
             var status = $(this).attr('val_val');
             jQuery.ajax({
                 type: "get",
-                url: '/tasks/change_status/'+id,
+                url: 'tasks/change_status/'+id,
                 data:{
                     "COMPLETION_STATUS": status,
                 },
@@ -850,7 +823,7 @@
             var status = 4;
             jQuery.ajax({
                 type: "get",
-                url: '/tasks/change_status/'+id,
+                url: 'tasks/change_status/'+id,
                 data:{
                     "COMPLETION_STATUS": status,
                     "ACTUAL_START_DT" : $("#ACTUAL_START_DT").val(),
@@ -872,7 +845,7 @@
             var status = 1;
             jQuery.ajax({
                 type: "get",
-                url: '/tasks/change_status_2/'+id,
+                url: 'tasks/change_status_2/'+id,
                 data:{
                     "COMPLETION_STATUS": status,
                     "ACTUAL_START_DT" : $("#ACTUAL_START_DT_1").val(),
@@ -882,7 +855,6 @@
                 },
                 dataType: 'json',
                 success :function (data) {
-                    $("#toggel_1_Modal").modal("hide");
                     dt.draw();
                     toastr.success("تم تعديل حالة المهمة");
 
@@ -895,7 +867,7 @@
             var id = $("#wait_id").val();
             jQuery.ajax({
                 type: "post",
-                url: '/tasks/update_notes/'+id,
+                url: 'tasks/update_notes/'+id,
                 data:{
                     "_token": "{{ csrf_token() }}",
                     "id": id,
@@ -927,40 +899,9 @@
         });
 
 
-         $("#save_task").click(function(){
-
-            var system_id = $('#SYSTEM_ID1').val();
-            var task_type = $('#TASK_TYPE').val();
-            var in_plan = $("input[name='IN_PLAN']:checked").val();
-            jQuery.ajax({
-                type: "post",
-                url: '/tasks',
-                data:{
-                    "_token": "{{ csrf_token() }}",
-                    'SYSTEM_ID':system_id,
-                    'DESCRIPTION' : null,
-                    'PRIORITY' :null,
-                    'TASK_TYPE':task_type,
-                    'PLANNED_START_DT': $("#PLANNED_START_DT_").val(),
-                    'PLANNED_FINISH_DT': $("#PLANNED_FINISH_DT_").val(),
-                    'ACTUAL_START_DT' : null,
-                    'ACTUAL_FINISH_DT' : null,
-                    'COMPLETION_PERIOD':null,
-                    'COMPLETION_STATUS' :null,
-                    'NOTES' :null,
-                    'IN_PLAN':in_plan,
-                    'TITLE'  : $('#title_').val(),
-                    'DURATION_TYPE' :null,
-                    'MEM_ID':{{session('user')['user_id']}},
-                },
-                dataType: 'json',
-                success :function (data) {
-                dt.draw();
-                toastr.success("تمت عملية الحفظ بنجاح");
-
-                }
-            });
-        });
+        // $("#ACTUAL_START_DT_").change(function(){
+        //     dt.draw();
+        // });
 
 
 
@@ -1008,7 +949,7 @@ $(document).on('click', '.cancel', function (data, callbak) {
                                         //  alert(id);
                                         jQuery.ajax({
                                                 type: "post",
-                                                url: '/tasks/update_reason/'+id,
+                                                url: 'tasks/update_reason/'+id,
                                                 data:{
                                                     "_token": "{{ csrf_token() }}",
                                                     "id": id,
@@ -1035,11 +976,7 @@ $(document).on('click', '.cancel', function (data, callbak) {
 
          } ) ;
 
-         $( '#TEAM_ID' ).select2( {
-           enableFiltering: true,
-           maxHeight: 350
 
-         } ) ;
     $( '#COMPLETION_STATUS' ).select2( {
            enableFiltering: true,
             maxHeight: 350
@@ -1062,23 +999,20 @@ $(document).on('click', '.cancel', function (data, callbak) {
                 dateFormat: 'd/m/Y',
             });
         });
-        $(document).on('click', '.add', function (data, callbak) {
-            $('#add').modal('show');
-
-        });
 
 
         $("#export").click(function(e){
             e.preventDefault();
                 jQuery.ajax({
                     type: "get",
-                    url: '/tasks/export',
+                    url: 'tasks/export',
                     data:{
-                        "MEM_ID":{{session('user')['user_id']}},
+                        "MEM_ID":$('#MEM_ID').val(),
                         "SYSTEM_ID":$('#SYSTEM_ID').val(),
                         "COMPLETION_STATUS":$('#COMPLETION_STATUS').val(),
                         "PLANNED_START_DT" : $("#PLANNED_START_DT").val(),
                         "ACTUAL_START_DT" : $("#ACTUAL_START_DT_").val(),
+                        "COMPLETION_STATUS" : $("#COMPLETION_STATUS").val(),
                         "title" : $("#task_titel").val()
                                      },
                                      xhrFields: {

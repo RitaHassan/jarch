@@ -36,7 +36,6 @@ Route::post('teams/save_by_id/{ID}', 'TeamController@save_by_id')->name('teams.s
 Route::get('teams/giveMembers/{TEAM_ID}', 'TeamController@giveMembers')->name('teams.giveMembers');
 Route::get('teams/datatable', 'TeamController@datatable')->name('teams.datatable');
 Route::get('teams/exportTeams', 'TeamController@exportTeams')->name('teams.exportTeams');
-
 Route::resource('teams', 'TeamController');
 
 
@@ -47,7 +46,6 @@ Route::resource('members', 'MemberController');
 
 
 Route::get('systems/datatable', 'SystemController@datatable')->name('systems.datatable');
-Route::get('systems/systems/{member_id}', 'SystemController@systems')->name('systems.info');
 Route::get('systems/toggel/{id}', 'SystemController@toggel')->name('systems.toggel');
 Route::post('systems/members', 'SystemController@add_members')->name('systems.members.store');
 Route::get('systems/members/{id}', 'SystemController@members')->name('systems.members.delete');
@@ -68,11 +66,12 @@ Route::get('tasks/sysName_mem/{ID_NUM}', 'TasksController@sysName_mem')->name('t
 Route::get('tasks/MyTasks', 'TasksController@MyTasks')->name('tasks.MyTasks');
 Route::get('tasks/GetMyTask', 'TasksController@GetMyTask')->name('tasks.GetMyTask');
 Route::get('tasks/mydatatable', 'TasksController@mydatatable')->name('tasks.mydatatable');
+
 Route::get('tasks/datatable', 'TasksController@datatable')->name('tasks.datatable');
 Route::get('tasks/datatable_all', 'TasksController@datatable_all')->name('tasks.datatable_all');
 Route::get('tasks/export', 'TasksController@export')->name('tasks.export');
 Route::get('tasks/all', 'TasksController@index_all')->name('tasks.index_all');
-Route::get('tasks/export_all', 'TasksController@export')->name('tasks.export_all');
+Route::get('tasks/export_all', 'TasksController@export_all')->name('tasks.export_all');
 Route::resource('tasks', 'TasksController');
 
 

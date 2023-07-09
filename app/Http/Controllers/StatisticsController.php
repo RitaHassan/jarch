@@ -11,8 +11,6 @@ class StatisticsController extends Controller
     {
         $statistics = new Statistics();
         $TOTAL_COUNT=$statistics->teams_count()['data'];
-
-       //dd($TOTAL_COUNT);
         $TOTAL_MEMBERS= $statistics->members_count()['data'];
         $TOTAL_SYSTEMS= $statistics->systems_count()['data'];
         $SYSTEMS_DISABLE= $statistics->systems_disable()['data'];
@@ -24,12 +22,11 @@ class StatisticsController extends Controller
         $MY_LAST_TOTAL_TASKS= $statistics->my_last_completed_tasks_count((session('user')['user_id']))['data'];
         $MY_TASKS_YEAR= $statistics->tasks_count_year()['data'];
         $MY_COMPLETED_TASKS_YEAR= $statistics->tasks_completed_year()['data'];
-         // dd($MY_TASKS_YEAR);       
-  //DD($MY_LAST_TOTAL_TASKS);
+
         return view('welcome',compact('TOTAL_COUNT'
-        ,'TOTAL_MEMBERS','TOTAL_SYSTEMS','SYSTEMS_DISABLE' 
-       ,'TASKS_COUNT','COMPLETED_TASKS','MY_TOTAL_TASKS','MY_COMPLETED_TASKS',
-       'LAST_TOTAL_TASKS','MY_LAST_TOTAL_TASKS','MY_TASKS_YEAR','MY_COMPLETED_TASKS_YEAR'));
+            ,'TOTAL_MEMBERS','TOTAL_SYSTEMS','SYSTEMS_DISABLE' 
+            ,'TASKS_COUNT','COMPLETED_TASKS','MY_TOTAL_TASKS','MY_COMPLETED_TASKS',
+            'LAST_TOTAL_TASKS','MY_LAST_TOTAL_TASKS','MY_TASKS_YEAR','MY_COMPLETED_TASKS_YEAR'));
     }
    
 

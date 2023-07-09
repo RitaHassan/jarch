@@ -58,4 +58,19 @@ class MYModel extends Model
         $stmt->execute();
     }
 
+    public static function  get_perm($p_id_no)
+    {
+        $cursor =null;
+        $stmt = DB::getPdo()->prepare("begin PERMISSION_PKG.GET_PERMISSIONS(:p_id_no, :out_cursor); end;");
+        $stmt->bindValue(':p_id_no', $p_id_no, PDO::PARAM_NULL);
+        $stmt->bindParam(':out_cursor', $cursor, PDO::PARAM_STMT, 0, \OCI_B_CURSOR);
+        $stmt->execute();
+        oci_execute($cursor, OCI_DEFAULT);
+        while($row = oci_fetch_object($cursor, OCI_ASSOC | OCI_RETURN_NULLS)){
+            $data[] = $row;
+        }
+        oci_free_cursor($cursor);
+        return $data;
+    }
+
 }

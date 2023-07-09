@@ -2,7 +2,7 @@
 <html lang="en" dir="rtl">
 <head>
     <meta charset="utf-8">
-    <title>الدخول إلى نظام التأهيل والإصلاح</title>
+    <title>الدخول إلى نظام  إدارة المهام</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link href="{{ get_asset('assets/login/css/app.css') }}" rel="stylesheet" />

@@ -182,6 +182,8 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'SYSTEM_ID'                  => 'النظام',
+    ],
 
 ];

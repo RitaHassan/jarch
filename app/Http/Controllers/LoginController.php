@@ -23,6 +23,7 @@ class LoginController extends Controller
             'MEM_NAME' => $user->MEM_NAME,
             'TEAM_ID' => $user->TEAM_ID
         ]);
+        session() -> put('is_managment' ,true);
         return redirect(route('index'));
        }else{
         throw ValidationException::withMessages([
