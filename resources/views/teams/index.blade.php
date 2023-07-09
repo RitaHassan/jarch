@@ -462,26 +462,7 @@
             $('#updateModal').modal('show');
         });
 
-        $("#btn_update").click(function(e){
-            e.preventDefault();
-            jQuery.ajax({
-                    type: "PATCH",
-                    url: 'teams/'+ $("#ID").val(),
-                    data:{
-                        "_token": "{{ csrf_token() }}",
-                        "NAME": $("#NAME_UPDATE").val(),
-                    },
-                    dataType: 'json',
-                    success :function (data) {
-                        $('#updateModal').modal('hide');
-                        $("#NAME_UPDATE").val("");
-                        $("#ID").val("");
-                        dt.draw();
-                        toastr.success("تمت عملية الحفظ بنجاح");
 
-                    }
-                });
-        });
         //end edit team
 
         //start show members

@@ -181,7 +181,6 @@
                                         <option value=""  >--اختر--</option>
                                         <option value="1" >يوم</option>
                                         <option value="2">ساعة</option>
-                                        <option value="3">ساعتين</option>
                                         <option value="4" >شهر</option>
 
                                     </select>

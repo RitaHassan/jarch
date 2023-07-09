@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Statistics;
 use Illuminate\Http\Request;
 
+use App\Models\System;
+use App\Models\Team;
+
 class StatisticsController extends Controller
 {
     public function index()
@@ -28,7 +31,39 @@ class StatisticsController extends Controller
             ,'TASKS_COUNT','COMPLETED_TASKS','MY_TOTAL_TASKS','MY_COMPLETED_TASKS',
             'LAST_TOTAL_TASKS','MY_LAST_TOTAL_TASKS','MY_TASKS_YEAR','MY_COMPLETED_TASKS_YEAR'));
     }
-   
+
+
+   /* public function index_view()
+    {
+        dd('ll');
+        $systems= System::LOAD_DATA(null,0,100,1)['data'];
+        $teams = Team::LOAD_DATA(null,0,100,1)['data'];
+        return view('tasks.index_all',compact('systems','teams'));
+    }*/
+
+    public function Table_Statistics(Request $request)
+    {
+
+        $search = null;
+        $search2 = null;
+        $search3 = null;
+        $search4 = null;
+        $search5 = null;
+
+
+        if($request->search['value'] != ""){
+            $search = $request->search['value'];
+        }
+        $PLANNED_START_DT = explode('-',$request->PLANNED_START_DT);
+        $PLANNED_START_DT_FIRST = isset($PLANNED_START_DT[0]) ? trim($PLANNED_START_DT[0]):null;
+        $PLANNED_START_DT_LAST = isset($PLANNED_START_DT[1]) ? trim($PLANNED_START_DT[1]):null;
+
+        $ACTUAL_START_DT = explode('-',$request->ACTUAL_START_DT);
+        $ACTUAL_START_DT_FIRST = isset($ACTUAL_START_DT[0]) ? trim($ACTUAL_START_DT[0]):null;
+        $ACTUAL_START_DT_LAST = isset($ACTUAL_START_DT[1]) ? trim($ACTUAL_START_DT[1]):null;
+       return json_encode(Statistics::STATISTICS_status($request->MEM_ID,$request->COMPLETION_STATUS,$request->SYSTEM_ID,
+       $PLANNED_START_DT_FIRST,$PLANNED_START_DT_LAST,$ACTUAL_START_DT_FIRST,$ACTUAL_START_DT_LAST,$request->start,$request->length));
+    }
 
 
 

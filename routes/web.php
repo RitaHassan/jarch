@@ -25,6 +25,9 @@ Route::middleware([CheckLogin::class])->group(function () {
 })->name('home');*/
 
 Route::get('/', 'StatisticsController@index')->name('index');
+Route::get('statistics/Table_Statistics', 'StatisticsController@Table_Statistics')->name('statistics.Table_Statistics');
+Route::get('statistics/show', 'StatisticsController@index_view')->name('statistics.index_view');
+
 // Route::get('statistics/index', 'StatisticsController@index');
 // Route::resource('statistics', 'StatisticsController');
 
@@ -40,6 +43,8 @@ Route::resource('teams', 'TeamController');
 
 
 // Route::post('members/save_by_id/{ID}', 'MemberController@save_by_id')->name('members.save_by_id');
+// Route::patch('members/update/{ID}', 'MemberController@update')->name('members.update');
+Route::get('members/update_deleted/{ID}', 'MemberController@update_deleted')->name('members.update_deleted');
 Route::get('members/info/{ID_NUM}', 'MemberController@info')->name('members.info');
 Route::get('members/datatable', 'MemberController@datatable')->name('members.datatable');
 Route::resource('members', 'MemberController');
