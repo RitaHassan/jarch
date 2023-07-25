@@ -33,7 +33,7 @@ Route::get('statistics/show', 'StatisticsController@index_view')->name('statisti
 
 
 
-
+Route::get('teams/exportTeamsNum', 'TeamController@exportTeamsNum')->name('teams.exportTeamsNum');
 Route::get('teams/create_by_id/{ID}', 'TeamController@create_by_id')->name('teams.create_by_id');
 Route::post('teams/save_by_id/{ID}', 'TeamController@save_by_id')->name('teams.save_by_id');
 Route::get('teams/giveMembers/{TEAM_ID}', 'TeamController@giveMembers')->name('teams.giveMembers');
@@ -50,9 +50,11 @@ Route::get('members/datatable', 'MemberController@datatable')->name('members.dat
 Route::resource('members', 'MemberController');
 
 
+Route::get('systems/exportSystemNum', 'SystemController@exportSystemNum')->name('systems.exportSystemNum');
 Route::get('systems/datatable', 'SystemController@datatable')->name('systems.datatable');
+Route::get('systems/systems/{member_id}', 'SystemController@systems')->name('systems.info');
 Route::get('systems/toggel/{id}', 'SystemController@toggel')->name('systems.toggel');
-Route::post('systems/members', 'SystemController@add_members')->name('systems.members.store');
+Route::post('systems/addmembers', 'SystemController@add_members')->name('systems.members.store');
 Route::get('systems/members/{id}', 'SystemController@members')->name('systems.members.delete');
 Route::delete('systems/members/{id}', 'SystemController@delete_member')->name('systems.members');
 Route::get('systems/get_by_user_id/{user_id}', 'SystemController@get_by_user_id')->name('systems.get_by_user_id');
@@ -76,4 +78,11 @@ Route::get('tasks/datatable', 'TasksController@datatable')->name('tasks.datatabl
 Route::get('tasks/datatable_all', 'TasksController@datatable_all')->name('tasks.datatable_all');
 Route::get('tasks/export', 'TasksController@export')->name('tasks.export');
 Route::get('tasks/all', 'TasksController@index_all')->name('tasks.index_all');
+Route::get('tasks/exportNum', 'TasksController@exportNum')->name('tasks.exportNum');
 Route::get('tasks/export_all', 'TasksController@export_all')->name('tasks.export_all');
+Route::resource('tasks', 'TasksController');
+
+Route::get('transaction/get_log/{id}', 'TransactionController@get_log')->name('transaction.get_log');
+
+
+});

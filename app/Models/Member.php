@@ -45,6 +45,27 @@ class Member extends MYModel
         return ['data'=>$data,'recordsFiltered'=>$P_recordsTotal,'recordsTotal'=>$P_recordsTotal];
     }
 
+
+    public static function GET_DATA($P_NAME,$P_STRAT,$P_LENGTH){
+        $cursor =null;
+        $data = array();
+        $P_recordsTotal = 0;
+        $stmt = DB::getPdo()->prepare("begin MEMBER_PKG.GET_DATA(:P_MEM_NAME,:P_STRAT, :P_LENGTH, :P_recordsTotal, :out_cursor); end;");
+        $stmt->bindValue(':P_MEM_NAME', $P_NAME, PDO::PARAM_NULL);
+      //  $stmt->bindValue(':p_system_id', $p_system_id , PDO::PARAM_NULL);
+        $stmt->bindValue(':P_STRAT', $P_STRAT, PDO::PARAM_NULL);
+        $stmt->bindValue(':P_LENGTH', $P_LENGTH, PDO::PARAM_NULL);
+        $stmt->bindParam(':P_recordsTotal', $P_recordsTotal, PDO::PARAM_INT);
+        $stmt->bindParam(':out_cursor', $cursor, PDO::PARAM_STMT, 0, \OCI_B_CURSOR);
+        $stmt->execute();
+        oci_execute($cursor, OCI_DEFAULT);
+        while($row = oci_fetch_object($cursor, OCI_ASSOC | OCI_RETURN_NULLS)){
+            $data[] = $row;
+        }
+        oci_free_cursor($cursor);
+        return ['data'=>$data,'recordsFiltered'=>$P_recordsTotal,'recordsTotal'=>$P_recordsTotal];
+    }
+
     public static function Save_($array_in){
         $stmt = DB::getPdo()->prepare("begin MEMBER_PKG.SAVE(:p_id_num,:p_created_by,:p_MEM_NAME,:p_active,:p_role,:P_TEAM_ID,:P_STATUS,:P_MSG); end;");
       /*  foreach ($array_in as $key => $value) {

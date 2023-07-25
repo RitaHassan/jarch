@@ -3,7 +3,7 @@
 if (! function_exists('get_asset')) {
     function get_asset($path) : string
     {
-        return '/'.$path; 
+        return '/'.$path;
     }
 }
 
@@ -114,4 +114,40 @@ function change_key($array)
     return $array;
 }
 
+
+
+
+use App\Models\Transaction;
+use Illuminate\Support\Carbon;
+
+class LogActivity
+{
+
+public static function addToLog($TABLE_ID,$RECORD_ID,
+$ACTION_ID,$SCREEN_ID , $DESCRIPTION )
+{
+    $transaction = new Transaction();
+    $transaction->USER_BY = 1 ;//session() -> has('user') ? session('user')['idc'] : session('user_id');//session('idNo');//auth()->check() ? auth()->user()->id : 1;
+    $transaction->TABLE_ID = $TABLE_ID;
+    $transaction->RECORD_ID = $RECORD_ID;
+    $transaction->ACTION_ID = $ACTION_ID;
+    $transaction->SCREEN_ID = $SCREEN_ID;
+    $transaction->DESCRIPTION = $DESCRIPTION;
+    $transaction->IP = Request::ip();
+    $transaction->DEVICE = request() ->server ->get('HTTP_SEC_CH_UA') ? request() ->server ->get('HTTP_SEC_CH_UA') : 'unknown';
+/*1,$TABLE_ID,$RECORD_ID,$action_id,
+    $SCREEN_ID. $DESCRIPTION,Request::ip(), request() ->server ->get('HTTP_SEC_CH_UA') ? request() ->server ->get('HTTP_SEC_CH_UA') : 'unknown'*/
+    $X = Transaction::Save_($transaction);
+}
+
+
+
+public static function logActivityLists()
+{
+    return LogActivityModel::latest()->get();
+}
+
+
+
+}
 ?>

@@ -154,6 +154,11 @@ $get_all_members= $tasks->get_all_members()['data'];
                     <span class="svg-icon svg-icon-2"></span>
                     تصدير
                 </button>
+
+                <button  id="export2" class="btn btn-light-primary me-3" data-bs-toggle="tooltip" title="">
+                    <span class="svg-icon svg-icon-2"></span>
+                    تقرير احصائي
+                </button>
                 <!--end::Filter-->
 
 
@@ -263,7 +268,7 @@ $get_all_members= $tasks->get_all_members()['data'];
         </div>
         <br>
         <div class="row col-md-12">
-            
+
             <div class="col-md-2">
                 <button type="button" class="btn btn-primary">
                     الكلي <span class="badge badge-light" id="span_all"></span>
@@ -294,15 +299,15 @@ $get_all_members= $tasks->get_all_members()['data'];
                     <span class="sr-only">unread messages</span>
                   </button>
             </div>
-           
+
             <div class="col-md-2">
                 <button type="button" class="btn btn-danger">
                     غير منجز  <span class="badge badge-light" id="span_notdone"></span>
                     <span class="sr-only">unread messages</span>
                   </button>
             </div>
-           
-            
+
+
         </div>
         <br>
         <div class="row">
@@ -338,7 +343,53 @@ $get_all_members= $tasks->get_all_members()['data'];
         <!--end::Datatable-->
     </div>
 </div>
+
+<div id="toggel_log_Modal" class="modal fade bd-example-modal-lg"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" >
+    <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">عرض الانظمة</h3>
+
+            </div>
+            <div class="modal-body">
+
+                <input type="hidden" id="val_id_1" />
+                <input type="hidden" id="val_dat" />
+                <table class="table table-bordered table-hover table-striped dataTable" id="systems_table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>الاجراء</th>
+                            <th>التفاصيل</th>
+                            <th>الجدول</th>
+                            <th>الشاشة </th>
+                            <th>الاي بي</th>
+                            <th>الجهاز</th>
+                            <th>التاريخ</th>
+                            <th>المستخدم</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
 @endsection
+
+@push('css')
+.st {
+    width: 1000px;
+    margin: auto;
+  }
+@endpush
 @push('javascript')
 
 
@@ -392,7 +443,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                    $("#span_undefined").html(json.undefined);
                     },
                 },
-              
+
                 columns: [
 
                     { data: 'TEAM',"searchable": false },
@@ -530,6 +581,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                         </a>
                                     </div>
                                 <!--end::Menu item-->
+
                         `;
                         }
                        if(data.COMPLETION_STATUS == 1){
@@ -589,7 +641,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                         </a>
                                     </div>
                                 <!--end::Menu item-->
-                            
+
                         `;
                        }else if(data.COMPLETION_STATUS == 4){
                         action = `\
@@ -649,11 +701,18 @@ $get_all_members= $tasks->get_all_members()['data'];
                                 </div>
                                 <!--end::Menu item-->
                                 `+action+
-                                `/
+                                `
                                  <!--begin::Menu item-->
                                 <div class="menu-item px-3">
                                     <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}" val_val="5" class="menu-link px-3 wait"  data-kt-docs-table-filter="add_reason2"> <i class="fa fa-times me-2"></i>
                                   الغاء
+                                  </a>
+                                </div>
+                                <!--end::Menu item-->
+
+                                <div class="menu-item px-3">
+                                    <a href="#" val_id="${data.ID}" val_notes="${data.NOTES}" val_val="5" class="menu-link px-3 log"  data-kt-docs-table-filter="add_reason2"> <i class="fa fa-times me-2"></i>
+                                  سجل الحركات
                                   </a>
                                 </div>
                                 <!--end::Menu item-->
@@ -679,7 +738,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                 handleupdatecancel();
                 KTMenu.createInstances();
             });
-           
+
         }
 
 
@@ -912,6 +971,7 @@ $get_all_members= $tasks->get_all_members()['data'];
 
         $("#save_wait").click(function(){
             var id = $("#wait_id").val();
+           //alert('wait');
             jQuery.ajax({
                 type: "post",
                 url: '/tasks/update_notes/'+id,
@@ -994,7 +1054,7 @@ $(document).on('click', '.cancel', function (data, callbak) {
 
                     $(".save_cancel").click(function(){
                                             var id = $("#cancel_id").val();
-                                        //  alert(id);
+                                          alert('cancel');
                                         jQuery.ajax({
                                                 type: "post",
                                                 url: '/tasks/update_reason/'+id,
@@ -1087,6 +1147,182 @@ $(document).on('click', '.cancel', function (data, callbak) {
 
 
             });
+
+
+            $(document).on('click', '.log', function(data, callbak) {
+            //$("#val_id_1").val($(this).attr('val_id'));
+            //$("#ACTUAL_START_DT_1").val($(this).attr('val_dat'));
+            var record_id = $(this).attr('val_id');
+            /// alert(member_id);
+            $("#toggel_log_Modal").modal("show");
+            $("#MEMBER_ID").val($(this).attr('val_memeber'));
+
+            jQuery.ajax({
+                type: "get",
+                url: '/transaction/get_log/' + record_id,
+                dataType: 'json',
+                success: function(data) {
+                    $("#systems_table").find('tbody').empty();
+                    console.log(data);
+                    data.forEach((d, index) => {
+                        if(d.ACTION_ID==1){
+                        var action ='اضافة' ;
+                    }else if(d.ACTION_ID==3){
+                        var action ='تعديل' ;
+                    }else if(d.ACTION_ID==2){
+                        var action ='حذف' ;
+                    }else if(d.ACTION_ID==5){
+                        var action ='عرض' ;
+                    }
+                    /////////////////////////////////
+                    if(d.TABLE_ID==1){
+                        var table ='المهام' ;
+                    }else if(d.TABLE_ID==3){
+                        var table ='الفرق' ;
+                    }else if(d.TABLE_ID==2){
+                        var table ='الانظمة' ;
+                    }else if(d.TABLE_ID==5){
+                        var table ='الاعضاء' ;
+                    }else if(d.TABLE_ID==5){
+                        var table ='اعضاء النظام' ;
+                    }
+                    //////////////////////////////////////////
+                    if(d.TABLE_ID==1){
+                        var table ='المهام' ;
+                    }else if(d.TABLE_ID==2){
+                        var table ='الفرق' ;
+                    }else if(d.TABLE_ID==3){
+                        var table ='الانظمة' ;
+                    }else if(d.TABLE_ID==4){
+                        var table ='الاعضاء' ;
+                    }else if(d.TABLE_ID==5){
+                        var table ='اعضاء النظام' ;
+                    }
+
+                    if(d.SCREEN_ID==11){
+                        var screen ='صفحة الاضافة' ;
+                    }else if(d.SCREEN_ID==12){
+                        var screen ='مودال الاضافة' ;
+                    }
+
+                            $("#systems_table").find('tbody').append("<tr><td>"+ d.RECORD_ID +
+                            "</td><td>" + action +
+                            "</td><td>" + d.DESCRIPTION +
+                            "</td><td>" + table +
+                            "</td><td>" + screen +
+                            "</td><td>" + d.IP +
+                            "</td><td>" + d.DEVICE +
+                            "</td><td>" + d.TRANS_DATE +
+                            "</td><td>" + d.USER_BY +
+                            "</td></tr>"
+                            );
+
+                    });
+                }
+            });
+        });
+
+
+        $("#export2").click(function(e){
+            e.preventDefault();
+                jQuery.ajax({
+                    type: "get",
+                    url: '/tasks/exportNum',
+                    data:{
+
+                        },
+                                     xhrFields: {
+                            responseType: 'blob'
+                        },
+                    success :function (data) {
+                        var a = document.createElement('a');
+                        var url = window.URL.createObjectURL(data);
+                        a.href = url;
+                        a.download = Date.now()+'tasks.xlsx';
+                        document.body.append(a);
+                        a.click();
+                        a.remove();
+                        window.URL.revokeObjectURL(url);
+
+                    }
+                });
+
+
+            });
+
+
+            $(document).on('click', '.log', function(data, callbak) {
+            //$("#val_id_1").val($(this).attr('val_id'));
+            //$("#ACTUAL_START_DT_1").val($(this).attr('val_dat'));
+            var record_id = $(this).attr('val_id');
+            /// alert(member_id);
+            $("#toggel_log_Modal").modal("show");
+            $("#MEMBER_ID").val($(this).attr('val_memeber'));
+
+            jQuery.ajax({
+                type: "get",
+                url: '/transaction/get_log/' + record_id,
+                dataType: 'json',
+                success: function(data) {
+                    $("#systems_table").find('tbody').empty();
+                    console.log(data);
+                    data.forEach((d, index) => {
+                        if(d.ACTION_ID==1){
+                        var action ='اضافة' ;
+                    }else if(d.ACTION_ID==3){
+                        var action ='تعديل' ;
+                    }else if(d.ACTION_ID==2){
+                        var action ='حذف' ;
+                    }else if(d.ACTION_ID==5){
+                        var action ='عرض' ;
+                    }
+                    /////////////////////////////////
+                    if(d.TABLE_ID==1){
+                        var table ='المهام' ;
+                    }else if(d.TABLE_ID==3){
+                        var table ='الفرق' ;
+                    }else if(d.TABLE_ID==2){
+                        var table ='الانظمة' ;
+                    }else if(d.TABLE_ID==5){
+                        var table ='الاعضاء' ;
+                    }else if(d.TABLE_ID==5){
+                        var table ='اعضاء النظام' ;
+                    }
+                    //////////////////////////////////////////
+                    if(d.TABLE_ID==1){
+                        var table ='المهام' ;
+                    }else if(d.TABLE_ID==2){
+                        var table ='الفرق' ;
+                    }else if(d.TABLE_ID==3){
+                        var table ='الانظمة' ;
+                    }else if(d.TABLE_ID==4){
+                        var table ='الاعضاء' ;
+                    }else if(d.TABLE_ID==5){
+                        var table ='اعضاء النظام' ;
+                    }
+
+                    if(d.SCREEN_ID==11){
+                        var screen ='صفحة الاضافة' ;
+                    }else if(d.SCREEN_ID==12){
+                        var screen ='مودال الاضافة' ;
+                    }
+
+                            $("#systems_table").find('tbody').append("<tr><td>"+ d.RECORD_ID +
+                            "</td><td>" + action +
+                            "</td><td>" + d.DESCRIPTION +
+                            "</td><td>" + table +
+                            "</td><td>" + screen +
+                            "</td><td>" + d.IP +
+                            "</td><td>" + d.DEVICE +
+                            "</td><td>" + d.TRANS_DATE +
+                            "</td><td>" + d.USER_BY +
+                            "</td></tr>"
+                            );
+
+                    });
+                }
+            });
+        });
 
     </script>
     <script>

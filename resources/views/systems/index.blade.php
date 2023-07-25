@@ -24,11 +24,18 @@
                     <button type="button" id="print" class='btn btn-primary'><i class='fa fa-print'></i>تصدير
                         اكسل</button>
 
+
+
                 </div>
 
                 <div class="d-flex justify-content-end" data-kt-docs-table-toolbar="base">
 
                     <button type="button" id="REPORT" class='btn btn-primary'><i class='fa fa-print'></i>تقرير تفصيلي
+                        </button>
+
+                        <button id="export2" class="btn btn-light-primary me-3" data-bs-toggle="tooltip" title="">
+                            <span class="svg-icon svg-icon-2"></span>
+                            تقرير احصائي
                         </button>
 
                 </div>
@@ -492,7 +499,7 @@
                     dataType: 'json',
                     success: function(data) {
                         console.log(data);
-                        if (data == 1) {
+                        if (data.status >= 1) {
                             $('#addModal').modal('hide');
                             $("#SYSTEM_NUM").val("");
                             $("#SYSTEM_NAME").val("");
@@ -526,6 +533,7 @@
             })
 
             function draw_members(system_id) {
+                //alert(system_id);
                 jQuery.ajax({
                     type: "get",
                     url: 'systems/members/' + system_id,
@@ -634,9 +642,10 @@
             $("#add_member").click(function(e) {
                 e.preventDefault();
                 var SYSTEM_ID = $('#SYSTEM_ID').val();
+                
                 jQuery.ajax({
                     type: "post",
-                    url: 'systems/members',
+                    url: 'systems/addmembers',
                     data: {
                         "_token": "{{ csrf_token() }}",
                         "SYSTEM_ID": SYSTEM_ID,
@@ -644,6 +653,7 @@
                     },
                     dataType: 'json',
                     success: function(data) {
+                        
                         if (data.status == 1) {
                             $("#ID_NUM").val("");
                             $("#MEM_NAME").val("");
@@ -742,5 +752,32 @@
                 });
             });
         });
+
+        $("#export2").click(function(e){
+            e.preventDefault();
+                jQuery.ajax({
+                    type: "get",
+                    url: '/systems/exportSystemNum',
+                    data:{
+
+                        },
+                                     xhrFields: {
+                            responseType: 'blob'
+                        },
+                    success :function (data) {
+                        var a = document.createElement('a');
+                        var url = window.URL.createObjectURL(data);
+                        a.href = url;
+                        a.download = Date.now()+'tasks.xlsx';
+                        document.body.append(a);
+                        a.click();
+                        a.remove();
+                        window.URL.revokeObjectURL(url);
+
+                    }
+                });
+
+
+            });
     </script>
 @endpush

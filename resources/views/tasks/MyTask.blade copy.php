@@ -227,7 +227,7 @@ $get_all_members= $tasks->get_all_members()['data'];
             <!--begin::Toolbar-->
             <div class="d-flex justify-content-end" data-kt-docs-table-toolbar="base">
                 <!--begin::Filter-->
-               
+
                 <!--end::Filter-->
 
 
@@ -684,7 +684,7 @@ var created_user = <?php echo $created_user; ?>;
                             <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
                                 <!--begin::Menu item-->
                                 <div class="menu-item px-3">
-                                    <a href="${edit_link}" class="menu-link px-3" data-kt-docs-table-filter="edit_row"> <i class="fa fa-edit me-2"></i>
+                                    <a href="${edit_link}" class="menu-link px-3" data-kt-docs-table-filter="edit_row" target="_blank"> <i class="fa fa-edit me-2"></i>
                                         تعديل
                                     </a>
                                 </div>

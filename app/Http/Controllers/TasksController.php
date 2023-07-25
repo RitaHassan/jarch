@@ -6,9 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Tasks;
 use App\Models\SystemMembers;
 use App\Models\System;
+use App\Models\Member;
 use App\Exports\ExportTask;
+use App\Exports\ExportTaskNum;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Team;
+use App\Classes\StaticCode;
 
 class TasksController extends Controller
 {
@@ -38,7 +41,7 @@ class TasksController extends Controller
         }else{
             $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
         }
-  
+
         $teams = Team::LOAD_DATA(null,0,100,1)['data'];
         return view('tasks.index_all',compact('systems','teams','html_breadcrumbs','html_new_path'));
     }
@@ -50,15 +53,18 @@ class TasksController extends Controller
      */
     public function create()
     {
+        $system = new System();
+          $member2= $system->teamSelect()['data'];
           $tasks = new Tasks();
         if(session('is_managment')){
             $systems= System::LOAD_DATA(null,0,100,1)['data'];
         }else{
             $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
         }
-          $GET_MEMBERS= $tasks->GET_MEMBERS()['data'];
+          //$GET_MEMBERS= $tasks->GET_MEMBERS()['data'];
+          $GET_MEMBERS=Member::LOAD_DATA(null,0,100,1)['data'];
 
-          return view('tasks.form',compact('tasks','systems','GET_MEMBERS'));
+          return view('tasks.form',compact('tasks','systems','GET_MEMBERS','member2'));
 
     }
 
@@ -82,6 +88,8 @@ class TasksController extends Controller
         $ACTUAL_START_DT = explode('-',$request->ACTUAL_START_DT);
         $ACTUAL_START_DT_FIRST = isset($ACTUAL_START_DT[0]) ? trim($ACTUAL_START_DT[0]):null;
         $ACTUAL_START_DT_LAST = isset($ACTUAL_START_DT[1]) ? trim($ACTUAL_START_DT[1]):null;
+        \LogActivity::addToLog(StaticCode::$tasks,null,StaticCode::$showall,StaticCode::$page,'عرض المهام ');
+
        return json_encode(Tasks::LOAD_DATA($search,$request->MEM_ID,$request->COMPLETION_STATUS,$request->SYSTEM_ID,
        $PLANNED_START_DT_FIRST,$PLANNED_START_DT_LAST,$ACTUAL_START_DT_FIRST,$ACTUAL_START_DT_LAST,$request->start,$request->length));
 
@@ -108,6 +116,8 @@ class TasksController extends Controller
         $ACTUAL_START_DT = explode('-',$request->ACTUAL_START_DT);
         $ACTUAL_START_DT_FIRST = isset($ACTUAL_START_DT[0]) ? trim($ACTUAL_START_DT[0]):null;
         $ACTUAL_START_DT_LAST = isset($ACTUAL_START_DT[1]) ? trim($ACTUAL_START_DT[1]):null;
+        \LogActivity::addToLog(StaticCode::$tasks,null,StaticCode::$showall,StaticCode::$page,'عرض مهامي ');
+
        return json_encode(Tasks::LOAD_DATA($search,session('user')['user_id'],$request->COMPLETION_STATUS,$request->SYSTEM_ID,
        $PLANNED_START_DT_FIRST,$PLANNED_START_DT_LAST,$ACTUAL_START_DT_FIRST,$ACTUAL_START_DT_LAST,$request->start,$request->length));
 
@@ -134,6 +144,7 @@ class TasksController extends Controller
         $ACTUAL_START_DT = explode('-',$request->ACTUAL_START_DT);
         $ACTUAL_START_DT_FIRST = isset($ACTUAL_START_DT[0]) ? trim($ACTUAL_START_DT[0]):null;
         $ACTUAL_START_DT_LAST = isset($ACTUAL_START_DT[1]) ? trim($ACTUAL_START_DT[1]):null;
+        \LogActivity::addToLog(StaticCode::$tasks,null,StaticCode::$showall,StaticCode::$page,'عرض المهام ');
 
        return json_encode(Tasks::LOAD_DATA_ALL($search,$request->MEM_ID,$request->COMPLETION_STATUS,$request->SYSTEM_ID,$request->TEAM_ID,
        $PLANNED_START_DT_FIRST,$PLANNED_START_DT_LAST,$ACTUAL_START_DT_FIRST,$ACTUAL_START_DT_LAST,$request->start,$request->length));
@@ -163,7 +174,8 @@ class TasksController extends Controller
            'IN_PLAN'=>'required',
            'TITLE'=>'sometimes',
            'DURATION_TYPE'=>'sometimes',
-           'MEM_ID' =>'required'
+           'MEM_ID' =>'required' ,
+           'TEAM_ID' => 'required'
 
 
         ]);
@@ -172,14 +184,19 @@ class TasksController extends Controller
 
      $tasks = new Tasks();
 
-
      $request->request->add(['CREATED_BY' => 1]);
      $result = Tasks::Save_(change_key($request->only($tasks->getFillable())));
+
+
     if($request->ajax()){
+        \LogActivity::addToLog(StaticCode::$tasks,$result['STATUS'],StaticCode::$insert,StaticCode::$model,'اضافة مهمة جديدة');
+
        return $result['STATUS'];
 
     }else {
-        if($result['STATUS']==1){
+        if($result['STATUS'] > 0){
+            \LogActivity::addToLog(StaticCode::$tasks,$result['STATUS'],StaticCode::$insert,StaticCode::$page,'اضافة مهمة جديدة');
+
             return back()->with('success',$result['MSG'] );
         }else {
             return back()->with('error',$result['MSG'] );
@@ -209,19 +226,21 @@ class TasksController extends Controller
      */
     public function edit($id)
     {
+        $system = new System();
+          $member2= $system->teamSelect()['data'];
         $tasks = new Tasks();
         if(session('is_managment')){
             $systems= System::LOAD_DATA(null,0,100,1)['data'];
         }else{
             $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
         }
-      
+
         $tasks  = $tasks->find_by_id($id);
         if ((!$tasks || $tasks->MEM_ID !=  session('user')['user_id'] ) && !session('is_managment')) {
             abort(404);
         }
         $GET_MEMBERS = SystemMembers::get_systems_by_id($tasks->SYSTEM_ID)['data'];
-        return view('tasks.form',compact('tasks','systems','GET_MEMBERS'));
+        return view('tasks.form',compact('tasks','systems','GET_MEMBERS','member2'));
     }
 
     /**
@@ -248,7 +267,8 @@ class TasksController extends Controller
            'IN_PLAN'=>'required',
            'TITLE'=>'required',
            'DURATION_TYPE'=>'sometimes',
-           'MEM_ID' =>'required'
+           'MEM_ID' =>'required' ,
+           'TEAM_ID'=> 'required'
 
 
         ]);
@@ -262,7 +282,9 @@ class TasksController extends Controller
 
         $request->request->add(['UPDATED_BY' => 1,'ID'=>$id]);
         $result = Tasks::Update_(change_key($request->only((new Tasks())->getFillable())));
-        if($result['STATUS']==1){
+        \LogActivity::addToLog(StaticCode::$tasks,$id,StaticCode::$update,StaticCode::$page,' تعديل المهمة ');
+
+        if($result['STATUS']>0){
             return back()->with('success',$result['MSG'] );
 
         }else {
@@ -329,6 +351,8 @@ class TasksController extends Controller
 
         $request->request->add(['UPDATED_BY' => 1,'ID'=>$id]);
         $result = Tasks::update_reason(change_key($request->only((new Tasks())->getFillable())));
+        \LogActivity::addToLog(StaticCode::$tasks,$id,StaticCode::$update,StaticCode::$page,' سبب التأجيل ');
+
         return [];
 
     }
@@ -342,8 +366,12 @@ class TasksController extends Controller
         }
         if($request->ACTUAL_START_DT){
             $res= Tasks::change_status($P_ID,$request->COMPLETION_STATUS,$request->ACTUAL_START_DT);
+            \LogActivity::addToLog(StaticCode::$tasks,$P_ID,StaticCode::$update,StaticCode::$page,'  تغيير حالة المهمة قيد العمل');
+
         }else{
             $res= Tasks::change_status($P_ID,$request->COMPLETION_STATUS,NULL);
+            \LogActivity::addToLog(StaticCode::$tasks,$P_ID,StaticCode::$update,StaticCode::$page,' تغيير حالة المهمة قيد العمل');
+
         }
 
         return ['status'=>1];
@@ -359,6 +387,7 @@ class TasksController extends Controller
             return ['status'=>-1,'msg'=>'عملية غير قانونية'];
         }
         $res= Tasks::change_status_2($P_ID,$request->COMPLETION_STATUS,$request->ACTUAL_START_DT,$request->ACTUAL_FINISH_DT,$request->COMPLETION_PERIOD,$request->DURATION_TYPE);
+        \LogActivity::addToLog(StaticCode::$tasks,$P_ID,StaticCode::$update,StaticCode::$page,'  تغيير حالة المهمة الي منجز');
 
 
         return [];
@@ -374,6 +403,9 @@ class TasksController extends Controller
         $ACTUAL_START_DT = explode('-',$request->ACTUAL_START_DT);
         $ACTUAL_START_DT_FIRST = isset($ACTUAL_START_DT[0]) ? trim($ACTUAL_START_DT[0]):null;
         $ACTUAL_START_DT_LAST = isset($ACTUAL_START_DT[1]) ? trim($ACTUAL_START_DT[1]):null;
+
+        \LogActivity::addToLog(StaticCode::$tasks,null,StaticCode::$export,StaticCode::$page,' التقرير مهامي ');
+
         return Excel::download(new ExportTask($request->title,$request->MEM_ID,$request->COMPLETION_STATUS,$request->SYSTEM_ID,$PLANNED_START_DT_FIRST,$PLANNED_START_DT_LAST,$ACTUAL_START_DT_FIRST,$ACTUAL_START_DT_LAST,null,0), 'teams.xlsx');
     }
 
@@ -387,7 +419,16 @@ class TasksController extends Controller
         $ACTUAL_START_DT_FIRST = isset($ACTUAL_START_DT[0]) ? trim($ACTUAL_START_DT[0]):null;
         $ACTUAL_START_DT_LAST = isset($ACTUAL_START_DT[1]) ? trim($ACTUAL_START_DT[1]):null;
 
+        \LogActivity::addToLog(StaticCode::$tasks,null,StaticCode::$export,StaticCode::$page,' التقرير المهام ');
+
         return Excel::download(new ExportTask($request->title,$request->MEM_ID,$request->COMPLETION_STATUS,$request->SYSTEM_ID,$PLANNED_START_DT_FIRST,$PLANNED_START_DT_LAST,$ACTUAL_START_DT_FIRST,$ACTUAL_START_DT_LAST,$request->TEAM_ID,1), 'teams.xlsx');
+    }
+
+
+    public function exportNum(Request $request)
+    {
+        \LogActivity::addToLog(StaticCode::$tasks,null,StaticCode::$export,StaticCode::$page,' التقرير تجميعي المهام ');
+        return Excel::download(new ExportTaskNum(), 'teams.xlsx');
     }
 
 
@@ -395,6 +436,9 @@ class TasksController extends Controller
 
     public function MyTasks()
     {
+
+        $system = new System();
+        $member2= $system->teamSelect()['data'];
         $tasks = new Tasks();
         $systems= SystemMembers::get_systems_by_user_id(session('user')['user_id'])['data'];
         $GET_MEMBERS= $tasks->GET_MEMBERS()['data'];
@@ -406,7 +450,7 @@ class TasksController extends Controller
         ];
         $html_new_path = '#';
 
-        return view('tasks.MyTask',compact('systems','GET_MEMBERS','tasks','html_breadcrumbs','html_new_path'));
+        return view('tasks.MyTask',compact('systems','GET_MEMBERS','tasks','member2','html_breadcrumbs','html_new_path'));
     }
 
 
@@ -434,14 +478,13 @@ class TasksController extends Controller
         if ((!$task || $task->MEM_ID !=  session('user')['user_id'] ) && !session('is_managment')) {
             return ['status'=>-1,'msg'=>'عملية غير قانونية'];
         }
-      
 
         $request->request->add(['ID'=>$id]);
         $res= Tasks::change_status($id,$request->status,NULL);
 
         $result = Tasks::update_notes(change_key($request->only((new Tasks())->getFillable())));
+        \LogActivity::addToLog(StaticCode::$tasks,$id,StaticCode::$update,StaticCode::$page,' تغيير حالة المهمة ');
         return [];
-
     }
 
 }

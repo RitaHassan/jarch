@@ -517,7 +517,7 @@
             @if (getAllErrors($errors))
                 toastr.error("{!! getAllErrors($errors) !!}");
             @endif
-            @if (getAllSuccessMessages())
+            @if (getAllSuccessMessages()>0)
                 toastr.success("{!! getAllSuccessMessages() !!}");
             @endif
 

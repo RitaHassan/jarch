@@ -14,7 +14,8 @@ class MYModel extends Model
         'MEMBERS' => 'MEMBERS',
         'SYSTEMS' => 'SYSTEMS',
         'tasks' => 'tasks',
-        'SYSTEM_MEMBERS' => 'SYSTEM_MEMBERS'
+        'SYSTEM_MEMBERS' => 'SYSTEM_MEMBERS',
+        'TRANSACTION' => 'TRANSACTION'
 
 
     );

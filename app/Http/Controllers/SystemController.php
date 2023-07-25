@@ -7,8 +7,10 @@ use App\Models\System;
 use App\Models\Member;
 use App\Models\SystemMembers;
 use App\Exports\ExportSystem;
+use App\Exports\ExportSystemNum;
 use App\Exports\ExportAll;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Classes\StaticCode;
 
 class SystemController extends Controller
 {
@@ -27,6 +29,7 @@ class SystemController extends Controller
         ];
         $html_new_path = '#';
         $members = Member::LOAD_DATA(null,0,100)['data'];
+
         return view('systems.index',compact('html_breadcrumbs','html_new_path','members'));
     }
 
@@ -52,6 +55,8 @@ class SystemController extends Controller
         if($request->search['value'] != ""){
             $search = $request->search['value'];
         }
+        \LogActivity::addToLog(StaticCode::$systems,null,StaticCode::$showall,StaticCode::$page,'  عرض الاعضاء ');
+
         // // dd(System::LOAD_DATA($search,0,10,$request->ACTIVE));
        return json_encode(System::LOAD_DATA($search,0,10,$request->ACTIVE));
     }
@@ -74,13 +79,19 @@ class SystemController extends Controller
      $system = new System();
      $request->request->add(['CREATED_BY' => 1]);
      $result = System::Save_(change_key($request->only($system->getFillable())));
+     \LogActivity::addToLog(StaticCode::$systems,$result['STATUS'],StaticCode::$insert,StaticCode::$model,' اضافة نظام');
+//dd($result);
+if($result['STATUS']> 1){
+    //dd($result['STATUS']);
+    return ['status'=>1,'msg'=>$result['MSG']];
 
-     if($result['STATUS']==1){
-         return $result['STATUS'];
 
-     }else {
-         return $result['STATUS'];
-     }
+ }else {
+   // dd('kkk');
+
+     return ['status'=>-1,'msg'=>$result['MSG']];
+
+ }
     }
 
     /**
@@ -137,6 +148,8 @@ class SystemController extends Controller
 
         $request->request->add(['UPDATED_BY' => 1,'ID'=>$id]);
         $result = System::Update_(change_key($request->only((new System())->getFillable())));
+        \LogActivity::addToLog(StaticCode::$systems,$id,StaticCode::$update,StaticCode::$model,' تعديل النظام ');
+
         return [];
     }
 
@@ -152,6 +165,8 @@ class SystemController extends Controller
         if ($system->find_by_id($id)) {
             $system->delete_by_id($id);
         }
+        \LogActivity::addToLog(StaticCode::$systems,$id,StaticCode::$delete,StaticCode::$page,' حذف النظام ');
+
         return [];
     }
 
@@ -169,7 +184,10 @@ class SystemController extends Controller
         $SystemMembers = new SystemMembers();
         $request->request->add(['CREATED_BY' => 1]);
         $result = SystemMembers::Save_(change_key($request->only($SystemMembers->getFillable())));
-        if($result['STATUS']==1){
+
+        \LogActivity::addToLog(StaticCode::$system_members,$result['STATUS'],StaticCode::$insert,StaticCode::$model,'  اضافة الاعضاء للنظام ');
+
+        if($result['STATUS']>1){
             return ['status'=>1];
 
          }else {
@@ -190,6 +208,8 @@ class SystemController extends Controller
         if ($member->find_by_id($id)) {
             $member->delete_by_id($id);
         }
+        \LogActivity::addToLog(StaticCode::$system_members,$id,StaticCode::$delete,StaticCode::$page,' حذف اعضاء الفريق ');
+
         return [];
     }
 
@@ -208,6 +228,8 @@ class SystemController extends Controller
 
     public function exportSystems(Request $request)
     {
+        \LogActivity::addToLog(StaticCode::$systems,null,StaticCode::$export,StaticCode::$page,'  التقرير الانظمة ');
+
         return Excel::download(new ExportSystem($request->ACTIVE), 'Systems.xlsx');
     }
 
@@ -215,6 +237,15 @@ class SystemController extends Controller
 
     public function exportAll(Request $request)
     {
+        \LogActivity::addToLog(StaticCode::$systems,null,StaticCode::$export,StaticCode::$page,' التقرير الانظمة ');
+
         return Excel::download(new ExportAll(), 'Systems.xlsx');
+    }
+
+    public function exportSystemNum(Request $request)
+    {
+        \LogActivity::addToLog(StaticCode::$systems,null,StaticCode::$export,StaticCode::$page,' التقرير الانظمة ');
+
+        return Excel::download(new ExportSystemNum(), 'Systems.xlsx');
     }
 }

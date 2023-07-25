@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\Team;
+use App\Models\Report;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -11,8 +11,7 @@ use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use DB;
 
-
-class ExportTeam implements FromView ,ShouldAutoSize,WithEvents
+class ExportSystemNum implements FromView ,ShouldAutoSize,WithEvents
 {
     use Exportable;
 
@@ -31,9 +30,9 @@ class ExportTeam implements FromView ,ShouldAutoSize,WithEvents
         ini_set('memory_limit', '-1');
         set_time_limit(0);
 
-        $teams = Team::teams_report()['data'];
-        return view('teams.export', [
-            'teams' => $teams,
+        $systems = Report::SYSTEM_RET()['data'];
+        return view('systems.exportNum', [
+            'systems' => $systems,
         ]);
 
     }

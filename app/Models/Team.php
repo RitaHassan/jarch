@@ -73,6 +73,15 @@ class Team extends MYModel
         $stmt->execute();
     }
 
+
+   /* public static function Update_($array_in){
+        $stmt = DB::getPdo()->prepare("begin TEAM_PKG.update_team(:p_id,:p_NAME,:P_updated_by); end;");
+        $stmt->bindValue(':P_ID', $array_in['P_ID'], PDO::PARAM_NULL);
+        $stmt->bindValue(':p_NAME', $array_in['p_NAME'], PDO::PARAM_NULL);
+        $stmt->bindValue(':p_UPDATED_BY', $array_in['P_UPDATED_BY'], PDO::PARAM_NULL);
+         $stmt->execute();
+    }*/
+
     public static function sys_name(){
         $cursor =null;
         $data = array();

@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Team;
 use App\Exports\ExportTeam;
+use App\Exports\ExportTeamNum;
 use Maatwebsite\Excel\Facades\Excel;
+
+use App\Classes\StaticCode;
+
 class TeamController extends Controller
 {
     /**
@@ -38,6 +42,8 @@ class TeamController extends Controller
         if($request->search['value'] != ""){
             $search = $request->search['value'];
         }
+
+        \LogActivity::addToLog(StaticCode::$teams,null,StaticCode::$showall,StaticCode::$page,'عرض الفرق ');
        return json_encode(Team::LOAD_DATA($search,0,10));
     }
     /**
@@ -66,12 +72,13 @@ class TeamController extends Controller
         $team = new Team();
         $request->request->add(['CREATED_BY' => 1]);
         $result = Team::Save_(change_key($request->only($team->getFillable())));
-           if($result['STATUS']==1){
-        
-           return ['status'=>1];
+        \LogActivity::addToLog(StaticCode::$teams,$result['STATUS'],StaticCode::$insert,StaticCode::$model,'اضافة فريق جديد');
+           if($result['STATUS']> 1){
+           return ['status'=>1,'msg'=>$result['MSG']];
+
 
         }else {
-           
+
             return ['status'=>-1,'msg'=>$result['MSG']];
 
         }
@@ -86,7 +93,7 @@ class TeamController extends Controller
      */
     public function show($id)
     {
-   
+
     }
 
     /**
@@ -97,7 +104,7 @@ class TeamController extends Controller
      */
 
 
- 
+
     public function edit($id)
     {
         $team = new Team();
@@ -109,7 +116,7 @@ class TeamController extends Controller
     }
 
 
- 
+
 
     /**
      * Update the specified resource in storage.
@@ -129,8 +136,12 @@ class TeamController extends Controller
         if (!$team) {
             abort(404);
         }
+        
         $request->request->add(['UPDATED_BY' => 1,'ID'=>$id]);
         $result = Team::Update_(change_key($request->only((new Team())->getFillable())));
+       // dd($result);
+        \LogActivity::addToLog(StaticCode::$teams,$id,StaticCode::$update,StaticCode::$model,' تعديل الفريق ');
+
         return [];
         // return back()->with('success', 'تمت عملية الحفظ بنجاح');
     }
@@ -147,21 +158,23 @@ class TeamController extends Controller
         if ($team->find_by_id($id)) {
             $team->delete_by_id($id);
         }
+        \LogActivity::addToLog(StaticCode::$teams,$id,StaticCode::$delete,StaticCode::$page,' حذف الفريق ');
         return [];
     }
 
 
     public function giveMembers($TEAM_ID)
-    { 
+    {
 
        $team=new Team();
        $X= $team->giveMembers($TEAM_ID)['data'];
-      
-       return $X;
-    
-    } 
+    //    \LogActivity::addToLog(StaticCode::$teams,$result['STATUS'],StaticCode::$delete,StaticCode::$page,' تعديل المهمة ');
 
-    
+       return $X;
+
+    }
+
+
     public function create_by_id($id)
     {
         $team=new Team();
@@ -190,8 +203,10 @@ class TeamController extends Controller
      $team=new Team();
         $id1 = (int)$id;
         $request->request->add([ 'CREATED_BY' => 1 , 'TEAM_ID'=>$id1]);
-       
+
         $result = Team::Save_by_id(change_key($request->only($team->getFillable())));
+        \LogActivity::addToLog(StaticCode::$teams,$id,StaticCode::$insert,StaticCode::$model,'اضافة عضو على الفريق  ');
+
         if($result['STATUS']==1){
             return back()->with('success',$result['MSG'] );
 
@@ -203,14 +218,26 @@ class TeamController extends Controller
 
     public function exportTeams(Request $request)
     {
+        \LogActivity::addToLog(StaticCode::$teams,null,StaticCode::$export,StaticCode::$page,' التقرير الفرق ');
+
         return Excel::download(new ExportTeam(), 'teams.xlsx');
 
-       
+
            // $x = $request->isactive;
           //  return Excel::download(new ExportStudy($request->final_active,$request->title), 'studies.xlsx');
-        
+
         // dd($request->isactive);
         //dd($request->all());
+
+    }
+
+
+
+    public function exportTeamsNum(Request $request)
+    {
+        \LogActivity::addToLog(StaticCode::$teams,null,StaticCode::$export,StaticCode::$page,' التقرير الفرق ');
+
+        return Excel::download(new ExportTeamNum(), 'teams.xlsx');
 
     }
 }

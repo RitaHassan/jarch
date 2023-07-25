@@ -12,7 +12,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-xl-12 form-group mb-6">
+                        <div class="col-xl-6 form-group mb-6">
                                 <label class="required form-label fw-bolder">اسم النظام</label>
                                 <select name="SYSTEM_ID" id="SYSTEM_ID1" class="form-control form-control-solid" >
                                     <option value="option_select" disabled selected>--اختر--</option>
@@ -21,7 +21,19 @@
                                     @endforeach
                                 </select>
                         </div>
-                        <div class="col-xl-12 form-group mb-12">
+
+                        <div class="col-xl-6 form-group mb-6">
+                                <label class="required form-label fw-bolder">اسم الفريق</label>
+                                <select name="TEAM_ID" id="TEAM_ID" class="form-control form-control-solid" >
+                                    <option value="option_select" disabled selected>--اختر--</option>
+                                    @foreach($member2 as $m)
+                                        <option value="{{ $m->ID }}" {{$tasks->TEAM_ID == $m->ID  ? 'selected' : ''}}>{{ $m->NAME}}</option>
+                                    @endforeach
+                                    </select> 
+
+                                </div>
+
+                        <div class="col-xl-6 form-group mb-6">
                             <label class="required form-label fw-bolder">عنوان المهمة</label>
                             <input type="text" required  id="title_" class="form-control form-control-solid"   placeholder="عنوان المهمة">
                         </div>
@@ -570,7 +582,7 @@
                                         </a>
                                     </div>
                                 <!--end::Menu item-->
-                            
+
                         `;
                        }else if(data.COMPLETION_STATUS == 4){
                         action = `\
@@ -951,6 +963,7 @@
                     'TITLE'  : $('#title_').val(),
                     'DURATION_TYPE' :null,
                     'MEM_ID':{{session('user')['user_id']}},
+                    'TEAM_ID':$("#TEAM_ID").val(),
                 },
                 dataType: 'json',
                 success :function (data) {

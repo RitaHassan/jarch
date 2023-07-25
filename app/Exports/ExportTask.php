@@ -55,9 +55,11 @@ class ExportTask implements FromView ,ShouldAutoSize,WithEvents
         }else{
             $tasks = Tasks::ALL_DATA($this->search,$this->MEM_ID,$this->COMPLETION_STATUS,$this->SYSTEM_ID,$this->PLANNED_START_DT_FIRST,$this->PLANNED_START_DT_LAST,$this->ACTUAL_START_DT_FIRST,$this->ACTUAL_START_DT_LAST,$this->TEAM_ID,0)['data'];
         }
+
         return view('tasks.export', [
             'tasks' => $tasks,
         ]);
+
 
     }
 

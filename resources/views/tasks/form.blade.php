@@ -58,16 +58,28 @@
                             </div>
 
                             <div class="col-xl-6 form-group mb-6">
-                                <label class="required form-label fw-bolder">اسم الموظف</label>
-                                <select name="MEM_ID" id="MEM_ID" class="form-control form-control-solid" >
-
-                                       <option value="option_select" disabled selected>--اختر--</option>
-                                    @foreach($GET_MEMBERS as $m)
-                                        <option value="{{ $m->ID }}" {{$tasks->MEM_ID == $m->ID  ? 'selected' : ''}}>{{ $m->MEM_NAME}}</option>
+                                <label class="required form-label fw-bolder">اسم الفريق</label>
+                                <select name="TEAM_ID" id="TEAM_ID" class="form-control form-control-solid" >
+                                    <option value="option_select" disabled selected>--اختر--</option>
+                                    @foreach($member2 as $m)
+                                        <option value="{{ $m->ID }}" {{$tasks->TEAM_ID == $m->ID  ? 'selected' : ''}}>{{ $m->NAME}}</option>
                                     @endforeach
-                                </select>
+                                    </select> 
 
                                 </div>
+
+                                <div class="col-xl-6 form-group mb-6">
+                                    <label class="required form-label fw-bolder">اسم الموظف</label>
+                                    <select name="MEM_ID" id="MEM_ID" class="form-control form-control-solid" >
+    
+                                           <option value="option_select" disabled selected>--اختر--</option>
+                                        @foreach($GET_MEMBERS as $m)
+                                            <option value="{{ $m->ID }}" {{$tasks->MEM_ID == $m->ID  ? 'selected' : ''}}>{{ $m->MEM_NAME}}</option>
+                                        @endforeach
+                                    </select>
+    
+                                </div>
+    
 
 
 
@@ -147,7 +159,6 @@
                                         <option value="-1" disabled >--اختر--</option>
                                         <option value="1" @selected($tasks->DURATION_TYPE == '1')>يوم</option>
                                         <option value="2" selected @selected($tasks->DURATION_TYPE == '2')>ساعة</option>
-                                        <option value="3" @selected($tasks->DURATION_TYPE == '3')>ساعتين</option>
                                         <option value="4" @selected($tasks->DURATION_TYPE == '4')>شهر</option>
 
                                       </select>
@@ -242,6 +253,16 @@
         });
 
     });
+    $( '#SYSTEM_ID' ).select2( {
+           enableFiltering: true,
+           maxHeight: 350
+
+         } ) ; 
+         $( '#MEM_ID' ).select2( {
+           enableFiltering: true,
+           maxHeight: 350
+
+         } ) ;
         </script>
 @endpush
 

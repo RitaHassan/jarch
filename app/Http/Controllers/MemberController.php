@@ -7,6 +7,8 @@ use App\Models\Member;
 use App\Classes\Http;
 use App\Models\System;
 use App\Models\Team;
+use App\Classes\StaticCode;
+
 
 class MemberController extends Controller
 {
@@ -43,6 +45,8 @@ class MemberController extends Controller
         if($request->search['value'] != ""){
             $search = $request->search['value'];
         }
+        \LogActivity::addToLog(StaticCode::$members,null,StaticCode::$showall,StaticCode::$page,' عرض الاعضاء ');
+
        return json_encode(Member::LOAD_DATA($search,0,10));
     }
     /**
@@ -67,8 +71,10 @@ class MemberController extends Controller
         $member = new Member();
         $request->request->add(['CREATED_BY' => 1]);
         $result = Member::Save_(change_key($request->only($member->getFillable())));
-        if($result['STATUS']==1){
-           return ['status'=>1];
+        \LogActivity::addToLog(StaticCode::$members,null,StaticCode::$insert,StaticCode::$model,' اضافة الأعضاء ');
+
+        if($result['STATUS']>1) {
+            return ['status'=>$result['STATUS'],'msg'=>$result['MSG']];
 
         }else {
             return ['status'=>-1,'msg'=>$result['MSG']];
@@ -168,6 +174,7 @@ class MemberController extends Controller
 
         $request->request->add(['UPDATED_BY' => 1,'ID'=>$id]);
         $result = Member::Update_(change_key($request->only((new Member())->getFillable())));
+        \LogActivity::addToLog(StaticCode::$members,null,StaticCode::$update,StaticCode::$page,' تعديل بيانات العضو ');
 
        // return back()->with('success', 'تمت عملية الحفظ بنجاح');
 
@@ -198,8 +205,17 @@ class MemberController extends Controller
         //dd('l');
         $request->request->add(['ID'=>$id]);
         $result = Member::Update_(change_key($request->only((new Member())->getFillable())));
+        \LogActivity::addToLog(StaticCode::$members,null,StaticCode::$update,StaticCode::$page,' تعديل بيانات العضو  ');
 
-       return [];
+        if($result['STATUS']==1){
+
+            return ['status'=>1,'msg'=>$result['MSG']];
+
+         }else {
+
+             return ['status'=>-1,'msg'=>$result['MSG']];
+
+         }
 /*
        if($result['STATUS']==1){
         return back()->with('success',$result['MSG'] );
@@ -228,6 +244,8 @@ class MemberController extends Controller
          if ($member->find_by_id($id)) {
              $member->soft_deleted($id);
          }
+         \LogActivity::addToLog(StaticCode::$members,null,StaticCode::$isactive,StaticCode::$page,' ايقاف العضو ');
+
          return [];
     }
 
@@ -235,7 +253,17 @@ class MemberController extends Controller
      {
          $member = new Member();
          $result = Member::update_deleted($id);
-         return[];
+         \LogActivity::addToLog(StaticCode::$members,null,StaticCode::$isactive,StaticCode::$page,' تفعيل  العضو ');
+
+         if($result['STATUS']==1){
+
+            return ['status'=>1];
+
+         }else {
+
+             return ['status'=>-1,'msg'=>$result['MSG']];
+
+         }
      }
 
 
@@ -267,11 +295,9 @@ class MemberController extends Controller
 
     public function memberTeamSelect($P_member_id)
     {
-
        $member = new Member();
        $X= $member->memberTeamSelect($P_member_id);
         echo json_decode($X);
-
 
     }
 

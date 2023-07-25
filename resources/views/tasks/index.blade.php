@@ -154,6 +154,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                     <span class="svg-icon svg-icon-2"></span>
                     تصدير
                 </button>
+
                 <!--end::Filter-->
 
 
@@ -177,7 +178,7 @@ $get_all_members= $tasks->get_all_members()['data'];
             <div class="card-body">
                 <form action="">
                     <div class="row">
-                     
+
                         <div class="col-sm-3">
                             <div class="form-group">
                                 <label for="">المبادرة</label>
@@ -518,7 +519,7 @@ $get_all_members= $tasks->get_all_members()['data'];
                                         </a>
                                     </div>
                                 <!--end::Menu item-->
-                            
+
                         `;
                        }else if(data.COMPLETION_STATUS == 4){
                         action = `\
