@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        input {
+            width: 70%;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .error {
+            color: red;
+            padding: 10px;
+            background-color: #ffe6e6;
+        }
+    </style>
+</head>
+<body>
+    <h2>Quote Search</h2>
+    <input type="text" id="searchInput" placeholder="Search...">
+    <div id="error" class="error" style="display: none;"></div>
+    <ul id="quoteList"></ul>
+
+    <script>
+        let quotes = [];
+
+        async function fetchQuotes() {
+            try {
+                const response = await fetch('https://dummyjson.com/quotes');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch quotes');
+                }
+                const data = await response.json();
+                quotes = data.quotes;
+                displayQuotes(quotes);
+            } catch (error) {
+                document.getElementById('error').textContent = 'Error: ' + error.message;
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+
+        function displayQuotes(quotesToShow) {
+            const quoteList = document.getElementById('quoteList');
+            quoteList.innerHTML = '';
+            quotesToShow.forEach(quote => {
+                const li = document.createElement('li');
+                li.textContent = quote.quote;
+                quoteList.appendChild(li);
+            });
+        }
+
+        function filterQuotes(searchTerm) {
+            const filteredQuotes = quotes.filter(quote =>
+                quote.quote.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            displayQuotes(filteredQuotes);
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            filterQuotes(e.target.value);
+        });
+
+        fetchQuotes();
+    </script>
+</body>
+</html>
